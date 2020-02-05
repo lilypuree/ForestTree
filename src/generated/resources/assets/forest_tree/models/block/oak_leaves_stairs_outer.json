@@ -1,8 +1,0 @@
-{
-  "parent": "forest_tree:block/leaf_outer_stairs",
-  "textures": {
-    "side": "block/oak_leaves",
-    "bottom": "block/oak_leaves",
-    "top": "block/oak_leaves"
-  }
-}

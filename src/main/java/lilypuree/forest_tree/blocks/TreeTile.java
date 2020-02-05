@@ -427,15 +427,16 @@ public class TreeTile extends TileEntity {
                     return Registration.getLeafBlock(wood, leafType).getDefaultState()
                             .with(BlockStateProperties.WATERLOGGED, (i & 1) == 0 ? Boolean.FALSE : Boolean.TRUE)
                             .with(BlockStateProperties.HALF, Half.values()[i >> 5 & 1])
-                            .with(BlockStateProperties.OPEN, (i >> 6 & 1) == 0 ? Boolean.FALSE : Boolean.TRUE)
-                            .with(BlockStateProperties.POWERED, (i >> 7 & 1) == 0 ? Boolean.FALSE : Boolean.TRUE)
-                            .with(BlockStateProperties.HORIZONTAL_FACING, Direction.values()[i >> 8 & 7]);
+                            .with(BlockStateProperties.STAIRS_SHAPE, StairsShape.values()[i >> 6 & 7])
+                            .with(BlockStateProperties.HORIZONTAL_FACING, Direction.values()[i >> 9 & 7]);
+
                 } else if (leafType == 3) {
                     return Registration.getLeafBlock(wood, leafType).getDefaultState()
                             .with(BlockStateProperties.WATERLOGGED, (i & 1) == 0 ? Boolean.FALSE : Boolean.TRUE)
                             .with(BlockStateProperties.HALF, Half.values()[i >> 5 & 1])
-                            .with(BlockStateProperties.STAIRS_SHAPE, StairsShape.values()[i >> 6 & 7])
-                            .with(BlockStateProperties.FACING, Direction.values()[i >> 9 & 7]);
+                            .with(BlockStateProperties.OPEN, (i >> 6 & 1) == 0 ? Boolean.FALSE : Boolean.TRUE)
+                            .with(BlockStateProperties.POWERED, (i >> 7 & 1) == 0 ? Boolean.FALSE : Boolean.TRUE)
+                            .with(BlockStateProperties.HORIZONTAL_FACING, Direction.values()[i >> 8 & 7]);
 
                 }
             }

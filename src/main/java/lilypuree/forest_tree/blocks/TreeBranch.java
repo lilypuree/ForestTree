@@ -135,7 +135,7 @@ public class TreeBranch extends Block implements IWaterLoggable, ITreeBlock {
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState block, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult rayTraceResult) {
+    public boolean onBlockActivated(BlockState block, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult rayTraceResult) {
         Direction facing = getHitSide(block, pos, rayTraceResult);
         if (playerIn.getHeldItem(handIn).getItem() == Registration.GRAFTING_TOOL.get()) {
             if (block.get(ForestTreeProperties.MAIN_BRANCH)) {
@@ -150,10 +150,10 @@ public class TreeBranch extends Block implements IWaterLoggable, ITreeBlock {
                         worldIn.setBlockState(pos, block.cycle(LEFT_BRANCH));
                     }
                 }
-                return ActionResultType.SUCCESS;
+                return true;
             } else if (facing == block.get(FACING).getOpposite()) {
                 if (!worldIn.isRemote()) worldIn.setBlockState(pos, block.with(MAIN_BRANCH, true));
-                return ActionResultType.SUCCESS;
+                return true;
             }
         }
         return super.onBlockActivated(block, worldIn, pos, playerIn, handIn, rayTraceResult);

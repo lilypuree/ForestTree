@@ -92,9 +92,9 @@ public class Registration {
 
         for (WoodTypes leaf : WoodTypes.values()) {
             String name = leaf + "_" + "leaves";
-            Block leafSlab = new LeavesSlabBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid());
-            Block leafStair = new LeavesStairBlock(Blocks.OAK_LEAVES::getDefaultState, Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT).notSolid());
-            Block leafTrapDoor = new LeavesTrapDoorBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT).notSolid());
+            Block leafSlab = new LeavesSlabBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT));
+            Block leafStair = new LeavesStairBlock(Blocks.OAK_LEAVES::getDefaultState, Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT));
+            Block leafTrapDoor = new LeavesTrapDoorBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT));
             blockBuilder.put((name + "_slab").toUpperCase(), BLOCKS.register(name + "_slab", () -> leafSlab));
             blockBuilder.put((name + "_stairs").toUpperCase(), BLOCKS.register(name + "_stairs", () -> leafStair));
             blockBuilder.put((name + "_trapdoor").toUpperCase(), BLOCKS.register(name + "_trapdoor", () -> leafTrapDoor));
@@ -108,7 +108,7 @@ public class Registration {
         for(WoodTypes wood : WoodTypes.values()){
             for(ThicknessTypes thickness : ThicknessTypes.values()){
                 String name = wood + "_" + thickness + "_tree";
-                itemBuilder.put(name.toUpperCase(), ITEMS.register(name, ()-> new TreeItem(treeItemProperty, TREE_BLOCKS.get((wood+"_"+thickness+"_stump").toUpperCase()))));
+                itemBuilder.put(name.toUpperCase(), ITEMS.register(name, ()-> new TreeItem(treeItemProperty, TREE_BLOCKS.get((wood+"_"+thickness+"_stump").toUpperCase()).get())));
             }
         }
 
@@ -131,7 +131,7 @@ public class Registration {
                 case 1:
                     return TREE_BLOCKS.get((wood+"_leaves_slab").toUpperCase()).get();
                 case 2:
-                    return TREE_BLOCKS.get((wood+"_leaves_stair").toUpperCase()).get();
+                    return TREE_BLOCKS.get((wood+"_leaves_stairs").toUpperCase()).get();
                 case 3:
                     return TREE_BLOCKS.get((wood+"_leaves_trapdoor").toUpperCase()).get();
             }

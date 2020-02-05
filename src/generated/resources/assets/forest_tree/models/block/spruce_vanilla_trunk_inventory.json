@@ -1,7 +1,0 @@
-{
-  "parent": "forest_tree:block/vanilla_trunk_inventory",
-  "textures": {
-    "trunk": "block/spruce_log",
-    "top": "block/spruce_log_top"
-  }
-}

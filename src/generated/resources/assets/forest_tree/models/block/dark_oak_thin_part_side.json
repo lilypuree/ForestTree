@@ -1,7 +1,0 @@
-{
-  "parent": "forest_tree:block/thin_part_side",
-  "textures": {
-    "trunk": "block/dark_oak_log",
-    "top": "block/dark_oak_log_top"
-  }
-}

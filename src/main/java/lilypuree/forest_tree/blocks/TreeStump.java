@@ -128,7 +128,7 @@ public class TreeStump extends Block implements IWaterLoggable, ITreeBlock {
 
 
     @Override
-    public ActionResultType onBlockActivated(BlockState block, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult rayTraceResult) {
+    public boolean onBlockActivated(BlockState block, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult rayTraceResult) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         ItemStack heldItem = playerIn.getHeldItem(handIn);
         if (tileEntity instanceof TreeTile) {
@@ -137,7 +137,7 @@ public class TreeStump extends Block implements IWaterLoggable, ITreeBlock {
                     worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_WOOD_BREAK, SoundCategory.BLOCKS, 1.2F, 1.0F);
                     if (!worldIn.isRemote) worldIn.setBlockState(pos, block.cycle(STUMP));
                 } else worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_WOOD_HIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                return ActionResultType.SUCCESS;
+                return true;
             }
             if (heldItem.getToolTypes().contains(ToolType.SHOVEL) && !block.get(STUMP)){
                 if(playerIn.isCreative() && !worldIn.isRemote){
@@ -156,7 +156,7 @@ public class TreeStump extends Block implements IWaterLoggable, ITreeBlock {
             if (playerIn.getHeldItem(handIn).getItem() == Items.CARROT && !block.get(STUMP)) {
                 ((TreeTile) worldIn.getTileEntity(pos)).registerTree();
 
-                return ActionResultType.SUCCESS;
+                return true;
             }
 
 
@@ -164,7 +164,7 @@ public class TreeStump extends Block implements IWaterLoggable, ITreeBlock {
 
                 System.out.println(((TreeTile) worldIn.getTileEntity(pos)).write(new CompoundNBT()).toString());
 
-                return ActionResultType.SUCCESS;
+                return true;
             }
         }
 

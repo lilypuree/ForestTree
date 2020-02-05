@@ -3,6 +3,7 @@ package lilypuree.forest_tree.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.TrapDoorBlock;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -37,5 +38,10 @@ public class LeavesTrapDoorBlock extends TrapDoorBlock implements IShearable, IL
     @Override
     public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
         return 60;
+    }
+
+
+    public BlockRenderLayer getRenderLayer() {
+        return  BlockRenderLayer.CUTOUT_MIPPED;
     }
 }

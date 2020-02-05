@@ -13,16 +13,13 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Lazy;
-
-import java.util.function.Supplier;
 
 public class TreeItem extends Item {
-    private Lazy<Block> type;
+    private Block type;
 
-    public TreeItem(Properties properties, Supplier<Block> supplier) {
+    public TreeItem(Properties properties, Block supplier) {
         super(properties);
-        this.type = Lazy.of(supplier);
+        this.type = supplier;
     }
 
     @Override
@@ -37,7 +34,7 @@ public class TreeItem extends Item {
             if (!world.isRemote) {
                 BlockPos treePos = plantingPos.offset(Direction.UP);
                 world.setBlockState(plantingPos, Blocks.DIRT.getDefaultState());
-                BlockState state = type.get().getDefaultState();
+                BlockState state = type.getDefaultState();
                 world.setBlockState(treePos, state);
                 world.notifyBlockUpdate(treePos, state, state, 1 | 2);
 

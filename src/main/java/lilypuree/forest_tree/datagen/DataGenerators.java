@@ -16,7 +16,7 @@ public class DataGenerators {
 //            generator.addProvider(new LootTables(generator));
         }
         if (event.includeClient()) {
-            generator.addProvider(new BlockStates(generator, event.getExistingFileHelper()));
+//            generator.addProvider(new BlockStates(generator, event.getExistingFileHelper()));
             generator.addProvider(new Items(generator, ForestTree.MODID, event.getExistingFileHelper()));
 //            generator.addProvider(new Languages(generator, "en_us"));
         }

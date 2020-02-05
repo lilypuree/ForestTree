@@ -1,8 +1,0 @@
-{
-  "parent": "forest_tree:block/leaf_inner_stairs",
-  "textures": {
-    "side": "block/jungle_leaves",
-    "bottom": "block/jungle_leaves",
-    "top": "block/jungle_leaves"
-  }
-}

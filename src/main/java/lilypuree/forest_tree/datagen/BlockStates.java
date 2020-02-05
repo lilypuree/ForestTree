@@ -25,11 +25,11 @@ public class BlockStates extends BlockStateProvider {
     }
 
     public ModelFile treePartModel(WoodTypes wood, ThicknessTypes thickness, PartTypes type) {
-        return addTreeTextures(models().getBuilder(wood + "_" + thickness + "_part_" + type).parent(partModel(thickness, type)), wood);
+        return addTreeTextures(getBuilder(wood + "_" + thickness + "_part_" + type).parent(partModel(thickness, type)), wood);
     }
 
     public ModelFile treeInventoryModel(WoodTypes wood, ThicknessTypes thickness, TreeBlockTypes type) {
-        return addTreeTextures(models().getBuilder(wood + "_" + thickness + "_" + type + "_inventory").parent(inventoryModel(thickness, type)), wood);
+        return addTreeTextures(getBuilder(wood + "_" + thickness + "_" + type + "_inventory").parent(inventoryModel(thickness, type)), wood);
     }
 
     private ModelBuilder<?> addTreeTextures(ModelBuilder<?> builder, WoodTypes wood) {
@@ -37,7 +37,7 @@ public class BlockStates extends BlockStateProvider {
     }
 
     public ModelFile partModel(ThicknessTypes thickness, PartTypes type) {
-        ModelBuilder<?> base = models().getBuilder(thickness + "_part_" + type).texture("particle", "#trunk");
+        ModelBuilder<?> base = getBuilder(thickness + "_part_" + type).texture("particle", "#trunk");
         float f1 = 8.0F - thickness.getWidth();
         float f2 = 8.0F + thickness.getWidth();
         switch (type) {
@@ -58,13 +58,13 @@ public class BlockStates extends BlockStateProvider {
                     }
                 }).end();
             case UP:
-                return base.element().from(f1 + 0.02F, 0, f1).to(f2 - 0.02F, 11.32F, f2).rotation().origin(8, 0, 8).angle(-45.0F).axis(Direction.Axis.X).end().allFaces((dir, faceBuilder) -> {
-                    if (dir.getHorizontalIndex() < 0) {
-                        faceBuilder.texture("#top");
-                    } else {
-                        faceBuilder.texture("#trunk");
-                    }
-                }).end();
+//                return base.element().from(f1 + 0.02F, 0, f1).to(f2 - 0.02F, 11.32F, f2).rotation().origin(8, 0, 8).angle(-45).axis(Direction.Axis.X).end().allFaces((dir, faceBuilder) -> {
+//                    if (dir.getHorizontalIndex() < 0) {
+//                        faceBuilder.texture("#top");
+//                    } else {
+//                        faceBuilder.texture("#trunk");
+//                    }
+//                }).end();
             case STUMP:
                 return base.element().from(f1, 0, f1).to(f2, thickness.getWidth() * 1.5F, f2).allFaces((dir, faceBuilder) -> {
                     if (dir.getHorizontalIndex() < 0) {
@@ -84,7 +84,7 @@ public class BlockStates extends BlockStateProvider {
     public ModelFile inventoryModel(ThicknessTypes thickness, TreeBlockTypes type) {
         float f1 = 8.0F - thickness.getWidth();
         float f2 = 8.0F + thickness.getWidth();
-        ModelBuilder<?> base = models().withExistingParent(thickness + "_" + type + "_inventory", mcLoc("block/block")).transforms()
+        ModelBuilder<?> base = withExistingParent(thickness + "_" + type + "_inventory", mcLoc("block/block")).transforms()
                 .transform(ModelBuilder.Perspective.GUI).rotation(30, 135, 0).scale(0.625F, 0.625F, 0.625F).translation(0, 0, 0).end()
                 .transform(ModelBuilder.Perspective.FIXED).rotation(0, 90, 0).scale(0.5F, 0.5F, 0.5F).translation(0, 0, 0).end().end()
                 .ao(false).texture("particle", "#trunk");
@@ -121,67 +121,67 @@ public class BlockStates extends BlockStateProvider {
     }
 
     public ModelFile leafSlab(String name, ResourceLocation sideBottomTopTexture) {
-        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_slab")))
+        return getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_slab")))
                 .texture("side", sideBottomTopTexture)
                 .texture("bottom", sideBottomTopTexture)
                 .texture("top", sideBottomTopTexture);
     }
 
     public ModelFile leafSlabTop(String name, ResourceLocation sideBottomTopTexture) {
-        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_slab_top")))
+        return getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_slab_top")))
                 .texture("side", sideBottomTopTexture)
                 .texture("bottom", sideBottomTopTexture)
                 .texture("top", sideBottomTopTexture);
     }
 
     public ModelFile leafStairs(String name, ResourceLocation sideBottomTopTexture) {
-        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_stairs")))
+        return getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_stairs")))
                 .texture("side", sideBottomTopTexture)
                 .texture("bottom", sideBottomTopTexture)
                 .texture("top", sideBottomTopTexture);
     }
 
     public ModelFile leafStairsOuter(String name, ResourceLocation sideBottomTopTexture) {
-        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_outer_stairs")))
+        return getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_outer_stairs")))
                 .texture("side", sideBottomTopTexture)
                 .texture("bottom", sideBottomTopTexture)
                 .texture("top", sideBottomTopTexture);
     }
 
     public ModelFile leafStairsInner(String name, ResourceLocation sideBottomTopTexture) {
-        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_inner_stairs")))
+        return getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_inner_stairs")))
                 .texture("side", sideBottomTopTexture)
                 .texture("bottom", sideBottomTopTexture)
                 .texture("top", sideBottomTopTexture);
     }
 
     public ModelFile leafTrapdoorBottom(String name, ResourceLocation texture) {
-        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/template_leaf_trapdoor_bottom")))
+        return getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/template_leaf_trapdoor_bottom")))
                 .texture("texture", texture);
     }
 
     public ModelFile leafTrapdoorTop(String name, ResourceLocation texture) {
-        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/template_leaf_trapdoor_top")))
+        return getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/template_leaf_trapdoor_top")))
                 .texture("texture", texture);
     }
 
     public ModelFile leafTrapdoorOpen(String name, ResourceLocation texture) {
-        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/template_leaf_trapdoor_open")))
+        return getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/template_leaf_trapdoor_open")))
                 .texture("texture", texture);
     }
 
     public ModelFile leafTrapdoorOrientableBottom(String name, ResourceLocation texture) {
-        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/template_leaf_orientable_trapdoor_bottom")))
+        return getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/template_leaf_orientable_trapdoor_bottom")))
                 .texture("texture", texture);
     }
 
     public ModelFile leafTrapdoorOrientableTop(String name, ResourceLocation texture) {
-        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/template_leaf_orientable_trapdoor_top")))
+        return getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/template_leaf_orientable_trapdoor_top")))
                 .texture("texture", texture);
     }
 
     public ModelFile leafTrapdoorOrientableOpen(String name, ResourceLocation texture) {
-        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/template_leaf_orientable_trapdoor_open")))
+        return  getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/template_leaf_orientable_trapdoor_open")))
                 .texture("texture", texture);
     }
 
@@ -238,7 +238,7 @@ public class BlockStates extends BlockStateProvider {
 
 
     public void leafSlabBlock(SlabBlock block, ResourceLocation doubleslab, ResourceLocation sideBottomTopTexture) {
-        slabBlock(block, leafSlab(name(block), sideBottomTopTexture), leafSlabTop(name(block) + "_top", sideBottomTopTexture), models().getExistingFile(doubleslab));
+        slabBlock(block, leafSlab(name(block), sideBottomTopTexture), leafSlabTop(name(block) + "_top", sideBottomTopTexture), getExistingFile(doubleslab));
     }
 
     public void leafStairsBlock(StairsBlock block, ResourceLocation texture) {

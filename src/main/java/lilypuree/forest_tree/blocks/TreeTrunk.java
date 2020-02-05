@@ -111,12 +111,12 @@ public class TreeTrunk extends Block implements IWaterLoggable, ITreeBlock {
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState blockState, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult rayTraceResult) {
+    public boolean onBlockActivated(BlockState blockState, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult rayTraceResult) {
         Direction facing = getHitSide(blockState, pos, rayTraceResult);
         if (playerIn.getHeldItem(handIn).getItem() == Registration.GRAFTING_TOOL.get()) {
             if (blockState.get(UP)) {
                 if (facing == Direction.DOWN) {
-                    return ActionResultType.PASS;
+                    return true;
                 } else if (!worldIn.isRemote()) {
                     switch (facing) {
                         case NORTH:
@@ -133,7 +133,7 @@ public class TreeTrunk extends Block implements IWaterLoggable, ITreeBlock {
                             break;
                         case UP:
                             if (blockState.get(NORTH_CONNECTION) == BranchType.NONE && blockState.get(SOUTH_CONNECTION) == BranchType.NONE && blockState.get(EAST_CONNECTION) == BranchType.NONE && blockState.get(WEST_CONNECTION) == BranchType.NONE) {
-                                return ActionResultType.PASS;
+                                return true;
                             }
                             if (blockState.get(NORTH_CONNECTION) == BranchType.SIDE)
                                 blockState = blockState.with(NORTH_CONNECTION, BranchType.UP);
@@ -148,21 +148,21 @@ public class TreeTrunk extends Block implements IWaterLoggable, ITreeBlock {
                             break;
                     }
                 }
-                return ActionResultType.SUCCESS;
+                return true;
             } else {
                 if (facing == Direction.UP) {
                     if (!worldIn.isRemote()) {
                         worldIn.setBlockState(pos, blockState.cycle(UP));
                     }
-                    return ActionResultType.SUCCESS;
+                    return true;
                 }
             }
         }
         if (worldIn.isRemote) {
             ItemStack itemstack = playerIn.getHeldItem(handIn);
-            return itemstack.getItem() == Items.LEAD ? ActionResultType.SUCCESS : ActionResultType.PASS;
+            return itemstack.getItem() == Items.LEAD ? true : false;
         } else {
-            return LeadItem.func_226641_a_(playerIn, worldIn, pos);
+            return LeadItem.attachToFence(playerIn, worldIn, pos);
         }
     }
 
