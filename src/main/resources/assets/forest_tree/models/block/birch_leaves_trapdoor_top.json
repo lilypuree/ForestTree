@@ -1,0 +1,6 @@
+{
+  "parent": "forest_tree:block/template_leaf_orientable_trapdoor_top",
+  "textures": {
+    "texture": "block/birch_leaves"
+  }
+}

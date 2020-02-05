@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=top": {
+      "model": "forest_tree:block/jungle_leaves_slab_top"
+    },
+    "type=bottom": {
+      "model": "forest_tree:block/jungle_leaves_slab"
+    },
+    "type=double": {
+      "model": "minecraft:block/jungle_leaves"
+    }
+  }
+}

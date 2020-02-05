@@ -1,0 +1,7 @@
+{
+  "parent": "forest_tree:block/thick_part_root",
+  "textures": {
+    "trunk": "block/birch_log",
+    "top": "block/birch_log_top"
+  }
+}

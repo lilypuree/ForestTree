@@ -1,0 +1,7 @@
+{
+  "parent": "forest_tree:block/birch_thickest_trunk_inventory",
+  "textures": {
+    "#trunk": "block/birch_log",
+    "#top": "block/birch_log_top"
+  }
+}

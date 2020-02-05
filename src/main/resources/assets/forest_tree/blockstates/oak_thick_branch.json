@@ -1,0 +1,163 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north|south",
+        "main": "true"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thick_part_center",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east|west",
+        "main": "true"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thick_part_center",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "connection": "side"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thick_part_side",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "connection": "up"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thick_part_up",
+        "x": 180,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "connection": "up"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thick_part_up",
+        "x": 180,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "connection": "up"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thick_part_up",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "connection": "up"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thick_part_up",
+        "x": 180,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "right": "true"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_side",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "left": "true"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_side",
+        "x": 90,
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "left": "true"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_side",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "right": "true"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_side",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "right": "true"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_side",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "left": "true"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_side",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "left": "true"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_side",
+        "x": 90,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "right": "true"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_side",
+        "x": 90,
+        "y": 180
+      }
+    }
+  ]
+}

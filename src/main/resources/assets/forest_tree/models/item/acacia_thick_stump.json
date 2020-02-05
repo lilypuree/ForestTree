@@ -1,0 +1,7 @@
+{
+  "parent": "forest_tree:block/acacia_thick_stump_inventory",
+  "textures": {
+    "#trunk": "block/acacia_log",
+    "#top": "block/acacia_log_top"
+  }
+}

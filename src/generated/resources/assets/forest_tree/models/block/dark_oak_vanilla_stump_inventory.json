@@ -1,0 +1,7 @@
+{
+  "parent": "forest_tree:block/vanilla_stump_inventory",
+  "textures": {
+    "trunk": "block/dark_oak_log",
+    "top": "block/dark_oak_log_top"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "forest_tree:block/vanilla_stump_inventory",
+  "textures": {
+    "trunk": "block/jungle_log",
+    "top": "block/jungle_log_top"
+  }
+}

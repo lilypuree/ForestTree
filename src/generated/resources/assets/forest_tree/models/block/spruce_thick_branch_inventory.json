@@ -1,0 +1,7 @@
+{
+  "parent": "forest_tree:block/thick_branch_inventory",
+  "textures": {
+    "trunk": "block/spruce_log",
+    "top": "block/spruce_log_top"
+  }
+}

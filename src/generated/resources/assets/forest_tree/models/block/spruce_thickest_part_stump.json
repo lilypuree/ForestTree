@@ -1,0 +1,7 @@
+{
+  "parent": "forest_tree:block/thickest_part_stump",
+  "textures": {
+    "trunk": "block/spruce_log",
+    "top": "block/spruce_log_top"
+  }
+}

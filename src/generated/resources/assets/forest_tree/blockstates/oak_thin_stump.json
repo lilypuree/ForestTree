@@ -1,0 +1,43 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "stump": "true"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_stump"
+      }
+    },
+    {
+      "when": {
+        "stump": "false"
+      },
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_center"
+      }
+    },
+    {
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_root"
+      }
+    },
+    {
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_root",
+        "y": 90
+      }
+    },
+    {
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_root",
+        "y": 180
+      }
+    },
+    {
+      "apply": {
+        "model": "forest_tree:block/oak_thin_part_root",
+        "y": 270
+      }
+    }
+  ]
+}

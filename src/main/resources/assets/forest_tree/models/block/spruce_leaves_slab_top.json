@@ -1,0 +1,8 @@
+{
+  "parent": "forest_tree:block/leaf_slab_top",
+  "textures": {
+    "side": "block/spruce_leaves",
+    "bottom": "block/spruce_leaves",
+    "top": "block/spruce_leaves"
+  }
+}

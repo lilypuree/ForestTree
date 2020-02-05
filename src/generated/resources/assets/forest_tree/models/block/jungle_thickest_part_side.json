@@ -1,0 +1,7 @@
+{
+  "parent": "forest_tree:block/thickest_part_side",
+  "textures": {
+    "trunk": "block/jungle_log",
+    "top": "block/jungle_log_top"
+  }
+}

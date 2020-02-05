@@ -1,0 +1,14 @@
+{
+  "textures": {
+    "particle": "forest_tree:block/empty"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 0, 0, 0 ],
+      "faces": {
+        "down":  { "texture": "forest_tree:block/empty", "cullface": "down" }
+      }
+    }
+  ]
+}

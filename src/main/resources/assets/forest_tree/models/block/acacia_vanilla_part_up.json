@@ -1,0 +1,7 @@
+{
+  "parent": "forest_tree:block/vanilla_part_up",
+  "textures": {
+    "trunk": "block/acacia_log",
+    "top": "block/acacia_log_top"
+  }
+}

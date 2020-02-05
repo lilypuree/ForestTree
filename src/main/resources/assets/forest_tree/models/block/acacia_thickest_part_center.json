@@ -1,0 +1,7 @@
+{
+  "parent": "forest_tree:block/thickest_part_center",
+  "textures": {
+    "trunk": "block/acacia_log",
+    "top": "block/acacia_log_top"
+  }
+}
