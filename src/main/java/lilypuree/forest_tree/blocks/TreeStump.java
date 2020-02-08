@@ -107,6 +107,9 @@ public class TreeStump extends Block implements IWaterLoggable, ITreeBlock {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         if(tileEntity instanceof TreeTile){
             String[] s = state.getBlock().getRegistryName().getPath().split("_");
+            if(s.length > 3){
+                s[1] = s[2]; //dark_oak
+            }
             ((TreeTile) tileEntity).setThickness(ThicknessTypes.withName(s[1]));
             ((TreeTile) tileEntity).setWood(WoodTypes.withName(s[0]));
             ((TreeTile) tileEntity).init();

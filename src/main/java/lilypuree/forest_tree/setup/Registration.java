@@ -131,7 +131,7 @@ public class Registration {
                 case 1:
                     return TREE_BLOCKS.get((wood+"_leaves_slab").toUpperCase()).get();
                 case 2:
-                    return TREE_BLOCKS.get((wood+"_leaves_stair").toUpperCase()).get();
+                    return TREE_BLOCKS.get((wood+"_leaves_stairs").toUpperCase()).get();
                 case 3:
                     return TREE_BLOCKS.get((wood+"_leaves_trapdoor").toUpperCase()).get();
             }

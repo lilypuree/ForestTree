@@ -127,10 +127,10 @@ public class TreeTile extends TileEntity {
                 if (dir == originalFacing.getOpposite()) rotation = Rotation.CLOCKWISE_180;
                 else if (dir == originalFacing.rotateY()) rotation = Rotation.CLOCKWISE_90;
                 else if (dir == originalFacing.rotateYCCW()) rotation = Rotation.COUNTERCLOCKWISE_90;
-                world.destroyBlock(treePos, true);
+                if (isLeafBlock(world.getBlockState(treePos).getBlock())) world.destroyBlock(treePos, true);
                 BlockState state = this.treeData.getBlockStateOf(offset).rotate(rotation);
                 world.setBlockState(treePos, state);
-                world.notifyBlockUpdate(treePos, state, state, 1|2);
+                world.notifyBlockUpdate(treePos, state, state, 1 | 2);
             }
         }
     }
@@ -245,41 +245,33 @@ public class TreeTile extends TileEntity {
 
         private static int serializeBlockState(BlockState block) {
             Block blockClass = block.getBlock();
+            String[] name = splitRegistryName(blockClass);
+            int i = 0;
             if (blockClass instanceof TreeBranch) {
-                String[] name = StringUtils.split(block.getBlock().getRegistryName().getPath(), '_');
-                if (name[1].equals("oak")) { //i have to get rid of this...
-                    name[1] = name[2];
-                    name[2] = name[3];
-                }
-                int i = 0;
                 i = i | (block.get(BlockStateProperties.WATERLOGGED) ? 1 : 0);
                 i = i | (block.get(ForestTreeProperties.LEFT_BRANCH) ? 1 : 0) << 1;
                 i = i | (block.get(ForestTreeProperties.RIGHT_BRANCH) ? 1 : 0) << 2;
                 i = i | (block.get(ForestTreeProperties.MAIN_BRANCH) ? 1 : 0) << 3;
                 i = i | (block.get(ForestTreeProperties.CONNECTION)).ordinal() << 4;
                 i = i | (block.get(BlockStateProperties.HORIZONTAL_FACING)).ordinal() << 6;
-                i = i | (block.get(ForestTreeProperties.LEAVES_SLAB_TYPE)).ordinal() << 10;
+//                i = i | (block.get(ForestTreeProperties.LEAVES_SLAB_TYPE)).ordinal() << 10;
                 i = i | (WoodTypes.withName(name[0])).ordinal() << 12;
                 i = i | (ThicknessTypes.withName(name[1])).ordinal() << 15;
                 i = i | (TreeBlockTypes.withName(name[2])).ordinal() << 17;
                 return i;
             } else if (blockClass instanceof TreeTrunk) {
-                String[] name = StringUtils.split(block.getBlock().getRegistryName().getPath(), '_');
-                int i = 0;
                 i = i | (block.get(BlockStateProperties.WATERLOGGED) ? 1 : 0);
                 i = i | (block.get(BlockStateProperties.UP) ? 1 : 0) << 1;
                 i = i | (block.get(ForestTreeProperties.NORTH_CONNECTION)).ordinal() << 2;
                 i = i | (block.get(ForestTreeProperties.EAST_CONNECTION)).ordinal() << 4;
                 i = i | (block.get(ForestTreeProperties.SOUTH_CONNECTION)).ordinal() << 6;
                 i = i | (block.get(ForestTreeProperties.WEST_CONNECTION)).ordinal() << 8;
-                i = i | (block.get(ForestTreeProperties.LEAVES_SLAB_TYPE)).ordinal() << 10;
+//                i = i | (block.get(ForestTreeProperties.LEAVES_SLAB_TYPE)).ordinal() << 10;
                 i = i | (WoodTypes.withName(name[0])).ordinal() << 12;
                 i = i | (ThicknessTypes.withName(name[1])).ordinal() << 15;
                 i = i | (TreeBlockTypes.withName(name[2])).ordinal() << 17;
                 return i;
             } else if (blockClass instanceof TreeStump) {
-                String[] name = StringUtils.split(block.getBlock().getRegistryName().getPath(), '_');
-                int i = 0;
                 i = i | (block.get(BlockStateProperties.WATERLOGGED) ? 1 : 0);
                 i = i | (block.get(ForestTreeProperties.STUMP) ? 1 : 0) << 1;
                 i = i | (WoodTypes.withName(name[0])).ordinal() << 12;
@@ -287,8 +279,6 @@ public class TreeTile extends TileEntity {
                 i = i | (TreeBlockTypes.withName(name[2])).ordinal() << 17;
                 return i;
             } else if (blockClass instanceof LogBlock) {
-                String[] name = StringUtils.split(block.getBlock().getRegistryName().getPath(), '_');
-                int i = 0;
 //                i = i | (block.get(BlockStateProperties.WATERLOGGED) ? 1 : 0);
                 i = i | (block.get(BlockStateProperties.AXIS)).ordinal() << 1;
                 i = i | (WoodTypes.withName(name[0])).ordinal() << 12;
@@ -296,8 +286,6 @@ public class TreeTile extends TileEntity {
                 i = i | 3 << 17;
                 return i;
             } else if (blockClass instanceof LeavesSlabBlock) {
-                String[] name = StringUtils.split(block.getBlock().getRegistryName().getPath(), '_');
-                int i = 0;
                 i = i | (block.get(BlockStateProperties.WATERLOGGED) ? 1 : 0);
                 i = i | (block.get(BlockStateProperties.PERSISTENT) ? 1 : 0) << 1;
                 i = i | (block.get(BlockStateProperties.DISTANCE_1_7)).byteValue() << 2;
@@ -307,8 +295,6 @@ public class TreeTile extends TileEntity {
                 i = i | 4 << 17;
                 return i;
             } else if (blockClass instanceof LeavesStairBlock) {
-                String[] name = StringUtils.split(block.getBlock().getRegistryName().getPath(), '_');
-                int i = 0;
                 i = i | (block.get(BlockStateProperties.WATERLOGGED) ? 1 : 0);
 //                i = i | (block.get(BlockStateProperties.PERSISTENT) ? 1 : 0) <<1;
 //                i = i | (block.get(BlockStateProperties.DISTANCE_1_7)).byteValue() <<2;
@@ -320,8 +306,6 @@ public class TreeTile extends TileEntity {
                 i = i | 4 << 17;
                 return i;
             } else if (blockClass instanceof LeavesTrapDoorBlock) {
-                String[] name = StringUtils.split(block.getBlock().getRegistryName().getPath(), '_');
-                int i = 0;
                 i = i | (block.get(BlockStateProperties.WATERLOGGED) ? 1 : 0);
 //                i = i | (block.get(BlockStateProperties.PERSISTENT) ? 1 : 0) <<1;
 //                i = i | (block.get(BlockStateProperties.DISTANCE_1_7)).byteValue() <<2;
@@ -334,20 +318,28 @@ public class TreeTile extends TileEntity {
                 i = i | 4 << 17;
                 return i;
             } else if (blockClass instanceof LeavesBlock) {
-                String[] name = StringUtils.split(block.getBlock().getRegistryName().getPath(), '_');
-                int i = 0;
 //                i = i | (block.get(BlockStateProperties.WATERLOGGED) ? 1 : 0);
                 i = i | (block.get(BlockStateProperties.PERSISTENT) ? 1 : 0) << 1;
                 i = i | (block.get(BlockStateProperties.DISTANCE_1_7)).byteValue() << 2;
                 i = i | (WoodTypes.withName(name[0])).ordinal() << 12;
                 i = i | 0 << 15;
                 i = i | 4 << 17;
+                return i;
             }
             return -1;
         }
 
+        private static String[] splitRegistryName(Block block) {
+            String[] name = block.getRegistryName().getPath().split("_");
+            if (name.length > 3) {
+                name[1] = name[2];
+                name[2] = name[3];
+            }
+            return name;
+        }
+
         private static BlockState deserializeBlockState(final int i) {
-            if (i < 0) return null;
+            if (i < 0) return Blocks.AIR.getDefaultState();
             int type = (i >> 17) & 7;
             WoodTypes wood = WoodTypes.values()[i >> 12 & 7];
             if (type < 3) {
@@ -359,8 +351,8 @@ public class TreeTile extends TileEntity {
                             .with(ForestTreeProperties.NORTH_CONNECTION, BranchType.values()[i >> 2 & 3])
                             .with(ForestTreeProperties.EAST_CONNECTION, BranchType.values()[i >> 4 & 3])
                             .with(ForestTreeProperties.SOUTH_CONNECTION, BranchType.values()[i >> 6 & 3])
-                            .with(ForestTreeProperties.WEST_CONNECTION, BranchType.values()[i >> 8 & 3])
-                            .with(ForestTreeProperties.LEAVES_SLAB_TYPE, LeafSlabType.values()[i >> 10 & 3]);
+                            .with(ForestTreeProperties.WEST_CONNECTION, BranchType.values()[i >> 8 & 3]);
+//                            .with(ForestTreeProperties.LEAVES_SLAB_TYPE, LeafSlabType.values()[i >> 10 & 3]);
                 }
                 if (type == 1) { //branch
                     return Registration.getTreeBlock(wood, thickness, TreeBlockTypes.BRANCH).getDefaultState()
@@ -369,8 +361,8 @@ public class TreeTile extends TileEntity {
                             .with(ForestTreeProperties.RIGHT_BRANCH, ((i >> 2 & 1) == 0) ? Boolean.FALSE : Boolean.TRUE)
                             .with(ForestTreeProperties.MAIN_BRANCH, ((i >> 3 & 1) == 0) ? Boolean.FALSE : Boolean.TRUE)
                             .with(ForestTreeProperties.CONNECTION, BranchType.values()[i >> 4 & 3])
-                            .with(BlockStateProperties.HORIZONTAL_FACING, Direction.values()[i >> 6 & 7])
-                            .with(ForestTreeProperties.LEAVES_SLAB_TYPE, LeafSlabType.values()[i >> 10 & 3]);
+                            .with(BlockStateProperties.HORIZONTAL_FACING, Direction.values()[i >> 6 & 7]);
+//                            .with(ForestTreeProperties.LEAVES_SLAB_TYPE, LeafSlabType.values()[i >> 10 & 3]);
                 }
                 if (type == 2) { //stump
                     return Registration.getTreeBlock(wood, thickness, TreeBlockTypes.STUMP).getDefaultState()
@@ -404,15 +396,15 @@ public class TreeTile extends TileEntity {
                         case OAK:
                             return Blocks.OAK_LEAVES.getDefaultState().with(BlockStateProperties.PERSISTENT, persistent).with(BlockStateProperties.DISTANCE_1_7, distance_1_7);
                         case BIRCH:
-                            return Blocks.BIRCH_LOG.getDefaultState().with(BlockStateProperties.PERSISTENT, persistent).with(BlockStateProperties.DISTANCE_1_7, distance_1_7);
+                            return Blocks.BIRCH_LEAVES.getDefaultState().with(BlockStateProperties.PERSISTENT, persistent).with(BlockStateProperties.DISTANCE_1_7, distance_1_7);
                         case SPRUCE:
-                            return Blocks.SPRUCE_LOG.getDefaultState().with(BlockStateProperties.PERSISTENT, persistent).with(BlockStateProperties.DISTANCE_1_7, distance_1_7);
+                            return Blocks.SPRUCE_LEAVES.getDefaultState().with(BlockStateProperties.PERSISTENT, persistent).with(BlockStateProperties.DISTANCE_1_7, distance_1_7);
                         case ACACIA:
-                            return Blocks.ACACIA_LOG.getDefaultState().with(BlockStateProperties.PERSISTENT, persistent).with(BlockStateProperties.DISTANCE_1_7, distance_1_7);
+                            return Blocks.ACACIA_LEAVES.getDefaultState().with(BlockStateProperties.PERSISTENT, persistent).with(BlockStateProperties.DISTANCE_1_7, distance_1_7);
                         case JUNGLE:
-                            return Blocks.JUNGLE_LOG.getDefaultState().with(BlockStateProperties.PERSISTENT, persistent).with(BlockStateProperties.DISTANCE_1_7, distance_1_7);
+                            return Blocks.JUNGLE_LEAVES.getDefaultState().with(BlockStateProperties.PERSISTENT, persistent).with(BlockStateProperties.DISTANCE_1_7, distance_1_7);
                         case DARK_OAK:
-                            return Blocks.DARK_OAK_LOG.getDefaultState().with(BlockStateProperties.PERSISTENT, persistent).with(BlockStateProperties.DISTANCE_1_7, distance_1_7);
+                            return Blocks.DARK_OAK_LEAVES.getDefaultState().with(BlockStateProperties.PERSISTENT, persistent).with(BlockStateProperties.DISTANCE_1_7, distance_1_7);
                         default:
                             return Blocks.AIR.getDefaultState();
 
@@ -427,15 +419,15 @@ public class TreeTile extends TileEntity {
                     return Registration.getLeafBlock(wood, leafType).getDefaultState()
                             .with(BlockStateProperties.WATERLOGGED, (i & 1) == 0 ? Boolean.FALSE : Boolean.TRUE)
                             .with(BlockStateProperties.HALF, Half.values()[i >> 5 & 1])
-                            .with(BlockStateProperties.OPEN, (i >> 6 & 1) == 0 ? Boolean.FALSE : Boolean.TRUE)
-                            .with(BlockStateProperties.POWERED, (i >> 7 & 1) == 0 ? Boolean.FALSE : Boolean.TRUE)
-                            .with(BlockStateProperties.HORIZONTAL_FACING, Direction.values()[i >> 8 & 7]);
+                            .with(BlockStateProperties.STAIRS_SHAPE, StairsShape.values()[i >> 6 & 7])
+                            .with(BlockStateProperties.HORIZONTAL_FACING, Direction.values()[i >> 9 & 7]);
                 } else if (leafType == 3) {
                     return Registration.getLeafBlock(wood, leafType).getDefaultState()
                             .with(BlockStateProperties.WATERLOGGED, (i & 1) == 0 ? Boolean.FALSE : Boolean.TRUE)
                             .with(BlockStateProperties.HALF, Half.values()[i >> 5 & 1])
-                            .with(BlockStateProperties.STAIRS_SHAPE, StairsShape.values()[i >> 6 & 7])
-                            .with(BlockStateProperties.FACING, Direction.values()[i >> 9 & 7]);
+                            .with(BlockStateProperties.OPEN, (i >> 6 & 1) == 0 ? Boolean.FALSE : Boolean.TRUE)
+                            .with(BlockStateProperties.POWERED, (i >> 7 & 1) == 0 ? Boolean.FALSE : Boolean.TRUE)
+                            .with(BlockStateProperties.HORIZONTAL_FACING, Direction.values()[i >> 8 & 7]);
 
                 }
             }
@@ -447,9 +439,9 @@ public class TreeTile extends TileEntity {
             List<Integer> blockList = new ArrayList<>();
             for (Map.Entry<Vec3i, BlockState> entry : treeBlocks.entrySet()) {
                 Vec3i key = entry.getKey();
-                vectorList.add((byte)key.getX());
-                vectorList.add((byte)key.getY());
-                vectorList.add((byte)key.getZ());
+                vectorList.add((byte) key.getX());
+                vectorList.add((byte) key.getY());
+                vectorList.add((byte) key.getZ());
                 blockList.add(serializeBlockState(entry.getValue()));
             }
             CompoundNBT tag = new CompoundNBT();

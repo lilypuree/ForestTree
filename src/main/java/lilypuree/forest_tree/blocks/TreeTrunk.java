@@ -36,7 +36,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 public class TreeTrunk extends Block implements IWaterLoggable, ITreeBlock {
-    public static final EnumProperty<LeafSlabType> LEAVES_SLAB_TYPE = ForestTreeProperties.LEAVES_SLAB_TYPE;
+//    public static final EnumProperty<LeafSlabType> LEAVES_SLAB_TYPE = ForestTreeProperties.LEAVES_SLAB_TYPE;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final EnumProperty<BranchType> NORTH_CONNECTION = ForestTreeProperties.NORTH_CONNECTION;
     public static final EnumProperty<BranchType> SOUTH_CONNECTION = ForestTreeProperties.SOUTH_CONNECTION;
@@ -204,7 +204,8 @@ public class TreeTrunk extends Block implements IWaterLoggable, ITreeBlock {
     }
 
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(UP, NORTH_CONNECTION, EAST_CONNECTION, WEST_CONNECTION, SOUTH_CONNECTION, WATERLOGGED, LEAVES_SLAB_TYPE);
+//        builder.add(UP, NORTH_CONNECTION, EAST_CONNECTION, WEST_CONNECTION, SOUTH_CONNECTION, WATERLOGGED, LEAVES_SLAB_TYPE);
+        builder.add(UP, NORTH_CONNECTION, EAST_CONNECTION, WEST_CONNECTION, SOUTH_CONNECTION, WATERLOGGED);
     }
 
     public Direction getHitSide(BlockState block, BlockPos pos, BlockRayTraceResult rayTraceResult) {

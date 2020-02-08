@@ -26,6 +26,11 @@ public class Items extends ItemModelProvider {
                 .texture("#trunk", mcLoc("block/" + wood + "_log")).texture("#top", mcLoc("block/" + wood + "_log_top"));
     }
 
+    public void treeItem(WoodTypes wood, ThicknessTypes thickness) {
+        singleTexture(wood + "_" + thickness + "_tree", mcLoc("item/generated"), mcLoc("block/oak_sapling"));
+
+    }
+
     @Override
     protected void registerModels() {
         for (WoodTypes wood : WoodTypes.values()) {
@@ -33,6 +38,7 @@ public class Items extends ItemModelProvider {
                 for (TreeBlockTypes types : TreeBlockTypes.values()) {
                     treeBlockItem(wood, thickness, types);
                 }
+                treeItem(wood, thickness);
             }
         }
         getBuilder(Registration.GRAFTING_TOOL.getId().getPath()).parent(new ModelFile.UncheckedModelFile("item/generated")).texture("layer0", mcLoc("item/shears"));

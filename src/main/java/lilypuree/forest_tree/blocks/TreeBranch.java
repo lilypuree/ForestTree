@@ -40,7 +40,7 @@ import java.util.Arrays;
 
 public class TreeBranch extends Block implements IWaterLoggable, ITreeBlock {
 
-    public static final EnumProperty<LeafSlabType> LEAVES_SLAB_TYPE = ForestTreeProperties.LEAVES_SLAB_TYPE;
+//    public static final EnumProperty<LeafSlabType> LEAVES_SLAB_TYPE = ForestTreeProperties.LEAVES_SLAB_TYPE;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final EnumProperty<BranchType> CONNECTION = ForestTreeProperties.CONNECTION;
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -180,7 +180,8 @@ public class TreeBranch extends Block implements IWaterLoggable, ITreeBlock {
     }
 
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(CONNECTION, FACING, MAIN_BRANCH, RIGHT_BRANCH, LEFT_BRANCH, WATERLOGGED, LEAVES_SLAB_TYPE);
+//        builder.add(CONNECTION, FACING, MAIN_BRANCH, RIGHT_BRANCH, LEFT_BRANCH, WATERLOGGED, LEAVES_SLAB_TYPE);
+        builder.add(CONNECTION, FACING, MAIN_BRANCH, RIGHT_BRANCH, LEFT_BRANCH, WATERLOGGED);
     }
 
     @Override
@@ -198,6 +199,8 @@ public class TreeBranch extends Block implements IWaterLoggable, ITreeBlock {
         if (block.get(MAIN_BRANCH)) {
             if (y < 1.0D && y > f1) {
                 return Direction.UP;
+            } else if (y > 0.0D && y < f){
+                return Direction.DOWN;
             } else if (x > 0.0D && x < f) {
                 return Direction.WEST;
             } else if (x < 1.0D && x > f1) {
@@ -206,8 +209,6 @@ public class TreeBranch extends Block implements IWaterLoggable, ITreeBlock {
                 return Direction.NORTH;
             } else if (z < 1.0D && z > f1) {
                 return Direction.SOUTH;
-            } else if (y > 0.0D && y < f){
-                return Direction.DOWN;
             }
         }
         return rayTraceResult.getFace();
