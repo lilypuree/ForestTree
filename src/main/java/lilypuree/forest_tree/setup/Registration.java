@@ -2,7 +2,7 @@ package lilypuree.forest_tree.setup;
 
 import com.google.common.collect.ImmutableMap;
 import lilypuree.forest_tree.blocks.LeavesSlabBlock;
-import lilypuree.forest_tree.blocks.LeavesStairBlock;
+import lilypuree.forest_tree.blocks.LeavesStairsBlock;
 import lilypuree.forest_tree.blocks.LeavesTrapDoorBlock;
 import lilypuree.forest_tree.blocks.TreeTile;
 import lilypuree.forest_tree.datagen.types.ThicknessTypes;
@@ -57,7 +57,15 @@ public class Registration {
     public static final ImmutableMap<String, RegistryObject<Block>> TREE_BLOCKS;
     public static final ImmutableMap<String, RegistryObject<Item>> TREE_BLOCK_ITEMS;
 
+    private  static Item.Properties timber = new Item.Properties().group(ItemGroup.MATERIALS);
     public static final RegistryObject<GraftingToolItem> GRAFTING_TOOL = ITEMS.register("grafting_tool", () -> new GraftingToolItem((new Item.Properties()).maxDamage(238).group(ItemGroup.TOOLS)));
+    public static final RegistryObject<Item> ACACIA_TIMBER = ITEMS.register("acacia_timber", ()->new Item(timber));
+    public static final RegistryObject<Item> BIRCH_TIMBER = ITEMS.register("birch_timber", ()->new Item(timber));
+    public static final RegistryObject<Item> DARK_OAK_TIMBER = ITEMS.register("dark_oak_timber", ()->new Item(timber));
+    public static final RegistryObject<Item> JUNGLE_TIMBER = ITEMS.register("jungle_timber", ()->new Item(timber));
+    public static final RegistryObject<Item> OAK_TIMBER = ITEMS.register("oak_timber", ()->new Item(timber));
+    public static final RegistryObject<Item> SPRUCE_TIMBER = ITEMS.register("spruce_timber", ()->new Item(timber));
+
 
     public static final RegistryObject<TileEntityType<TreeTile>> TREE_TILE ;
 
@@ -93,7 +101,7 @@ public class Registration {
         for (WoodTypes leaf : WoodTypes.values()) {
             String name = leaf + "_" + "leaves";
             Block leafSlab = new LeavesSlabBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid());
-            Block leafStair = new LeavesStairBlock(Blocks.OAK_LEAVES::getDefaultState, Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT).notSolid());
+            Block leafStair = new LeavesStairsBlock(Blocks.OAK_LEAVES::getDefaultState, Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT).notSolid());
             Block leafTrapDoor = new LeavesTrapDoorBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT).notSolid());
             blockBuilder.put((name + "_slab").toUpperCase(), BLOCKS.register(name + "_slab", () -> leafSlab));
             blockBuilder.put((name + "_stairs").toUpperCase(), BLOCKS.register(name + "_stairs", () -> leafStair));

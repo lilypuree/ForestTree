@@ -1,11 +1,8 @@
 package lilypuree.forest_tree.blocks;
 
 import com.google.common.primitives.Bytes;
-import com.google.common.primitives.Ints;
-import it.unimi.dsi.fastutil.bytes.Byte2IntFunctions;
 import lilypuree.forest_tree.blocks.properties.BranchType;
 import lilypuree.forest_tree.blocks.properties.ForestTreeProperties;
-import lilypuree.forest_tree.blocks.properties.LeafSlabType;
 import lilypuree.forest_tree.datagen.types.ThicknessTypes;
 import lilypuree.forest_tree.datagen.types.TreeBlockTypes;
 import lilypuree.forest_tree.datagen.types.WoodTypes;
@@ -26,7 +23,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -294,7 +290,7 @@ public class TreeTile extends TileEntity {
                 i = i | 1 << 15;
                 i = i | 4 << 17;
                 return i;
-            } else if (blockClass instanceof LeavesStairBlock) {
+            } else if (blockClass instanceof LeavesStairsBlock) {
                 i = i | (block.get(BlockStateProperties.WATERLOGGED) ? 1 : 0);
 //                i = i | (block.get(BlockStateProperties.PERSISTENT) ? 1 : 0) <<1;
 //                i = i | (block.get(BlockStateProperties.DISTANCE_1_7)).byteValue() <<2;
@@ -450,7 +446,6 @@ public class TreeTile extends TileEntity {
             tag.putInt("facing", this.facing.getIndex());
             return tag;
         }
-
 
         public void deserialize(CompoundNBT tag) {
             Map<Vec3i, BlockState> treeBlocksMap = new HashMap<>();

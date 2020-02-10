@@ -271,9 +271,10 @@ public class BlockStates extends BlockStateProvider {
             }
         }
         for (WoodTypes leaf : WoodTypes.values()) {
-            leafStairsBlock((StairsBlock) Registration.TREE_BLOCKS.get((leaf + "_leaves_stairs").toUpperCase()).get(), mcLoc("block/" + leaf + "_leaves"));
-            leafSlabBlock((SlabBlock) Registration.TREE_BLOCKS.get((leaf + "_leaves_slab").toUpperCase()).get(), mcLoc(leaf + "_leaves"), mcLoc("block/" + leaf + "_leaves"));
-            leafTrapdoorBlock((TrapDoorBlock) Registration.TREE_BLOCKS.get((leaf + "_leaves_trapdoor").toUpperCase()).get(), mcLoc("block/" + leaf + "_leaves"), true);
+            //These were created when the leaves blocks were stairs. now they are leaves, and these won't work.
+//            leafStairsBlock((StairsBlock) Registration.TREE_BLOCKS.get((leaf + "_leaves_stairs").toUpperCase()).get(), mcLoc("block/" + leaf + "_leaves"));
+//            leafSlabBlock((SlabBlock) Registration.TREE_BLOCKS.get((leaf + "_leaves_slab").toUpperCase()).get(), mcLoc(leaf + "_leaves"), mcLoc("block/" + leaf + "_leaves"));
+//            leafTrapdoorBlock((TrapDoorBlock) Registration.TREE_BLOCKS.get((leaf + "_leaves_trapdoor").toUpperCase()).get(), mcLoc("block/" + leaf + "_leaves"), true);
         }
     }
 }

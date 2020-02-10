@@ -1,4 +1,4 @@
 package lilypuree.forest_tree.datagen;
 
-public class LootTables {
+public class LootTables{
 }

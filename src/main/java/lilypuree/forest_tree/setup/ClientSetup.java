@@ -26,6 +26,7 @@ public class ClientSetup {
         }
     }
 
+
     @SubscribeEvent
     public static void onBlockColourHandlerEvent(final ColorHandlerEvent.Block event) {
         for (WoodTypes type : new WoodTypes[]{WoodTypes.OAK, WoodTypes.ACACIA, WoodTypes.JUNGLE, WoodTypes.DARK_OAK}) {
