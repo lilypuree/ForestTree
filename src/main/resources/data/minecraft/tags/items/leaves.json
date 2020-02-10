@@ -1,0 +1,22 @@
+{
+  "values" : [
+    "forest_tree:acacia_leaves_slab",
+    "forest_tree:acacia_leaves_stairs",
+    "forest_tree:acacia_leaves_trapdoor",
+    "forest_tree:birch_leaves_slab",
+    "forest_tree:birch_leaves_stairs",
+    "forest_tree:birch_leaves_trapdoor",
+    "forest_tree:dark_oak_leaves_slab",
+    "forest_tree:dark_oak_leaves_stairs",
+    "forest_tree:dark_oak_leaves_trapdoor",
+    "forest_tree:jungle_leaves_slab",
+    "forest_tree:jungle_leaves_stairs",
+    "forest_tree:jungle_leaves_trapdoor",
+    "forest_tree:oak_leaves_slab",
+    "forest_tree:oak_leaves_stairs",
+    "forest_tree:oak_leaves_trapdoor",
+    "forest_tree:spruce_leaves_slab",
+    "forest_tree:spruce_leaves_stairs",
+    "forest_tree:spruce_leaves_trapdoor"
+  ]
+}
