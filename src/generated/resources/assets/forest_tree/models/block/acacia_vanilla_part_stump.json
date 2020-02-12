@@ -1,7 +1,0 @@
-{
-  "parent": "forest_tree:block/vanilla_part_stump",
-  "textures": {
-    "trunk": "block/acacia_log",
-    "top": "block/acacia_log_top"
-  }
-}

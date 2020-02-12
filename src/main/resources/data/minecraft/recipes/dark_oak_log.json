@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "forest tree",
+  "ingredients": [
+    {
+      "item": "forest_tree:dark_oak_timber"
+    },
+    {
+      "item": "forest_tree:dark_oak_timber"
+    }
+  ],
+  "result": {
+    "item": "minecraft:dark_oak_log",
+    "count": 2
+  }
+}

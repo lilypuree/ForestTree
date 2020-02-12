@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "forest tree",
+  "ingredients": [
+    {
+      "item": "forest_tree:spruce_timber"
+    },
+    {
+      "item": "forest_tree:spruce_timber"
+    }
+  ],
+  "result": {
+    "item": "minecraft:spruce_log",
+    "count": 2
+  }
+}

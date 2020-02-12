@@ -17,6 +17,7 @@ import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -32,6 +33,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
@@ -136,6 +139,10 @@ public class TreeStump extends Block implements IWaterLoggable, ITreeBlock {
         ItemStack heldItem = playerIn.getHeldItem(handIn);
         if (tileEntity instanceof TreeTile) {
             if (heldItem.getToolTypes().contains(ToolType.AXE) && !block.get(STUMP)) {
+                if(playerIn.isCreative()){
+                    ((TreeTile) tileEntity).chopDownTree();
+                    return ActionResultType.SUCCESS;
+                }
                 if (((TreeTile) tileEntity).attemptChopDown()) {
                     worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_WOOD_BREAK, SoundCategory.BLOCKS, 1.2F, 1.0F);
                     if (!worldIn.isRemote) worldIn.setBlockState(pos, block.cycle(STUMP));
@@ -145,7 +152,7 @@ public class TreeStump extends Block implements IWaterLoggable, ITreeBlock {
             if (heldItem.getToolTypes().contains(ToolType.SHOVEL) && !block.get(STUMP)){
                 if(playerIn.isCreative() && !worldIn.isRemote){
                     playerIn.addItemStackToInventory(((TreeTile) tileEntity).getTreeItem());
-                }else {
+                }else if(!worldIn.isRemote()) {
                     if(((TreeTile) tileEntity).attemptUproot(playerIn.getHorizontalFacing())){
                         worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 1.2F, 1.0F);
                     }else {
@@ -153,23 +160,26 @@ public class TreeStump extends Block implements IWaterLoggable, ITreeBlock {
                     }
                 }
             }
-        }
-
-        if (!worldIn.isRemote && tileEntity instanceof TreeTile) {
-            if (playerIn.getHeldItem(handIn).getItem() == Items.CARROT && !block.get(STUMP)) {
-                ((TreeTile) worldIn.getTileEntity(pos)).registerTree();
-
-                return ActionResultType.SUCCESS;
-            }
-
-
-            if (playerIn.getHeldItem(handIn).getItem() == Items.ALLIUM) {
-
-                System.out.println(((TreeTile) worldIn.getTileEntity(pos)).write(new CompoundNBT()).toString());
-
+            if (heldItem.getItem() == Registration.TREE_ESSENCE.get() && !block.get(STUMP)) {
+                if(!worldIn.isRemote()) {
+                    ((TreeTile) worldIn.getTileEntity(pos)).registerTree();
+                    heldItem.shrink(1);
+                }else {
+                    spawnTreeStumpParticles(worldIn, pos, 15);
+                }
                 return ActionResultType.SUCCESS;
             }
         }
+
+//        if (!worldIn.isRemote && tileEntity instanceof TreeTile) {
+//
+//            if (playerIn.getHeldItem(handIn).getItem() == Items.ALLIUM) {
+//
+//                System.out.println(((TreeTile) worldIn.getTileEntity(pos)).write(new CompoundNBT()).toString());
+//
+//                return ActionResultType.SUCCESS;
+//            }
+//        }
 
         return super.onBlockActivated(block, worldIn, pos, playerIn, handIn, rayTraceResult);
     }
@@ -198,5 +208,23 @@ public class TreeStump extends Block implements IWaterLoggable, ITreeBlock {
     @Override
     public TreeBlockTypes getTreeBlockType() {
         return TreeBlockTypes.STUMP;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void spawnTreeStumpParticles(IWorld worldIn, BlockPos posIn, int data) {
+        if (data == 0) {
+            data = 15;
+        }
+
+        BlockState blockstate = worldIn.getBlockState(posIn);
+        if (!blockstate.isAir(worldIn, posIn)) {
+            for(int i = 0; i < data; ++i) {
+                double d0 = random.nextGaussian() * 0.02D;
+                double d1 = random.nextGaussian() * 0.02D;
+                double d2 = random.nextGaussian() * 0.02D;
+                worldIn.addParticle(ParticleTypes.HAPPY_VILLAGER, (double)((float)posIn.getX() + random.nextFloat()), (double)posIn.getY() + (double)random.nextFloat() * blockstate.getShape(worldIn, posIn).getEnd(Direction.Axis.Y), (double)((float)posIn.getZ() + random.nextFloat()), d0, d1, d2);
+            }
+
+        }
     }
 }

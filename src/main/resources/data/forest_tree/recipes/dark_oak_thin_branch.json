@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx "
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:dark_oak_wood"
+    }
+  },
+  "result": {
+    "item": "forest_tree:dark_oak_thin_branch",
+    "count": 4
+  }
+}

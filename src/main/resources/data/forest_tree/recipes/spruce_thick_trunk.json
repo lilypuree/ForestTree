@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " x ",
+    " x ",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:spruce_wood"
+    }
+  },
+  "result": {
+    "item": "forest_tree:spruce_thick_trunk",
+    "count": 3
+  }
+}

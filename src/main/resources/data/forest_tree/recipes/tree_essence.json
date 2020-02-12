@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "forest_tree:tree_extract"
+  },
+  "result": "forest_tree:tree_essence",
+  "experience": 0.50,
+  "cookingtime": 1200
+}

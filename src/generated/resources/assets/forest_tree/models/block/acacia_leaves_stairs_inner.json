@@ -1,8 +1,0 @@
-{
-  "parent": "forest_tree:block/leaf_inner_stairs",
-  "textures": {
-    "side": "block/acacia_leaves",
-    "bottom": "block/acacia_leaves",
-    "top": "block/acacia_leaves"
-  }
-}

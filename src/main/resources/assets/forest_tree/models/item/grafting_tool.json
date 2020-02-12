@@ -1,6 +1,6 @@
 {
-  "parent": "item/generated",
+  "parent": "item/handheld",
   "textures": {
-    "layer0": "item/shears"
+    "layer0": "forest_tree:item/grafting_tool"
   }
 }

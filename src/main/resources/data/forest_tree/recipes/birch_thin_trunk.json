@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " x ",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:birch_wood"
+    }
+  },
+  "result": {
+    "item": "forest_tree:birch_thin_trunk",
+    "count": 4
+  }
+}

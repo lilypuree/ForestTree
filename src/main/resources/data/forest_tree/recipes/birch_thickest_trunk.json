@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " x ",
+    " xx",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:birch_wood"
+    }
+  },
+  "result": {
+    "item": "forest_tree:birch_thickest_trunk",
+    "count": 2
+  }
+}

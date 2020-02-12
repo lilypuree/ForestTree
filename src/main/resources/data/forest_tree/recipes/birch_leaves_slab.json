@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:birch_leaves"
+    }
+  },
+  "result": {
+    "item": "forest_tree:birch_leaves_slab",
+    "count": 6
+  }
+}

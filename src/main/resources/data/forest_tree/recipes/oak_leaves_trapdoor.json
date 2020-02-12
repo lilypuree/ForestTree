@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:oak_leaves"
+    }
+  },
+  "result": {
+    "item": "forest_tree:oak_leaves_trapdoor",
+    "count": 2
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " xx",
+    " xx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:acacia_wood"
+    }
+  },
+  "result": {
+    "item": "forest_tree:acacia_thickest_stump",
+    "count": 2
+  }
+}
