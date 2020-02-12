@@ -59,8 +59,8 @@ public class Registration {
 
     private static Item.Properties timber = new Item.Properties().group(ItemGroup.MATERIALS);
     public static final RegistryObject<GraftingToolItem> GRAFTING_TOOL = ITEMS.register("grafting_tool", () -> new GraftingToolItem((new Item.Properties()).maxDamage(238).group(ItemGroup.TOOLS)));
-    public static final RegistryObject<Item> TREE_EXTRACT = ITEMS.register("tree_extract", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> TREE_ESSENCE = ITEMS.register("tree_essence", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> TREE_EXTRACT = ITEMS.register("tree_extract", () -> new Item(new Item.Properties().group(ItemGroup.MISC)));
+    public static final RegistryObject<Item> TREE_ESSENCE = ITEMS.register("tree_essence", () -> new Item(new Item.Properties().group(ItemGroup.MISC)));
     public static final RegistryObject<Item> ACACIA_TIMBER = ITEMS.register("acacia_timber", () -> new Item(timber));
     public static final RegistryObject<Item> BIRCH_TIMBER = ITEMS.register("birch_timber", () -> new Item(timber));
     public static final RegistryObject<Item> DARK_OAK_TIMBER = ITEMS.register("dark_oak_timber", () -> new Item(timber));

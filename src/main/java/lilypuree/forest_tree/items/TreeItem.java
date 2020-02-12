@@ -40,6 +40,8 @@ public class TreeItem extends Item {
         PlayerEntity player = context.getPlayer();
         ItemStack item = context.getItem();
 
+        if(!item.hasTag()) return ActionResultType.PASS;
+
         if (canPlantInPos(plantingPos, world)) {
             if (!world.isRemote) {
                 BlockPos treePos = plantingPos.offset(Direction.UP);

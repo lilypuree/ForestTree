@@ -79,6 +79,7 @@ public class TreeTile extends TileEntity {
     public void chopDownTree() {
         if (this.world.isRemote() || !hasTreeData()) return;
         for (Vec3i offset : this.treeData.getTreePositions()) {
+            if(offset.equals(Vec3i.NULL_VECTOR)) continue;
             BlockPos treePos = this.getPos().add(offset);
             Block block = world.getBlockState(treePos).getBlock();
             if (isTreeBlock(block) || isLeafBlock(block)) {
@@ -113,6 +114,7 @@ public class TreeTile extends TileEntity {
 
     public void replantTree(Direction dir) {
         if (!world.isRemote() && hasTreeData()) {
+            TreeData newTreeData = new TreeData(pos, world);
             Direction originalFacing = this.treeData.getFacing();
             for (Vec3i offset : this.treeData.getTreePositions()) {
                 if (offset.compareTo(Vec3i.NULL_VECTOR) == 0) continue; //should keep this stump from resetting.
@@ -125,9 +127,12 @@ public class TreeTile extends TileEntity {
                 else if (dir == originalFacing.rotateYCCW()) rotation = Rotation.COUNTERCLOCKWISE_90;
                 if (isLeafBlock(world.getBlockState(treePos).getBlock())) world.destroyBlock(treePos, true);
                 BlockState state = this.treeData.getBlockStateOf(offset).rotate(rotation);
+
+                newTreeData.add(newOffset, state);
                 world.setBlockState(treePos, state);
                 world.notifyBlockUpdate(treePos, state, state, 1 | 2);
             }
+            this.treeData = newTreeData;
         }
     }
 
@@ -211,6 +216,10 @@ public class TreeTile extends TileEntity {
         public TreeData(BlockPos rootPos, World worldIn) {
             treeBlocks = new HashMap<>();
             facing = Direction.NORTH;
+        }
+
+        public void add(Vec3i pos, BlockState state){
+            treeBlocks.put(pos, state);
         }
 
         public void register(BlockPos rootPos, World worldIn) {

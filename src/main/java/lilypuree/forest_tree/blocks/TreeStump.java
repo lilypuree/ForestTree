@@ -12,6 +12,7 @@ import net.minecraft.block.IWaterLoggable;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.ItemStack;
@@ -145,6 +146,7 @@ public class TreeStump extends Block implements IWaterLoggable, ITreeBlock {
                 }
                 if (((TreeTile) tileEntity).attemptChopDown()) {
                     worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_WOOD_BREAK, SoundCategory.BLOCKS, 1.2F, 1.0F);
+                    heldItem.attemptDamageItem(1, random, (ServerPlayerEntity) playerIn);
                     if (!worldIn.isRemote) worldIn.setBlockState(pos, block.cycle(STUMP));
                 } else worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_WOOD_HIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 return ActionResultType.SUCCESS;
@@ -154,6 +156,7 @@ public class TreeStump extends Block implements IWaterLoggable, ITreeBlock {
                     playerIn.addItemStackToInventory(((TreeTile) tileEntity).getTreeItem());
                 }else if(!worldIn.isRemote()) {
                     if(((TreeTile) tileEntity).attemptUproot(playerIn.getHorizontalFacing())){
+                        heldItem.attemptDamageItem(1, random, (ServerPlayerEntity) playerIn);
                         worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 1.2F, 1.0F);
                     }else {
                         worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_GRASS_HIT, SoundCategory.BLOCKS, 1.2F, 1.0F);
