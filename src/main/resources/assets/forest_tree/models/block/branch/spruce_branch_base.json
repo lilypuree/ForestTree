@@ -1,0 +1,10 @@
+{
+  "parent": "block/block",
+  "loader" : "forest_tree:branchloader",
+  "textures" : {
+    "particles" : "block/spruce_log",
+    "side": "block/spruce_log",
+    "end": "block/spruce_log_top",
+    "leaf": "block/spruce_leaves"
+  }
+}

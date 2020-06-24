@@ -1,7 +1,0 @@
-{
-  "parent": "forest_tree:block/acacia_thin_trunk_inventory",
-  "textures": {
-    "#trunk": "block/acacia_log",
-    "#top": "block/acacia_log_top"
-  }
-}

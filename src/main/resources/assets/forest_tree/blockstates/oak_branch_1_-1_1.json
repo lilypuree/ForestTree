@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "tree_age=0": {
+      "model": "forest_tree:block/branch/oak_branch_1_-1_1"
+    },
+    "tree_age=1": {
+      "model": "forest_tree:block/branch/oak_branch_1_-1_1"
+    },
+    "tree_age=2": {
+      "model": "forest_tree:block/branch/oak_branch_1_-1_1"
+    },
+    "tree_age=3": {
+      "model": "forest_tree:block/branch/oak_branch_1_-1_1"
+    },
+    "tree_age=4": {
+      "model": "forest_tree:block/branch/oak_branch_1_-1_1"
+    },
+    "tree_age=5": {
+      "model": "forest_tree:block/branch/oak_branch_1_-1_1"
+    },
+    "tree_age=6": {
+      "model": "forest_tree:block/branch/oak_branch_1_-1_1"
+    },
+    "tree_age=7": {
+      "model": "forest_tree:block/branch/oak_branch_1_-1_1"
+    },
+    "tree_age=8": {
+      "model": "forest_tree:block/branch/oak_branch_1_-1_1"
+    },
+    "tree_age=9": {
+      "model": "forest_tree:block/branch/oak_branch_1_-1_1"
+    },
+    "tree_age=10": {
+      "model": "forest_tree:block/branch/oak_branch_1_-1_1"
+    },
+    "tree_age=11": {
+      "model": "forest_tree:block/branch/oak_branch_1_-1_1"
+    }
+  }
+}

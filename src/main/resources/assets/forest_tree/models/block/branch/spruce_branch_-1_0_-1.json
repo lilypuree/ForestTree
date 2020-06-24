@@ -1,0 +1,9 @@
+{
+  "parent": "forest_tree:block/branch/spruce_branch_base",
+  "loader": "forest_tree:branchloader",
+  "source": [
+    -1,
+    0,
+    -1
+  ]
+}

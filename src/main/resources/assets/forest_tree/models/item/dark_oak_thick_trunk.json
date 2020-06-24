@@ -1,7 +1,0 @@
-{
-  "parent": "forest_tree:block/dark_oak_thick_trunk_inventory",
-  "textures": {
-    "#trunk": "block/dark_oak_log",
-    "#top": "block/dark_oak_log_top"
-  }
-}

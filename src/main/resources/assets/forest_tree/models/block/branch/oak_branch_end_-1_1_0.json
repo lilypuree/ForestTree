@@ -1,0 +1,9 @@
+{
+  "parent": "forest_tree:block/branch/oak_branch_base",
+  "loader": "forest_tree:branchloader",
+  "source": [
+    -1,
+    1,
+    0
+  ]
+}

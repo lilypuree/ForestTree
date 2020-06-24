@@ -1,7 +1,0 @@
-{
-  "parent": "forest_tree:block/thick_part_side",
-  "textures": {
-    "trunk": "block/acacia_log",
-    "top": "block/acacia_log_top"
-  }
-}

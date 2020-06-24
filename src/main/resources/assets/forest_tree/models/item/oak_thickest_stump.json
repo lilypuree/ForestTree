@@ -1,7 +1,0 @@
-{
-  "parent": "forest_tree:block/oak_thickest_stump_inventory",
-  "textures": {
-    "#trunk": "block/oak_log",
-    "#top": "block/oak_log_top"
-  }
-}

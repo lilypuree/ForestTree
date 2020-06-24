@@ -1,7 +1,0 @@
-{
-  "parent": "forest_tree:block/thin_part_stump",
-  "textures": {
-    "trunk": "block/jungle_log",
-    "top": "block/jungle_log_top"
-  }
-}

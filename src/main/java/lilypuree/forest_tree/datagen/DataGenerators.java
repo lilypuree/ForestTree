@@ -13,22 +13,12 @@ public class DataGenerators {
         DataGenerator generator = event.getGenerator();
         if (event.includeServer()) {
 //            generator.addProvider(new Recipes(generator));
-            generator.addProvider(new LootTables(generator));
-
+//            generator.addProvider(new LootTables(generator));
         }
         if (event.includeClient()) {
-//            generator.addProvider(new BlockStates(generator, event.getExistingFileHelper()));
+            generator.addProvider(new BlockStates(generator, event.getExistingFileHelper()));
 //            generator.addProvider(new Items(generator, ForestTree.MODID, event.getExistingFileHelper()));
 //            generator.addProvider(new Languages(generator, "en_us"));
         }
-    }
-
-    public static String connectWithUnderscore(Object firstString, Object... strings){
-        StringBuilder builder = new StringBuilder(firstString.toString());
-        for (Object s : strings){
-            builder.append("_");
-            builder.append(s.toString());
-        }
-        return builder.toString();
     }
 }
