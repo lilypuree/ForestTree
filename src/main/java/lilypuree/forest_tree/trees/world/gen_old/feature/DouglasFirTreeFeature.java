@@ -1,4 +1,4 @@
-package lilypuree.forest_tree.trees.world.gen.feature;
+package lilypuree.forest_tree.trees.world.gen_old.feature;
 
 import com.mojang.datafixers.Dynamic;
 import lilypuree.forest_tree.trees.TreeBlocks;
@@ -6,9 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
 import net.minecraft.world.gen.IWorldGenerationReader;
-import org.lwjgl.system.CallbackI;
 
 import java.util.Optional;
 import java.util.Random;

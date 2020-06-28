@@ -1,13 +1,10 @@
-package lilypuree.forest_tree.trees.world.gen.feature;
+package lilypuree.forest_tree.trees.world.gen_old.feature;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.DynamicOps;
 import lilypuree.forest_tree.trees.species.Species;
-import net.minecraft.world.gen.blockstateprovider.BlockStateProvider;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
-import net.minecraft.world.gen.foliageplacer.FoliagePlacer;
 import net.minecraft.world.gen.treedecorator.TreeDecorator;
 import net.minecraftforge.common.IPlantable;
 

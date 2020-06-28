@@ -10,6 +10,8 @@ import lilypuree.forest_tree.trees.species.Species;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.item.BlockItem;
@@ -25,6 +27,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.function.Consumer;
 
 import static lilypuree.forest_tree.ForestTree.MODID;
 
@@ -51,13 +55,43 @@ public class Registration {
     public static final RegistryObject<AdvancedSaplingBlock> OAK_SAPLING = BLOCKS.register("oak_sapling", ()->new AdvancedSaplingBlock(new AdvancedOakTree(), Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0f).sound(SoundType.PLANT)));
     public static final RegistryObject<AdvancedSaplingBlock> PINE_SAPLING = BLOCKS.register("fir_sapling", ()->new AdvancedSaplingBlock(new PineTree(), Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0f).sound(SoundType.PLANT)));
 
-    public static final ImmutableMap<Pair<Integer, Vec3i>, RegistryObject<Block>> BRANCH_BLOCKS;
-    public static final ImmutableMap<Pair<Integer, Vec3i>, RegistryObject<Block>> BRANCH_END_BLOCKS;
+    public static final ImmutableMap<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> BRANCH_BLOCKS;
+    public static final ImmutableMap<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> BRANCH_END_BLOCKS;
     public static final ImmutableMap<Integer, RegistryObject<Item>> BRANCH_BLOCK_ITEMS;
 
+    public static void forAllBranches(Consumer<BranchBlock> action){
+        for (Species species : ModSpecies.allSpecies()) {
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    for (int z = -1; z <= 1; z++) {
+                        if (x == 0 && y == 0 && z == 0) continue;
+                            Vec3i sourceDir = new Vec3i(x, y, z);
+                            Pair<Integer, Vec3i> pair = ImmutablePair.of(species.getID(), sourceDir);
+                            action.accept(BRANCH_BLOCKS.get(pair).get());
+                    }
+                }
+            }
+        }
+    }
+
+    public static void forAllBranchEnds(Consumer<BranchBlock> action){
+        for (Species species : ModSpecies.allSpecies()) {
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    for (int z = -1; z <= 1; z++) {
+                        if (x == 0 && y == 0 && z == 0) continue;
+                        Vec3i sourceDir = new Vec3i(x, y, z);
+                        Pair<Integer, Vec3i> pair = ImmutablePair.of(species.getID(), sourceDir);
+                        action.accept(BRANCH_END_BLOCKS.get(pair).get());
+                    }
+                }
+            }
+        }
+    }
+
     static {
-        ImmutableMap.Builder<Pair<Integer, Vec3i>, RegistryObject<Block>> branchBuilder = ImmutableMap.builder();
-        ImmutableMap.Builder<Pair<Integer, Vec3i>, RegistryObject<Block>> branchEndBuilder = ImmutableMap.builder();
+        ImmutableMap.Builder<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> branchBuilder = ImmutableMap.builder();
+        ImmutableMap.Builder<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> branchEndBuilder = ImmutableMap.builder();
         ImmutableMap.Builder<Integer, RegistryObject<Item>> itemBuilder = ImmutableMap.builder();
 
         Block.Properties properties = Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0f).sound(SoundType.WOOD).notSolid();
@@ -68,6 +102,7 @@ public class Registration {
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
                     for (int z = -1; z <= 1; z++) {
+                        if(x==0 && y==0 && z==0)continue;
                         String name = species.getName() + "_branch_" + x + "_" + y + "_" + z;
                         String endName = species.getName() + "_branch_end_" + x + "_" + y + "_" + z;
 

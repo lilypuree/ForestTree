@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "lilypuree.forest_tree.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "forest_tree.refmap.json",
+  "mixins": [
+  ],
+  "client":[
+    "GameRendererMixin",
+    "TitleMixin",
+    "EntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

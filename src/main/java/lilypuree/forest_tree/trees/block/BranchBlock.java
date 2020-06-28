@@ -1,7 +1,9 @@
 package lilypuree.forest_tree.trees.block;
 
 import lilypuree.forest_tree.trees.species.Species;
+import lilypuree.forest_tree.util.Util;
 import net.minecraft.block.*;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
@@ -9,7 +11,12 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -34,6 +41,58 @@ public class BranchBlock extends Block {
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(AGE);
     }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
+        Entity looker = context.getEntity();
+        if (looker instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) looker;
+            Vec3d start = player.getEyePosition(0);
+            Vec3d look = player.getLook(0);
+            Vec3d end = start.add(look.scale(6));
+            return getClosestShape(start, end, pos, blockReader);
+        }
+        return BranchVoxelShapes.getVoxelShapeForDirection(sourceOffset);
+    }
+
+    private VoxelShape getClosestShape(Vec3d start, Vec3d end, BlockPos pos, IBlockReader blockReader) {
+
+        VoxelShape temp = VoxelShapes.empty();
+        double tempDistance = Double.MAX_VALUE;
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                for (int k = -1; k <= 1; k++) {
+                    VoxelShape shape;
+                    if (i == 0 && j == 0 && k == 0) {
+                        shape = BranchVoxelShapes.getVoxelShapeForDirection(sourceOffset);
+                    } else {
+                        BlockPos otherPos = pos.add(i, j, k);
+                        Block otherBlock = blockReader.getBlockState(otherPos).getBlock();
+                        if (otherBlock instanceof BranchBlock && Util.compareVec3iToInts(((BranchBlock) otherBlock).getSourceOffset(), -i, -j, -k)) {
+                            shape = BranchVoxelShapes.getVoxelShapeForDirection(i, j, k);
+                        }else{
+                            continue;
+                        }
+                    }
+                    BlockRayTraceResult result = shape.rayTrace(start, end, pos);
+                    double distance = result == null ? Double.MAX_VALUE : start.squareDistanceTo(result.getHitVec());
+                    if (distance < tempDistance) {
+                        temp = shape;
+                        tempDistance = distance;
+                    }
+                }
+            }
+        }
+
+        return temp;
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+        return BranchVoxelShapes.getHalfShapeForDirection(sourceOffset);
+    }
+
 
     public BranchBlock setEnd(boolean isEnd) {
         this.end = isEnd;
@@ -124,30 +183,30 @@ public class BranchBlock extends Block {
         }
     }
 
-    public static boolean canLoseLeaves(World world, BlockPos pos){
+    public static boolean canLoseLeaves(World world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
-        if(block instanceof BranchBlock){
-            if(((BranchBlock)block).isEnd() && false) { //&&isBananaWood()
+        if (block instanceof BranchBlock) {
+            if (((BranchBlock) block).isEnd() && false) { //&&isBananaWood()
                 return false;
             }
-            return ((BranchBlock)block).getSpecies().canLoseLeaves();
+            return ((BranchBlock) block).getSpecies().canLoseLeaves();
         }
         return true;
     }
 
-    protected boolean validLeafLocation(World world, BlockPos pos, boolean willow){
-        if(world.isRemote)return false;
+    protected boolean validLeafLocation(World world, BlockPos pos, boolean willow) {
+        if (world.isRemote) return false;
 
-        for (Direction dir : Direction.values()){
+        for (Direction dir : Direction.values()) {
             Block block = world.getBlockState(pos.offset(dir)).getBlock();
-            boolean valid = (block instanceof LeavesBlock || (block instanceof BranchBlock) && ((BranchBlock)block).isEnd());
-            if (valid)return true;
+            boolean valid = (block instanceof LeavesBlock || (block instanceof BranchBlock) && ((BranchBlock) block).isEnd());
+            if (valid) return true;
         }
         return false;
     }
 
-   //updateTick? - handles removing and ticking for leaves
+    //updateTick? - handles removing and ticking for leaves
 
     //shouldLoseLeaf : has a season parameter
     //updateBranchTime : update branches to grow/lose leaves based on chunk loads
@@ -163,9 +222,9 @@ public class BranchBlock extends Block {
     @Override
     public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
 //        super.harvestBlock();
-        if(worldIn.isRemote) return;
+        if (worldIn.isRemote) return;
         boolean hasRightTool = true;
-        if(hasRightTool){
+        if (hasRightTool) {
             //do a bfs search
         }
     }

@@ -1,4 +1,4 @@
-package lilypuree.forest_tree.trees.world.gen.feature;
+package lilypuree.forest_tree.trees.world.gen_old.feature;
 
 import com.mojang.datafixers.Dynamic;
 import lilypuree.forest_tree.trees.TreeBlocks;
@@ -13,56 +13,50 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-public class PineTreeFeature extends DouglasFirTreeFeature {
-    final Vec3i[] pineDirections = new Vec3i[]{v(-1, 0, -1), v(-1, 0, 0),
-            v(-1, 0, 1), v(1, 0, -1), v(0, 0, -1), v(1, 0, 1),
-            v(0, 0, 1), v(1, 0, 0)};
-
-    public PineTreeFeature(Function<Dynamic<?>, ? extends AdvancedTreeFeatureConfig> configFactoryIn) {
+public class CedarTreeFeature extends DouglasFirTreeFeature {
+    public CedarTreeFeature(Function<Dynamic<?>, ? extends AdvancedTreeFeatureConfig> configFactoryIn) {
         super(configFactoryIn);
     }
 
     @Override
     protected boolean generate(IWorldGenerationReader reader, Random rand, BlockPos pos, Set<BlockPos> logs, Set<BlockPos> leaves, MutableBoundingBox mBB, AdvancedTreeFeatureConfig config) {
+
         height = config.height + rand.nextInt(config.heightRandom);
         Optional<BlockPos> optionalBlockPos = canPlaceTree(reader, height, pos, config);
         if (!optionalBlockPos.isPresent()) {
             return false;
         } else {
             BlockPos treepos = optionalBlockPos.get();
-
-            int lim = 2 + rand.nextInt(height / 4);
             for (int treePosY = 0; treePosY < height; treePosY++) {
-                addBranch(reader, rand, pos.add(0, treePosY, 0), new Vec3i(0, -1, 0), logs, mBB, config);
-                //trydomoss
-                if (treePosY > lim) {
-                    BlockPos newPos = pos.add(0, treePosY, 0);
-                    if (treePosY < height / 3) {
-                        int numBranches = 4 - rand.nextInt(3) + 1;
-                        generateRandomBranches(reader, rand, newPos, new Vec3i(0, 1, 0), numBranches, config.extraBranchLength + 2, logs, leaves, mBB, config);
-                    } else if (treePosY < (2 * height) / 3) {
-                        int numBranches = 6 - rand.nextInt(rand.nextInt(5) + 1);
-                        generateRandomBranches(reader, rand, newPos, new Vec3i(0, 1, 0), numBranches, rand.nextInt(config.extraBranchLength + 2) + 1, logs, leaves, mBB, config);
-                        fillInLeaves(reader, rand, newPos, false, leaves, mBB, config);
-                    } else if (treePosY >= 2 * height / 3) {
-                        int numBranches = 4 - rand.nextInt(rand.nextInt(3) + 1);
-                        generateRandomBranches(reader, rand, newPos, new Vec3i(0, 1, 0), numBranches, 1, logs, leaves, mBB, config);
-                    }
-                }
+                addLog(reader, rand, treepos.add(0, treePosY, 0), logs, mBB, config);
             }
-            BlockPos endPos = pos.add(0, height, 0);
-            addBranchEnd(reader, rand, endPos, new Vec3i(0, -1, 0), logs, mBB, config);
+
+            int branchPattern = rand.nextInt(8);
+            for (int treePosY = 1; treePosY < height; treePosY++) {
+                int numBranchesHere = rand.nextInt(3) + 5;
+                int extraBranchLength = 1;
+//                for (int j = 0; j < numBranchesHere; j++) {
+//                    if (rand.nextInt(4) != 0) {
+                generateRandomBranches(reader, rand, treepos.add(0, treePosY, 0),
+                        new Vec3i(0, 1, 0), numBranchesHere, extraBranchLength, logs, leaves, mBB, config);
+//                    }
+//                }
+                branchPattern += numBranchesHere;
+                branchPattern %= 8;
+            }
+
+            addBranchEnd(reader, rand, treepos.add(0, height, 0), new Vec3i(0, -1, 0), logs, mBB, config);
             return true;
         }
     }
-
 
     @Override
     protected boolean generateRandomBranches(IWorldGenerationReader world, Random rand, BlockPos pos, Vec3i currentDirection, int numBranches, int remainingDistance, Set<BlockPos> logs, Set<BlockPos> leaves, MutableBoundingBox mBB, AdvancedBaseTreeFeatureConfig config) {
         if (remainingDistance < 1) {
             return true;
         }
-        boolean[] validDirections = new boolean[] { false, false, false, false, false, false, false, false };
+        boolean[] validDirections = new boolean[]{false, false, false, false, false, false, false, false};
+
         int numValidDirections = setValidDirections(currentDirection, validDirections);
         numBranches = Math.min(numBranches, numValidDirections);
 
@@ -77,15 +71,16 @@ public class PineTreeFeature extends DouglasFirTreeFeature {
                 break;
             }
 
-            int index = rand.nextInt(pineDirections.length);
+            int index = rand.nextInt(validDirections.length);
             while (!validDirections[index]) {
-                index = rand.nextInt(pineDirections.length);
+                index = rand.nextInt(validDirections.length);
             }
             validDirections[index] = false;
             numValidDirections--;
             curDir = initialDirections[index];
-
-            currentRemainingDistance = subtractDistance(rand, curDir, currentRemainingDistance);
+            if (currentRemainingDistance > 1) {
+                currentRemainingDistance = 1;
+            }
 
             Vec3i sourceDir = new Vec3i(-curDir.getX(), -curDir.getY(), -curDir.getZ());
 

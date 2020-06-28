@@ -1,4 +1,4 @@
-package lilypuree.forest_tree.trees.world.gen.feature;
+package lilypuree.forest_tree.trees.world.gen_old.feature;
 
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.util.math.BlockPos;

@@ -1,8 +1,7 @@
-package lilypuree.forest_tree.trees.world.gen.feature;
+package lilypuree.forest_tree.trees.world.gen_old.feature;
 
 import com.mojang.datafixers.Dynamic;
 import lilypuree.forest_tree.trees.TreeBlocks;
-import lilypuree.forest_tree.trees.species.Species;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;

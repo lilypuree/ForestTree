@@ -23,7 +23,7 @@ public class BranchModelGeometry implements IModelGeometry<BranchModelGeometry> 
     private Vec3i source;
 
     public BranchModelGeometry(Vec3i source){
-        Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply()
+//        Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply()
         this.source = source;
     }
 

@@ -18,7 +18,7 @@ public class QuaternionHelper {
         Vector3f axis = new Vector3f(0, 1, 0);
         axis.cross(normal);
         axis.normalize();
-        if (len > 1.5) {
+        if (len > 1.6) {
             float angle = (float) ((y > 0) ? Math.asin(SQRT_2 / SQRT_3) : Math.PI - Math.asin(SQRT_2 / SQRT_3));
             Quaternion planeRotation = new Quaternion(axis, angle, false);
             Quaternion rotation = new Quaternion(new Vector3f(0, 1, 0), 45, true);

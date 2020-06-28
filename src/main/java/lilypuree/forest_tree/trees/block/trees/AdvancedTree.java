@@ -1,6 +1,6 @@
 package lilypuree.forest_tree.trees.block.trees;
 
-import lilypuree.forest_tree.trees.world.gen.feature.AdvancedTreeFeatureConfig;
+import lilypuree.forest_tree.trees.world.gen_old.feature.AdvancedTreeFeatureConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.tags.BlockTags;
@@ -8,7 +8,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
 
 import javax.annotation.Nullable;
 import java.util.Random;
