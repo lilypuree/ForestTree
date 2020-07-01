@@ -3,12 +3,16 @@ package lilypuree.forest_tree.trees;
 import lilypuree.forest_tree.Registration;
 import lilypuree.forest_tree.trees.species.Species;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3i;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class TreeBlocks {
 
     public static Block getBranchBlock(Vec3i sourcePos, boolean isEnd, Species species){
+        if(sourcePos.equals(Vec3i.NULL_VECTOR)){
+            return Blocks.AIR;
+        }
         if (isEnd){
             return getBranchEndBlock(sourcePos, species);
         }else

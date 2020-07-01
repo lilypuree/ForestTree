@@ -1,7 +1,5 @@
 package lilypuree.forest_tree.trees.client;
 
-import com.google.common.collect.Lists;
-import com.sun.org.apache.xpath.internal.functions.FuncCeiling;
 import lilypuree.forest_tree.trees.block.BranchBlock;
 import lilypuree.forest_tree.trees.block.ModBlockProperties;
 import lilypuree.forest_tree.trees.client.util.QuadUtils;
@@ -22,7 +20,6 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
-import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -173,10 +170,11 @@ public class BranchBakedModel implements IDynamicBakedModel {
     public IModelData getModelData(@Nonnull ILightReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData) {
         BranchBlock block = (BranchBlock) state.getBlock();
         Species species = block.getSpecies();
-        int distanceToTrunk = block.getDistanceToTrunk(world, pos, 0);
-        if (distanceToTrunk < 0) {
-            distanceToTrunk = 20;
-        }
+//        int distanceToTrunk = block.getDistanceToTrunk(world, pos, 0);
+//        if (distanceToTrunk < 0) {
+//            distanceToTrunk = 20;
+//        }
+        int distanceToTrunk = 2;
         float thickness = species.getThickness(distanceToTrunk, state.get(ModBlockProperties.TREE_AGE), block.isEnd(), block.getSourceOffset());
         if (tileData == EmptyModelData.INSTANCE) {
             tileData = new ModelDataMap.Builder().withInitial(ModBlockProperties.THICKNESS, thickness).build();

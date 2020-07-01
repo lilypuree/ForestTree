@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -15,15 +16,16 @@ import java.util.Random;
 public abstract class AdvancedTree {
 
     @Nullable
-    protected abstract ConfiguredFeature<AdvancedTreeFeatureConfig, ?>getTreeFeature(Random randomIn, boolean canPlace, int age);
+    protected abstract ConfiguredFeature<NoFeatureConfig, ?>getTreeFeature(Random randomIn, boolean canPlace, int age);
 
     public boolean place(IWorld worldIn, ChunkGenerator<?> generatorIn, BlockPos posIn, BlockState stateIn, Random randomIn, int ageIn){
-        ConfiguredFeature<AdvancedTreeFeatureConfig, ?> configuredFeature = this.getTreeFeature(randomIn, canPlaceTree(worldIn,posIn) ,ageIn);
+        ConfiguredFeature<NoFeatureConfig, ?> configuredFeature = this.getTreeFeature(randomIn, canPlaceTree(worldIn,posIn) ,ageIn);
         if(configuredFeature == null){
             return false;
         }else {
             worldIn.setBlockState(posIn, Blocks.AIR.getDefaultState(), 4);
-            ((AdvancedTreeFeatureConfig)configuredFeature.config).forcePlacement();
+
+//            ((AdvancedTreeFeatureConfig)configuredFeature.config).forcePlacement();
             if(configuredFeature.place(worldIn,generatorIn,randomIn,posIn)){
                 return true;
             }else {

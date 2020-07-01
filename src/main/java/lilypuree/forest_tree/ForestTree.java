@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 public class ForestTree
 {
     public static final String MODID = "forest_tree";
+    public static final Logger LOGGER = LogManager.getLogger();
 
 //    public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 
@@ -20,7 +21,6 @@ public class ForestTree
     public static ForestTree instance;
 
     // Directly reference a log4j logger.
-    private static final Logger LOGGER = LogManager.getLogger();
 
     public ForestTree() {
 

@@ -3,6 +3,7 @@ package lilypuree.forest_tree.core.setup;
 import lilypuree.forest_tree.ForestTree;
 import lilypuree.forest_tree.Registration;
 import lilypuree.forest_tree.datagen.types.WoodTypes;
+import lilypuree.forest_tree.trees.TreeBlocks;
 import lilypuree.forest_tree.trees.client.BranchModelLoader;
 import lilypuree.forest_tree.trees.species.ModSpecies;
 import lilypuree.forest_tree.trees.species.Species;
