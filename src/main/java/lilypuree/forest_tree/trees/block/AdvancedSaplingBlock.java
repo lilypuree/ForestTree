@@ -5,7 +5,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BushBlock;
 import net.minecraft.block.IGrowable;
-import net.minecraft.block.trees.Tree;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -34,6 +33,7 @@ public class AdvancedSaplingBlock extends BushBlock implements IGrowable {
         return SHAPE;
     }
 
+    //Changes on 1.16 to RandomTick
     @Override
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
         super.tick(state, worldIn, pos, rand);
@@ -43,7 +43,7 @@ public class AdvancedSaplingBlock extends BushBlock implements IGrowable {
         }
     }
 
-    public void growTree(ServerWorld world, BlockPos pos, BlockState state, Random rand){
+    public void placeTree(ServerWorld world, BlockPos pos, BlockState state, Random rand){
         if(state.get(STAGE) == 0){
             world.setBlockState(pos,state.cycle(STAGE), 4);
         }else {
@@ -64,7 +64,7 @@ public class AdvancedSaplingBlock extends BushBlock implements IGrowable {
 
     @Override
     public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
-        this.growTree(worldIn,pos,state,rand);
+        this.placeTree(worldIn,pos,state,rand);
     }
 
     @Override

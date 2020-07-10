@@ -35,12 +35,17 @@ public class AdvancedTreeFeature<T extends NoFeatureConfig> extends Feature<T> {
         this.treeGenerator = new TreeGenerator();
     }
 
+    public AdvancedTreeFeature<T> withGenerator(TreeGenerator generator){
+        this.treeGenerator = generator;
+        return this;
+    }
+
     protected boolean generate(IWorldGenerationReader reader, Random rand, BlockPos pos, Set<BlockPos> branches, Set<BlockPos> leaves, MutableBoundingBox mBB, T Config) {
         //don't have to do the chunk boundary test
         treeGenerator.setTreegenParameters(reader, rand, branches, leaves, mBB);
         //TODO
         //how should I determine the age?
-        return treeGenerator.generate(pos, 5);
+        return treeGenerator.generate(pos, 11);
     }
 
     //Copied from AbstractTreeFeature

@@ -1,4 +1,4 @@
-package lilypuree.forest_tree.trees.world.gen.feature;
+package lilypuree.forest_tree.trees.world.gen.feature.parametric;
 
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;

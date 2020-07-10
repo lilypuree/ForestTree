@@ -1,4 +1,4 @@
-package lilypuree.forest_tree.trees.world.gen.feature;
+package lilypuree.forest_tree.trees.world.gen.feature.parametric;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -11,6 +11,8 @@ import java.util.Random;
 public abstract class Meristem {
 
     protected MeristemFactory factory;
+    protected MeristemTerminator killer;
+    protected MeristemGrower grower;
     protected BranchDirectionHelper directionHelper;
 
     protected boolean alive = true;
@@ -22,11 +24,13 @@ public abstract class Meristem {
     protected GrowthVec dir;
 
 
-    public void init(int age, BlockPos pos, GrowthVec dir, MeristemFactory factory) {
+    public void init(int age, BlockPos pos, GrowthVec dir, MeristemFactory factory, MeristemGrower grower, MeristemTerminator killer) {
         this.age = age;
         this.pos = new BlockPos.Mutable(pos);
         this.dir = dir;
         this.factory = factory;
+        this.grower = grower;
+        this.killer = killer;
         this.directionHelper = factory.getDirectionHelper();
     }
 
@@ -38,7 +42,7 @@ public abstract class Meristem {
      * <p>ages if needed
      */
     public void grow(Random rand) {
-        if (rand.nextFloat() < factory.getMeristemDeathRate(this)) {
+        if (rand.nextFloat() < killer.getMeristemDeathRate(this)) {
             alive = false;
             return;
         }
@@ -85,11 +89,11 @@ public abstract class Meristem {
 
         float interval = length - lastNodeLength;
 
-        if (factory.shouldGenerateNode(interval, isTerminal())) {
+        if (grower.shouldGenerateNode(interval, isTerminal())) {
             lastNodeLength = length;
             BlockPos sourcePos = alive ? pos.add(getSourceDirection()) : pos;
             int count = (int) factory.randomMeristemsPerNode(isTerminal());
-            int newAge = age - (int)factory.randomAxillaryAgeOffset();
+            int newAge = age - (int) factory.randomAxillaryAgeOffset();
 
             if (alive) {
                 newMeristems.addAll(factory.createMeristemsOnNode(count, newAge, sourcePos, this));
@@ -109,7 +113,7 @@ public abstract class Meristem {
 
     public void decreaseAge() {
         float interval = length - lastAgeLength;
-        if (factory.shouldBranchAge(interval, isTerminal())) {
+        if (grower.shouldBranchAge(interval, isTerminal())) {
             age -= 1;
             lastAgeLength = length;
         }
@@ -130,7 +134,7 @@ public abstract class Meristem {
         @Override
         public void shiftDirection() {
             if (!dir.pitch.isVertical()) {
-                dir.yaw = dir.yaw.getCCRotatedYaw((int) (directionHelper.getTerminalYawRotation()));
+                dir.yaw = dir.yaw.getCCRotatedYaw((int) (directionHelper.getTerminalYawVariance()));
             }
             dir.pitch = directionHelper.changeTerminalPitchRandomly(dir.pitch);
         }

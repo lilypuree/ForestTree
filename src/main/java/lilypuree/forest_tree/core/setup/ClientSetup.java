@@ -5,8 +5,11 @@ import lilypuree.forest_tree.Registration;
 import lilypuree.forest_tree.datagen.types.WoodTypes;
 import lilypuree.forest_tree.trees.TreeBlocks;
 import lilypuree.forest_tree.trees.client.BranchModelLoader;
+import lilypuree.forest_tree.trees.client.gui.TreeDesignerScreen;
+import lilypuree.forest_tree.trees.customization.TreeDesignerTile;
 import lilypuree.forest_tree.trees.species.ModSpecies;
 import lilypuree.forest_tree.trees.species.Species;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.color.BlockColors;
@@ -38,6 +41,7 @@ public class ClientSetup {
                 RenderTypeLookup.setRenderLayer(branchBlock, RenderType.getCutoutMipped());
             }
         });
+        ScreenManager.registerFactory(Registration.TREE_DESIGNER_CONTAINER.get(), TreeDesignerScreen::new);
     }
 
 

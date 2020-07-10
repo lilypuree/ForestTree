@@ -1,19 +1,22 @@
 buildscript {
     repositories {
+        mavenLocal()
         maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://dist.creeper.host/Sponge/maven' }
         jcenter()
         mavenCentral()
-        maven {url='https://dist.creeper.host/Sponge/maven'}
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
+
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+
 
 version = "${mod_version}"
 group = "lilypuree.${modid}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -24,13 +27,13 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 minecraft {
     mappings channel: 'snapshot', version: "${mapping}-1.15.1"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
-     runs {
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    runs {
         client {
             workingDirectory project.file('run')
-            arg "-mixin.config="+archivesBaseName+".mixins.json"
+            arg "-mixin.config=" + archivesBaseName + ".mixins.json"
 
             // Recommended logging data for a userdev environment
 
@@ -46,7 +49,7 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
-            arg "-mixin.config="+archivesBaseName+".mixins.json"
+            arg "-mixin.config=" + archivesBaseName + ".mixins.json"
 
             // Recommended logging data for a userdev environment
 
@@ -79,7 +82,7 @@ minecraft {
     }
 }
 
-repositories{
+repositories {
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
@@ -90,9 +93,8 @@ repositories{
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
-
-    maven {url='https://dist.creeper.host/Sponge/maven'}
-
+    maven { url = 'https://dist.creeper.host/Sponge/maven' }
+    maven { url = "https://www.cursemaven.com" }
     jcenter()
     mavenCentral()
 
@@ -107,6 +109,8 @@ dependencies {
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
+
+    compile fg.deobf("curse.maven:mgui:2928277")
 
     compile 'org.spongepowered:mixin:0.8'
 
@@ -135,15 +139,15 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "${modid}",
-            "Specification-Vendor": "examplemodsareus",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs": "${modid}.mixins.json",
-            "MixinConnector": "lilypuree.${modid}.mixin.Connector"
+                "Specification-Title"     : "${modid}",
+                "Specification-Vendor"    : "examplemodsareus",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${version}",
+                "Implementation-Vendor"   : "examplemodsareus",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs"            : "${modid}.mixins.json",
+                "MixinConnector"          : "lilypuree.${modid}.mixin.Connector"
         ])
     }
 }

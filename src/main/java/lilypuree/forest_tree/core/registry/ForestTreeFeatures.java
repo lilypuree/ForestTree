@@ -16,7 +16,7 @@ public class ForestTreeFeatures {
     //    public static final Feature<TreeFeatureConfig> ROSEWOOD_TREE = new RosewoodTreeFeature(TreeFeatureConfig::func_227338_a_, false);
 //    public static final Feature<AdvancedTreeFeatureConfig> DEFAULT_TREE = new CustomShortTreeFeature((ops)-> ForestTreeFeatureConfigs.OAK_TREE_CONFIG);
 //    public static final Feature<AdvancedTreeFeatureConfig> PINE = new CedarTreeFeature((ops)-> ForestTreeFeatureConfigs.PINE_CONFIG);
-    public static final Feature<NoFeatureConfig> PLACEBO = new AdvancedTreeFeature<>(NoFeatureConfig::deserialize);
+    public static final AdvancedTreeFeature<NoFeatureConfig> CUSTOM = new AdvancedTreeFeature<>(NoFeatureConfig::deserialize);
 
 
     @SubscribeEvent

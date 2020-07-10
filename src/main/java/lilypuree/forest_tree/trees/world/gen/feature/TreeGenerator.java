@@ -4,10 +4,13 @@ import lilypuree.forest_tree.ForestTree;
 import lilypuree.forest_tree.Registration;
 import lilypuree.forest_tree.trees.TreeBlocks;
 import lilypuree.forest_tree.trees.block.ModBlockProperties;
+import lilypuree.forest_tree.trees.species.ModSpecies;
+import lilypuree.forest_tree.trees.world.gen.feature.parametric.Meristem;
+import lilypuree.forest_tree.trees.world.gen.feature.parametric.MeristemFactory;
 import net.minecraft.block.Block;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.gen.IWorldGenerationReader;
 
 import java.util.*;
@@ -19,7 +22,7 @@ public class TreeGenerator {
     private Random rand;
 
     public TreeGenerator() {
-        factory = new MeristemFactory();
+        factory = new MeristemFactory(new ModSpecies.Pine());
         placer = new TreePlacer();
     }
 
@@ -27,7 +30,7 @@ public class TreeGenerator {
         ForestTree.LOGGER.info("starting generation");
         //TODO
         //temporary values here
-        Optional<BlockPos> optionalBlockPos = placer.canPlaceTree(factory.getMaxHeight(), pos, true, true, 0, Registration.PLACEBO_SAPLING.get());
+        Optional<BlockPos> optionalBlockPos = placer.canPlaceTree(factory.getMaxHeight(), pos, true, true, 0, Registration.CUSTOM_SAPLING.get());
         if (!optionalBlockPos.isPresent()) {
             return false;
         } else {
@@ -73,4 +76,14 @@ public class TreeGenerator {
         placer.setParameters(reader, branches, leaves, mBB);
     }
 
+    public void loadFromNbt(CompoundNBT compound){
+        if(compound.contains("TreeGenerator")){
+            factory.loadFromNbt(compound.getCompound("TreeGenerator"));
+        }
+    }
+
+    public CompoundNBT saveToNbt(CompoundNBT compound){
+        compound.put("TreeGenerator", factory.saveToNbt(new CompoundNBT()));
+        return compound;
+    }
 }

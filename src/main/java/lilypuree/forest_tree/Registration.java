@@ -1,9 +1,8 @@
 package lilypuree.forest_tree;
 
 import com.google.common.collect.ImmutableMap;
-import lilypuree.forest_tree.trees.block.AdvancedSaplingBlock;
 import lilypuree.forest_tree.trees.block.BranchBlock;
-import lilypuree.forest_tree.trees.block.trees.PlaceboTree;
+import lilypuree.forest_tree.trees.customization.*;
 import lilypuree.forest_tree.trees.items.GraftingToolItem;
 import lilypuree.forest_tree.trees.species.ModSpecies;
 import lilypuree.forest_tree.trees.species.Species;
@@ -11,13 +10,15 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.village.PointOfInterestType;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -32,11 +33,18 @@ import static lilypuree.forest_tree.ForestTree.MODID;
 
 public class Registration {
 
+    public static final ItemGroup ITEM_GROUP = new ItemGroup(MODID) {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(Registration.GRAFTING_TOOL.get());
+        }
+    };
+
     public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, MODID);
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, MODID);
     public static final DeferredRegister<EntityType<?>> ENTITIES = new DeferredRegister<>(ForgeRegistries.ENTITIES, MODID);
-    public static final DeferredRegister<VillagerProfession> PROFESSIONS = new DeferredRegister<>(ForgeRegistries.PROFESSIONS, MODID);
+    public static final DeferredRegister<ContainerType<?>> CONTAINERS = new DeferredRegister<>(ForgeRegistries.CONTAINERS, MODID);
     public static final DeferredRegister<PointOfInterestType> POIS = new DeferredRegister<>(ForgeRegistries.POI_TYPES, MODID);
 
     public static void register() {
@@ -45,35 +53,31 @@ public class Registration {
         TILE_ENTITIES.register(modEventBus);
         BLOCKS.register(modEventBus);
         ENTITIES.register(modEventBus);
-        PROFESSIONS.register(modEventBus);
+        CONTAINERS.register(modEventBus);
         POIS.register(modEventBus);
     }
 
-
-//    public static final RegistryObject<AdvancedSaplingBlock> OAK_SAPLING = BLOCKS.register("oak_sapling", ()->new AdvancedSaplingBlock(new AdvancedOakTree(), Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0f).sound(SoundType.PLANT)));
-//    public static final RegistryObject<AdvancedSaplingBlock> PINE_SAPLING = BLOCKS.register("fir_sapling", ()->new AdvancedSaplingBlock(new PineTree(), Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0f).sound(SoundType.PLANT)));
-    public static final RegistryObject<AdvancedSaplingBlock> PLACEBO_SAPLING = BLOCKS.register("sapling", ()->new AdvancedSaplingBlock(new PlaceboTree(), Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0f).sound(SoundType.PLANT)));
 
     public static final ImmutableMap<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> BRANCH_BLOCKS;
     public static final ImmutableMap<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> BRANCH_END_BLOCKS;
     public static final ImmutableMap<Integer, RegistryObject<Item>> BRANCH_BLOCK_ITEMS;
 
-    public static void forAllBranches(Consumer<BranchBlock> action){
+    public static void forAllBranches(Consumer<BranchBlock> action) {
         for (Species species : ModSpecies.allSpecies()) {
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
                     for (int z = -1; z <= 1; z++) {
                         if (x == 0 && y == 0 && z == 0) continue;
-                            Vec3i sourceDir = new Vec3i(x, y, z);
-                            Pair<Integer, Vec3i> pair = ImmutablePair.of(species.getID(), sourceDir);
-                            action.accept(BRANCH_BLOCKS.get(pair).get());
+                        Vec3i sourceDir = new Vec3i(x, y, z);
+                        Pair<Integer, Vec3i> pair = ImmutablePair.of(species.getID(), sourceDir);
+                        action.accept(BRANCH_BLOCKS.get(pair).get());
                     }
                 }
             }
         }
     }
 
-    public static void forAllBranchEnds(Consumer<BranchBlock> action){
+    public static void forAllBranchEnds(Consumer<BranchBlock> action) {
         for (Species species : ModSpecies.allSpecies()) {
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
@@ -101,30 +105,41 @@ public class Registration {
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
                     for (int z = -1; z <= 1; z++) {
-                        if(x==0 && y==0 && z==0)continue;
+                        if (x == 0 && y == 0 && z == 0) continue;
                         String name = species.getName() + "_branch_" + x + "_" + y + "_" + z;
                         String endName = species.getName() + "_branch_end_" + x + "_" + y + "_" + z;
 
-                        Vec3i sourceDir = new Vec3i(x,y,z);
+                        Vec3i sourceDir = new Vec3i(x, y, z);
                         Pair<Integer, Vec3i> pair = ImmutablePair.of(species.getID(), sourceDir);
 
                         BranchBlock branch = new BranchBlock(properties, species).setSourceOffset(sourceDir).setEnd(false);
                         BranchBlock branchEnd = new BranchBlock(properties, species).setSourceOffset(sourceDir).setEnd(true);
-                        branchBuilder.put(pair, BLOCKS.register(name, ()-> branch));
-                        branchEndBuilder.put(pair, BLOCKS.register(endName, ()-> branchEnd));
-                        itemBuilder.put(i++, ITEMS.register(name, ()->new BlockItem(branch, itemProp)));
-                        itemBuilder.put(i++, ITEMS.register(endName, ()->new BlockItem(branchEnd, itemProp)));
+                        branchBuilder.put(pair, BLOCKS.register(name, () -> branch));
+                        branchEndBuilder.put(pair, BLOCKS.register(endName, () -> branchEnd));
+                        itemBuilder.put(i++, ITEMS.register(name, () -> new BlockItem(branch, itemProp)));
+                        itemBuilder.put(i++, ITEMS.register(endName, () -> new BlockItem(branchEnd, itemProp)));
                     }
                 }
             }
         }
         BRANCH_BLOCKS = branchBuilder.build();
         BRANCH_END_BLOCKS = branchEndBuilder.build();
-        BRANCH_BLOCK_ITEMS=itemBuilder.build();
+        BRANCH_BLOCK_ITEMS = itemBuilder.build();
     }
 
+    //    public static final RegistryObject<AdvancedSaplingBlock> OAK_SAPLING = BLOCKS.register("oak_sapling", ()->new AdvancedSaplingBlock(new AdvancedOakTree(), Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0f).sound(SoundType.PLANT)));
+//    public static final RegistryObject<AdvancedSaplingBlock> PINE_SAPLING = BLOCKS.register("fir_sapling", ()->new AdvancedSaplingBlock(new PineTree(), Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0f).sound(SoundType.PLANT)));
+//    public static final RegistryObject<AdvancedSaplingBlock> PLACEBO_SAPLING = BLOCKS.register("sapling", () -> new AdvancedSaplingBlock(new CustomTree(), Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0f).sound(SoundType.PLANT)));
+    public static final RegistryObject<CustomSaplingBlock> CUSTOM_SAPLING = BLOCKS.register("custom_sapling", () -> new CustomSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0f).sound(SoundType.PLANT)));
+    public static final RegistryObject<Item> CUSTOM_SAPLING_ITEM = ITEMS.register("custom_sapling", () -> new BlockItem(CUSTOM_SAPLING.get(), new Item.Properties().group(ITEM_GROUP)));
+    public static final RegistryObject<TileEntityType<CustomSaplingTile>> CUSTOM_SAPLING_TILE = TILE_ENTITIES.register("custom_sapling", () -> TileEntityType.Builder.create(CustomSaplingTile::new, CUSTOM_SAPLING.get()).build(null));
 
-//    public static final ImmutableMap<String, RegistryObject<Block>> TREE_BLOCKS;
+    public static final RegistryObject<Block> TREE_DESIGNER_BLOCK = BLOCKS.register("tree_designer", () -> new TreeDesignerBlock(Block.Properties.create(Material.EARTH)));
+    public static final RegistryObject<Item> TREE_DESIGNER_ITEM = ITEMS.register("tree_designer", () -> new BlockItem(TREE_DESIGNER_BLOCK.get(), new Item.Properties().group(ITEM_GROUP)));
+    public static final RegistryObject<TileEntityType<TreeDesignerTile>> TREE_DESIGNER_TILE = TILE_ENTITIES.register("tree_designer", () -> TileEntityType.Builder.create(TreeDesignerTile::new, TREE_DESIGNER_BLOCK.get()).build(null));
+    public static final RegistryObject<ContainerType<TreeDesignerContainer>> TREE_DESIGNER_CONTAINER = CONTAINERS.register("tree_designer", () -> IForgeContainerType.create((TreeDesignerContainer::create)));
+
+    //    public static final ImmutableMap<String, RegistryObject<Block>> TREE_BLOCKS;
 //    public static final ImmutableMap<String, RegistryObject<Item>> TREE_BLOCK_ITEMS;
 //
 //    private static Item.Properties timber = new Item.Properties().group(ItemGroup.MATERIALS);
