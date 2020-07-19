@@ -6,35 +6,43 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.items.*;
+
+import javax.annotation.Nonnull;
 
 public class TreeDesignerContainer extends Container {
 
-    private TreeDesignerTile treeDesigner;
+    private final IWorldPosCallable usabilityTest;
+    private final BlockPos pos;
+    private final PlayerEntity player;
 
-    @OnlyIn(Dist.CLIENT)
-    public static TreeDesignerContainer create(final int windowId, final PlayerInventory playerInventory, final PacketBuffer extraData) {
-        TreeDesignerTile treeDesignerTile = (TreeDesignerTile) Minecraft.getInstance().world.getTileEntity(extraData.readBlockPos());
-        return new TreeDesignerContainer(windowId, treeDesignerTile, playerInventory, Minecraft.getInstance().player);
+    public static TreeDesignerContainer getClientContainer(final int windowId, final PlayerInventory playerInventory, final PacketBuffer extraData) {
+        return new TreeDesignerContainer(windowId, playerInventory, extraData.readBlockPos(), new ItemStackHandler(1));
     }
 
-    public TreeDesignerContainer(final int windowId, TreeDesignerTile treeDesignerIn, final PlayerInventory playerInventory, PlayerEntity player) {
-        super(Registration.TREE_DESIGNER_CONTAINER.get(), windowId);
-        this.treeDesigner = treeDesignerIn;
+    public static IContainerProvider getServerContainerProvider(TreeDesignerTile te, BlockPos activationPos){
+        return (id, playerInventory, serverPlayer) -> new TreeDesignerContainer(id, playerInventory, activationPos, te.saplingHandler);
+    }
 
-        treeDesigner.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
-            addSlot(new SlotItemHandler(handler, 0, 50, 58));
-        });
+    private TreeDesignerContainer(final int id, final PlayerInventory playerInventory, BlockPos pos, IItemHandler itemHandler) {
+        super(Registration.TREE_DESIGNER_CONTAINER.get(), id);
+        this.pos = pos;
+        this.player = playerInventory.player;
+        this.usabilityTest = IWorldPosCallable.of(this.player.world, pos);
+        addSlot(new SlotItemHandler(itemHandler, 0, 15, 135));
+
 //        ContainerHelper.addPlayerInventoryToContainer(this, playerInventory);
     }
 
 
+    @Nonnull
     @Override
     public ItemStack transferStackInSlot(PlayerEntity player, int index) {
         return ContainerHelper.transferStackInSlot(this, player, index);
@@ -42,13 +50,10 @@ public class TreeDesignerContainer extends Container {
 
     @Override
     public boolean canInteractWith(PlayerEntity player) {
-        BlockPos pos = treeDesigner.getPos();
+        return isWithinUsableDistance(this.usabilityTest, player, Registration.TREE_DESIGNER_BLOCK.get());
+    }
 
-        // based on Container.isWithinUsableDistance but with more generic blockcheck
-        if (treeDesigner.getWorld().getBlockState(treeDesigner.getPos()).getBlock() instanceof TreeDesignerBlock) {
-            return player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D;
-        }
-
-        return false;
+    public BlockPos getPos(){
+        return pos;
     }
 }

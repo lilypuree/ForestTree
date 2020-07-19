@@ -1,6 +1,6 @@
-package lilypuree.forest_tree.gui;
+package lilypuree.forest_tree.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import lilypuree.forest_tree.client.gui.GuiExtended;
 import se.mickelus.mgui.gui.GuiElement;
 import se.mickelus.mgui.gui.GuiRect;
 
@@ -11,7 +11,7 @@ public class GuiScrollBar extends GuiExtended {
     private float scrollDistance;
 
     private int contentHeight;
-    private int border = 4;
+    private int border = 0;
 
     private GuiElement guibar;
     private int scrollAmount = 20;
@@ -45,6 +45,7 @@ public class GuiScrollBar extends GuiExtended {
 
     public void setScrollAmount(int scrollAmount) {
         this.scrollAmount = scrollAmount;
+        applyScrollLimits();
     }
 
     public float getScrollDistance() {
@@ -83,6 +84,8 @@ public class GuiScrollBar extends GuiExtended {
             int barHeight = getBarHeight();
             int barTop = (int)this.scrollDistance * (height - barHeight) / extraHeight;
             guibar.setY(barTop);
+        }else {
+            guibar.setY(0);
         }
     }
 

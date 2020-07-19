@@ -3,6 +3,7 @@ package lilypuree.forest_tree;
 import com.google.common.collect.ImmutableMap;
 import lilypuree.forest_tree.trees.block.BranchBlock;
 import lilypuree.forest_tree.trees.customization.*;
+import lilypuree.forest_tree.trees.items.CustomSaplingItem;
 import lilypuree.forest_tree.trees.items.GraftingToolItem;
 import lilypuree.forest_tree.trees.species.ModSpecies;
 import lilypuree.forest_tree.trees.species.Species;
@@ -131,13 +132,13 @@ public class Registration {
 //    public static final RegistryObject<AdvancedSaplingBlock> PINE_SAPLING = BLOCKS.register("fir_sapling", ()->new AdvancedSaplingBlock(new PineTree(), Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0f).sound(SoundType.PLANT)));
 //    public static final RegistryObject<AdvancedSaplingBlock> PLACEBO_SAPLING = BLOCKS.register("sapling", () -> new AdvancedSaplingBlock(new CustomTree(), Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0f).sound(SoundType.PLANT)));
     public static final RegistryObject<CustomSaplingBlock> CUSTOM_SAPLING = BLOCKS.register("custom_sapling", () -> new CustomSaplingBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0f).sound(SoundType.PLANT)));
-    public static final RegistryObject<Item> CUSTOM_SAPLING_ITEM = ITEMS.register("custom_sapling", () -> new BlockItem(CUSTOM_SAPLING.get(), new Item.Properties().group(ITEM_GROUP)));
+    public static final RegistryObject<Item> CUSTOM_SAPLING_ITEM = ITEMS.register("custom_sapling", () -> new CustomSaplingItem(CUSTOM_SAPLING.get(), new Item.Properties().group(ITEM_GROUP)));
     public static final RegistryObject<TileEntityType<CustomSaplingTile>> CUSTOM_SAPLING_TILE = TILE_ENTITIES.register("custom_sapling", () -> TileEntityType.Builder.create(CustomSaplingTile::new, CUSTOM_SAPLING.get()).build(null));
 
     public static final RegistryObject<Block> TREE_DESIGNER_BLOCK = BLOCKS.register("tree_designer", () -> new TreeDesignerBlock(Block.Properties.create(Material.EARTH)));
     public static final RegistryObject<Item> TREE_DESIGNER_ITEM = ITEMS.register("tree_designer", () -> new BlockItem(TREE_DESIGNER_BLOCK.get(), new Item.Properties().group(ITEM_GROUP)));
     public static final RegistryObject<TileEntityType<TreeDesignerTile>> TREE_DESIGNER_TILE = TILE_ENTITIES.register("tree_designer", () -> TileEntityType.Builder.create(TreeDesignerTile::new, TREE_DESIGNER_BLOCK.get()).build(null));
-    public static final RegistryObject<ContainerType<TreeDesignerContainer>> TREE_DESIGNER_CONTAINER = CONTAINERS.register("tree_designer", () -> IForgeContainerType.create((TreeDesignerContainer::create)));
+    public static final RegistryObject<ContainerType<TreeDesignerContainer>> TREE_DESIGNER_CONTAINER = CONTAINERS.register("tree_designer", () -> IForgeContainerType.create((TreeDesignerContainer::getClientContainer)));
 
     //    public static final ImmutableMap<String, RegistryObject<Block>> TREE_BLOCKS;
 //    public static final ImmutableMap<String, RegistryObject<Item>> TREE_BLOCK_ITEMS;

@@ -3,28 +3,24 @@ package lilypuree.forest_tree.core.setup;
 import lilypuree.forest_tree.ForestTree;
 import lilypuree.forest_tree.Registration;
 import lilypuree.forest_tree.datagen.types.WoodTypes;
-import lilypuree.forest_tree.trees.TreeBlocks;
 import lilypuree.forest_tree.trees.client.BranchModelLoader;
 import lilypuree.forest_tree.trees.client.gui.TreeDesignerScreen;
-import lilypuree.forest_tree.trees.customization.TreeDesignerTile;
-import lilypuree.forest_tree.trees.species.ModSpecies;
-import lilypuree.forest_tree.trees.species.Species;
+import lilypuree.forest_tree.trees.client.render.BlockHologramRenderer;
+import lilypuree.forest_tree.trees.client.render.TreeDesignerRenderer;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.FoliageColors;
 import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 @Mod.EventBusSubscriber(modid = ForestTree.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
@@ -41,6 +37,8 @@ public class ClientSetup {
                 RenderTypeLookup.setRenderLayer(branchBlock, RenderType.getCutoutMipped());
             }
         });
+        TreeDesignerRenderer.register();
+        RenderTypeLookup.setRenderLayer(Registration.CUSTOM_SAPLING.get(), RenderType.getCutout());
         ScreenManager.registerFactory(Registration.TREE_DESIGNER_CONTAINER.get(), TreeDesignerScreen::new);
     }
 
@@ -67,6 +65,17 @@ public class ClientSetup {
             }
         });
     }
+
+    @SubscribeEvent
+    public static void onTextureStitchEvent(TextureStitchEvent.Pre event){
+        ResourceLocation stitching = event.getMap().getTextureLocation();
+        if(!stitching.equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE))
+        {
+            return;
+        }
+        event.addSprite(TreeDesignerRenderer.HOLOGRAM_RAY);
+    }
+
 //
 //    @SubscribeEvent
 //    public static void onItemColourHandlerEvent(final ColorHandlerEvent.Item event) {

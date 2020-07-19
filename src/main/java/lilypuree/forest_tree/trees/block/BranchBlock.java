@@ -1,5 +1,6 @@
 package lilypuree.forest_tree.trees.block;
 
+import lilypuree.forest_tree.Registration;
 import lilypuree.forest_tree.trees.species.Species;
 import lilypuree.forest_tree.util.Util;
 import net.minecraft.block.*;
@@ -18,6 +19,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
@@ -71,7 +73,7 @@ public class BranchBlock extends Block {
                         Block otherBlock = blockReader.getBlockState(otherPos).getBlock();
                         if (otherBlock instanceof BranchBlock && Util.compareVec3iToInts(((BranchBlock) otherBlock).getSourceOffset(), -i, -j, -k)) {
                             shape = BranchVoxelShapes.getVoxelShapeForDirection(i, j, k);
-                        }else{
+                        } else {
                             continue;
                         }
                     }
@@ -224,9 +226,25 @@ public class BranchBlock extends Block {
 //        super.harvestBlock();
         if (worldIn.isRemote) return;
         boolean hasRightTool = true;
+
         if (hasRightTool) {
-            //do a bfs search
+            recursiveDestroyTree(worldIn, pos, !player.isCreative());
         }
+    }
+
+    public void recursiveDestroyTree(World worldIn, BlockPos pos, boolean generateDrop) {
+        worldIn.destroyBlock(pos, generateDrop);
+        BlockPos.getAllInBox(new BlockPos(pos).add(-1, -1, -1), new BlockPos(pos).add(1, 1, 1))
+                .forEach(bp -> {
+                    Block block = worldIn.getBlockState(bp).getBlock();
+                    if (block instanceof BranchBlock) {
+                        Vec3i soffset = ((BranchBlock) block).getSourceOffset();
+                        if (bp.add(soffset).equals(pos)) {
+
+                            ((BranchBlock) block).recursiveDestroyTree(worldIn, bp, generateDrop);
+                        }
+                    }
+                });
     }
 
     @Override

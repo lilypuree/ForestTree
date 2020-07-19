@@ -28,6 +28,7 @@ public class BlockStates extends BlockStateProvider {
             protected void registerModels() {
             }
         };
+
     }
 //
 //    public ModelFile treePartModel(WoodTypes wood, ThicknessTypes thickness, PartTypes type) {
@@ -269,6 +270,7 @@ public class BlockStates extends BlockStateProvider {
                 }
             }
         }
+
     }
 
     @Override

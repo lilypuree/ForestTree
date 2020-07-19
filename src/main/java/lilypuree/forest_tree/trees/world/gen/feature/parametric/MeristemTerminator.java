@@ -3,8 +3,8 @@ package lilypuree.forest_tree.trees.world.gen.feature.parametric;
 import net.minecraft.nbt.CompoundNBT;
 
 public class MeristemTerminator {
-    private float terminalDeathAgeMin = 0.0f;
-    private float terminalDeathAgeMax = 0.0f;
+    private float terminalDeathAgeMin = 5.0f;
+    private float terminalDeathAgeMax = 12.0f;
     private float axillaryDeathAgeMin = 3.8f;
     private float axillaryDeathAgeMax = 9.2f;
     private float branchDeathAgeMin = 5.4f;
@@ -23,7 +23,7 @@ public class MeristemTerminator {
 
     public float getMeristemDeathRate(Meristem meristem) {
         if (meristem.isTerminal()) {
-            return uniformRandomAlt(terminalDeathAgeMax, terminalDeathAgeMin, meristem.getAge());
+            return 1 - uniformRandomAlt(terminalDeathAgeMax, terminalDeathAgeMin, meristem.getAge());
         } else {
             if (meristem.getLength() == 0) { //a newly generated axillary.
                 return uniformRandomAlt(branchDeathAgeMax, branchDeathAgeMin, meristem.getAge());
@@ -31,6 +31,7 @@ public class MeristemTerminator {
             return uniformRandomAlt(axillaryDeathAgeMax, axillaryDeathAgeMin, meristem.getAge());
         }
     }
+
 
 
     private float uniformRandomAlt(float max, float min, float x) {

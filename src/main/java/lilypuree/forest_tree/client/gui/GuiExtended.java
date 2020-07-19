@@ -1,4 +1,4 @@
-package lilypuree.forest_tree.gui;
+package lilypuree.forest_tree.client.gui;
 
 import se.mickelus.mgui.gui.GuiElement;
 

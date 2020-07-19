@@ -1,10 +1,13 @@
 package lilypuree.forest_tree.trees.block.trees;
 
 import lilypuree.forest_tree.core.registry.ForestTreeFeatures;
+import lilypuree.forest_tree.trees.customization.CustomSaplingTile;
 import lilypuree.forest_tree.trees.world.gen.feature.TreeGenerator;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -32,6 +35,12 @@ public class CustomTree  {
         if(configuredFeature == null){
             return false;
         }else {
+            TileEntity tileEntity = worldIn.getTileEntity(posIn);
+            CompoundNBT treeData = new CompoundNBT();
+            if(tileEntity instanceof CustomSaplingTile){
+                tileEntity.write(treeData);
+            }
+
             worldIn.setBlockState(posIn, Blocks.AIR.getDefaultState(), 4);
 
 //            ((AdvancedTreeFeatureConfig)configuredFeature.config).forcePlacement();
@@ -39,6 +48,10 @@ public class CustomTree  {
                 return true;
             }else {
                 worldIn.setBlockState(posIn, stateIn, 4);
+                TileEntity newTileEntity = worldIn.getTileEntity(posIn);
+                if(newTileEntity instanceof CustomSaplingTile){
+                    newTileEntity.read(treeData);
+                }
                 return false;
             }
         }

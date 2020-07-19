@@ -35,9 +35,10 @@ public class AdvancedTreeFeature<T extends NoFeatureConfig> extends Feature<T> {
         this.treeGenerator = new TreeGenerator();
     }
 
-    public AdvancedTreeFeature<T> withGenerator(TreeGenerator generator){
-        this.treeGenerator = generator;
-        return this;
+    public AdvancedTreeFeature<NoFeatureConfig> withGenerator(TreeGenerator generator){
+        AdvancedTreeFeature<NoFeatureConfig> feature = new AdvancedTreeFeature<>(NoFeatureConfig::deserialize);
+        feature.treeGenerator = generator;
+        return feature;
     }
 
     protected boolean generate(IWorldGenerationReader reader, Random rand, BlockPos pos, Set<BlockPos> branches, Set<BlockPos> leaves, MutableBoundingBox mBB, T Config) {

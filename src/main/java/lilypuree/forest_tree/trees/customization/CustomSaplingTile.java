@@ -51,6 +51,7 @@ public class CustomSaplingTile extends TileEntity implements INameable {
     }
 
     public CompoundNBT saveToNbt(CompoundNBT compound) {
+        if(treeGenerator == null) return compound;
         return treeGenerator.saveToNbt(compound);
     }
 

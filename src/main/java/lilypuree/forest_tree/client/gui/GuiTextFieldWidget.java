@@ -1,9 +1,10 @@
-package lilypuree.forest_tree.gui;
+package lilypuree.forest_tree.client.gui;
 
 import com.google.common.base.Predicates;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import lilypuree.forest_tree.client.gui.GuiExtended;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
@@ -14,8 +15,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.util.SharedConstants;
 import net.minecraft.util.math.MathHelper;
-import se.mickelus.mgui.gui.GuiRect;
-import se.mickelus.mgui.gui.GuiString;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -48,23 +47,23 @@ public class GuiTextFieldWidget extends GuiExtended {
     private int enabledColor = 14737632;
     private int disabledColor = 7368816;
 
+    private Runnable onClickHandler = () -> {};
     private Consumer<String> guiResponder = s -> {};
     private Predicate<String> validator = Predicates.alwaysTrue();
     private BiFunction<String, Integer, String> textFormatter = (string, integer) -> {
         return string;
     };
-    private boolean enableBackgroundDrawing;
-    private boolean canLoseFocus;
 
+    private boolean enableBackgroundDrawing;
+    private boolean selected = false;
 
     public GuiTextFieldWidget(FontRenderer fontIn, int x, int y, int width, int height) {
         super(x, y, width, height);
         this.fontRenderer = fontIn;
-//        addChild(new GuiRect(0, 0, width, height, 0x53D1BA));
         this.text = "";
     }
 
-    public void setInnerText(String newString) {
+    private void setInnerText(String newString) {
         text = newString;
     }
 
@@ -133,7 +132,7 @@ public class GuiTextFieldWidget extends GuiExtended {
     }
 
     public boolean canWrite() {
-        return this.isVisible() && this.hasFocus() && this.isEnabled();
+        return this.isVisible() && this.isEnabled() && this.selected;
     }
 
     /**
@@ -344,20 +343,6 @@ public class GuiTextFieldWidget extends GuiExtended {
         }
     }
 
-    @Override
-    protected void calculateFocusState(int refX, int refY, int mouseX, int mouseY) {
-
-//        boolean gainFocus = mouseX >= this.getX() + refX && mouseX < this.getX() + refX + this.getWidth() && mouseY >= this.getY() + refY && mouseY < this.getY() + refY + this.getHeight();
-//
-//        if (canLoseFocus && gainFocus != this.hasFocus) {
-//            this.hasFocus = gainFocus;
-//            if (this.hasFocus()) {
-//                this.onFocus();
-//            } else {
-//                this.onBlur();
-//            }
-//        }
-    }
 
     @Override
     protected void onBlur() {
@@ -367,6 +352,8 @@ public class GuiTextFieldWidget extends GuiExtended {
     @Override
     public boolean onClick(int x, int y) {
         if (this.hasFocus()) {
+            selected = true;
+            onClickHandler.run();
             int i = MathHelper.floor(x) - baseX;
 //            if (this.enableBackgroundDrawing) {
 //                i -= 4;
@@ -377,6 +364,18 @@ public class GuiTextFieldWidget extends GuiExtended {
         } else {
             return false;
         }
+    }
+
+    public void setOnClickHandler(Runnable onClickHandler){
+        this.onClickHandler = onClickHandler;
+    }
+
+    public void setSelected(boolean selected){
+        this.selected = selected;
+    }
+
+    public boolean isSelected(){
+        return selected;
     }
 
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
@@ -477,6 +476,10 @@ public class GuiTextFieldWidget extends GuiExtended {
         }
     }
 
+    @Override
+    protected void calculateFocusState(int refX, int refY, int mouseX, int mouseY) {
+        super.calculateFocusState(refX, refY, mouseX, mouseY);
+    }
 
     @Override
     public void draw(MatrixStack matrixStack, int refX, int refY, int screenWidth, int screenHeight, int mouseX, int mouseY, float opacity) {
@@ -498,7 +501,7 @@ public class GuiTextFieldWidget extends GuiExtended {
             int selOffset = this.selectionEnd - this.lineScrollOffset;
             String renderString = this.fontRenderer.trimStringToWidth(this.text.substring(this.lineScrollOffset), this.getAdjustedWidth());
             boolean cursorInString = lenBehindCursor >= 0 && lenBehindCursor <= renderString.length();
-            boolean drawBar = this.hasFocus() && this.cursorCounter / 6 % 2 == 0 && cursorInString;
+            boolean drawBar = this.selected && this.cursorCounter / 6 % 2 == 0 && cursorInString;
             int startX = this.enableBackgroundDrawing ? baseX + 4 : baseX;
             int startY = this.enableBackgroundDrawing ? renderY + (this.height - 8) / 2 : renderY;
             int startX2 = startX;
@@ -610,17 +613,6 @@ public class GuiTextFieldWidget extends GuiExtended {
      */
     public void setEnableBackgroundDrawing(boolean enableBackgroundDrawingIn) {
         this.enableBackgroundDrawing = enableBackgroundDrawingIn;
-    }
-
-    /**
-     * Sets whether this text box loses focus when something other than it is clicked.
-     */
-    public void setCanLoseFocus(boolean canLoseFocusIn) {
-        this.canLoseFocus = canLoseFocusIn;
-    }
-
-    public void setHasFocus(boolean hasFocus){
-        this.hasFocus = hasFocus;
     }
 
     /**

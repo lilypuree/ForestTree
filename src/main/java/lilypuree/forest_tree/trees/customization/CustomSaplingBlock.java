@@ -10,6 +10,8 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.IntegerProperty;
@@ -22,6 +24,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -61,10 +64,7 @@ public class CustomSaplingBlock extends BushBlock implements IGrowable {
                 if (customSaplingTile.hasCustomName()) {
                     itemstack.setDisplayName(customSaplingTile.getCustomName());
                 }
-
-                ItemEntity itementity = new ItemEntity(worldIn, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), itemstack);
-                itementity.setDefaultPickupDelay();
-                worldIn.addEntity(itementity);
+                InventoryHelper.spawnItemStack(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, itemstack);
             }
         }
         super.onBlockHarvested(worldIn, pos, state, player);
@@ -73,9 +73,9 @@ public class CustomSaplingBlock extends BushBlock implements IGrowable {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        if (stack.hasDisplayName()) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof CustomSaplingTile) {
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+        if (tileentity instanceof CustomSaplingTile) {
+            if (stack.hasDisplayName()) {
                 ((CustomSaplingTile) tileentity).setCustomName(stack.getDisplayName());
             }
         }
@@ -105,19 +105,19 @@ public class CustomSaplingBlock extends BushBlock implements IGrowable {
     }
 
     public void placeTree(ServerWorld world, BlockPos pos, BlockState state, Random rand) {
-        if (state.get(STAGE) == 0) {
-            world.setBlockState(pos, state.cycle(STAGE), 4);
-        } else {
-            if (!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(world, rand, pos)) return;
-            CustomSaplingTile customSaplingTile = (CustomSaplingTile) world.getTileEntity(pos);
-            if (customSaplingTile != null) {
-                CustomTree customTree = new CustomTree(customSaplingTile.getTreeGenerator());
+//        if (state.get(STAGE) == 0) {
+//            world.setBlockState(pos, state.cycle(STAGE), 4);
+//        } else {
+        if (!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(world, rand, pos)) return;
+        CustomSaplingTile customSaplingTile = (CustomSaplingTile) world.getTileEntity(pos);
+        if (customSaplingTile != null) {
+            CustomTree customTree = new CustomTree(customSaplingTile.getTreeGenerator());
 
-                //TODO
-                //set age here?
-                customTree.place(world, world.getChunkProvider().getChunkGenerator(), pos, state, rand);
-            }
+            //TODO
+            //set age here?
+            customTree.place(world, world.getChunkProvider().getChunkGenerator(), pos, state, rand);
         }
+//        }
     }
 
 
