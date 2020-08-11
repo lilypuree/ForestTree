@@ -1,15 +1,20 @@
 package lilypuree.forest_tree.mixin;
 
+import lilypuree.forest_tree.Registration;
+import lilypuree.forest_tree.trees.TreeBlocks;
 import lilypuree.forest_tree.trees.block.BranchBlock;
 import lilypuree.forest_tree.trees.block.BranchVoxelShapes;
+import lilypuree.forest_tree.trees.block.ModBlockProperties;
 import lilypuree.forest_tree.util.Util;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.system.CallbackI;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,7 +35,9 @@ public abstract class EntityMixin {
     @Shadow
     public abstract Vec3d getLook(float partialTicks);
 
-    @Shadow @Final protected static Logger LOGGER;
+    @Shadow
+    @Final
+    protected static Logger LOGGER;
 
 
     //raytrace inside block to return the correct blockraytrace result with respective blockpos
@@ -59,15 +66,21 @@ public abstract class EntityMixin {
                 for (int k = -1; k <= 1; k++) {
                     VoxelShape shape;
                     BlockRayTraceResult result;
+                    BlockPos newPos = pos.add(i, j, k);
+                    BlockState otherState = blockReader.getBlockState(newPos);
+                    Block otherBlock = otherState.getBlock();
+
                     if (i == 0 && j == 0 && k == 0) {
-                        shape = BranchVoxelShapes.getVoxelShapeForDirection(sourceOffset);
-                        result = shape.rayTrace(start, end, pos);
+                        if (otherBlock instanceof BranchBlock) {
+                            shape = otherState.getShape(world, newPos);
+                            result = shape.rayTrace(start, end, pos);
+                        } else {
+                            result = null;
+                        }
                     } else {
-                        BlockPos otherPos = pos.add(i, j, k);
-                        Block otherBlock = blockReader.getBlockState(otherPos).getBlock();
                         if (otherBlock instanceof BranchBlock && Util.compareVec3iToInts(((BranchBlock) otherBlock).getSourceOffset(), -i, -j, -k)) {
-                            shape = BranchVoxelShapes.getVoxelShapeForDirection(-i, -j, -k);
-                            result = shape.rayTrace(start, end, otherPos);
+                            shape = otherState.getShape(world, newPos);
+                            result = shape.rayTrace(start, end, newPos);
                         } else {
                             continue;
                         }

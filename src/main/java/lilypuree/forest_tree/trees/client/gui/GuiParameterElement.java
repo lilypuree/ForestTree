@@ -20,7 +20,7 @@ public class GuiParameterElement extends GuiExtended {
     private GuiTextFieldWidget textFieldWidgetFocused;
     private boolean showToolTip;
 
-    private static final int TEXT_LENGTH =150;
+    private static final int TEXT_LENGTH =130;
     private static final int HELP_WIDTH = 10;
 
     public GuiParameterElement(int x, int y, int width, int height, Parameter parameter, TreeGenParamData paramData, Runnable onClickHandler) {
@@ -44,9 +44,9 @@ public class GuiParameterElement extends GuiExtended {
 
     private void initTextWidgets() {
         if (parameter.type == 2) {
-            float widgetWidth = (width-TEXT_LENGTH - HELP_WIDTH)/3.0f;
-            for (int i = 0; i < 9; i++) {
-                GuiTextFieldWidget textFieldWidget = new GuiTextFieldWidget(Minecraft.getInstance().fontRenderer, (int)(TEXT_LENGTH + (i % 3) * widgetWidth), (i / 3) * 10, (int)widgetWidth, 10);
+            float widgetWidth = (width-TEXT_LENGTH - HELP_WIDTH)/4.0f;
+            for (int i = 0; i < 16; i++) {
+                GuiTextFieldWidget textFieldWidget = new GuiTextFieldWidget(Minecraft.getInstance().fontRenderer, (int)(TEXT_LENGTH + (i % 4) * widgetWidth), (i / 4) * 10, (int)widgetWidth, 10);
                 initTextFieldWidgetArray(textFieldWidget, i);
                 if (i == 0) textFieldWidgetFocused = textFieldWidget;
                 addChild(textFieldWidget);

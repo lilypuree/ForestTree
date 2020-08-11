@@ -1,7 +1,6 @@
 package lilypuree.forest_tree;
 
 import lilypuree.forest_tree.core.setup.*;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -28,7 +27,7 @@ public class ForestTree
 
         Registration.register();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent e) -> setup.init(e));
+        FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent e) -> setup.forestTreeCommonSetup(e));
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
     }
 

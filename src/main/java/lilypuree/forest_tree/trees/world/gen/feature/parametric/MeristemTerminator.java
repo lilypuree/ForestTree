@@ -23,7 +23,8 @@ public class MeristemTerminator {
 
     public float getMeristemDeathRate(Meristem meristem) {
         if (meristem.isTerminal()) {
-            return 1 - uniformRandomAlt(terminalDeathAgeMax, terminalDeathAgeMin, meristem.getAge());
+            int startingAge = meristem.factory.getStartingAge();
+            return uniformRandomAlt(terminalDeathAgeMax, terminalDeathAgeMin, startingAge - meristem.getAge());
         } else {
             if (meristem.getLength() == 0) { //a newly generated axillary.
                 return uniformRandomAlt(branchDeathAgeMax, branchDeathAgeMin, meristem.getAge());
@@ -45,8 +46,8 @@ public class MeristemTerminator {
 
     public static class Builder {
 
-        private float terminalDeathAgeMin = 0.0f;
-        private float terminalDeathAgeMax = 0.0f;
+        private float terminalDeathAgeMin = 5.0f;
+        private float terminalDeathAgeMax = 12.0f;
         private float axillaryDeathAgeMin = 3.8f;
         private float axillaryDeathAgeMax = 9.2f;
         private float branchDeathAgeMin = 5.4f;

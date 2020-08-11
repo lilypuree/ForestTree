@@ -1,13 +1,25 @@
 {
   "variants": {
-    "type=top": {
-      "model": "forest_tree:block/spruce_leaves_slab_top"
-    },
-    "type=bottom": {
+    "facing=down": {
       "model": "forest_tree:block/spruce_leaves_slab"
     },
-    "type=double": {
-      "model": "minecraft:block/spruce_leaves"
+    "facing=up": {
+      "model": "forest_tree:block/spruce_leaves_slabtop"
+    },
+    "facing=north": {
+      "model": "forest_tree:block/spruce_leaves_slabside"
+    },
+    "facing=south": {
+      "model": "forest_tree:block/spruce_leaves_slabside",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "forest_tree:block/spruce_leaves_slabside",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "forest_tree:block/spruce_leaves_slabside",
+      "y": 270
     }
   }
 }

@@ -15,6 +15,7 @@ public class MeristemFactory {
     private MeristemGrower grower;
     private MeristemTerminator terminator;
     private BranchDirectionHelper directionHelper;
+    private int startingAge;
 
     private Species species;
     private int maxHeight = 30;
@@ -155,6 +156,14 @@ public class MeristemFactory {
         this.rand = rand;
         grower.setRandom(rand);
         this.directionHelper.setRandom(rand);
+    }
+
+    public void setStartingAge(int startingAge) {
+        this.startingAge = startingAge;
+    }
+
+    public int getStartingAge() {
+        return startingAge;
     }
 
     public static class Builder {

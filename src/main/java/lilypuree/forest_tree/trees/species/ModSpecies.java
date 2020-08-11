@@ -71,10 +71,13 @@ public class ModSpecies {
         }
     }
 
-    public static Collection<Species> allSpecies(){
+    static {
         species = new ArrayList<>();
         species.add(new DefaultSpecies());
         species.add(new Pine());
+    }
+
+    public static Collection<Species> allSpecies(){
         return species;
     }
 }

@@ -60,13 +60,13 @@ public class TreeGenParamData {
     }
 
     public void setFloatArrayEntry(Parameter parameter, int index, float value) {
-        if (index >= 9) return;
+        if (index >= 16) return;
         if (parameter.type == 2) {
             float[] array = floatArrayParams.get(parameter);
             if (array != null) {
                 array[index] = value;
             } else {
-                array = new float[9];
+                array = new float[16];
                 array[index] = value;
                 floatArrayParams.put(parameter, array);
             }
@@ -112,7 +112,7 @@ public class TreeGenParamData {
                         tag.putFloat(parameter.name, floatParams.getOrDefault(parameter, 1.0f));
                         break;
                     case 2:
-                        float[] array = floatArrayParams.getOrDefault(parameter, new float[]{1, 0, 0, 0, 1, 0, 0, 0, 1});
+                        float[] array = floatArrayParams.getOrDefault(parameter, new float[]{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1});
                         tag.putIntArray(parameter.name, BranchDirectionHelper.floatArrayToIntArray(array));
                         break;
                 }
@@ -145,7 +145,7 @@ public class TreeGenParamData {
 
     public float getFloatArrayEntry(Parameter parameter, int index) {
         float[] array = getFloatArrayParameter(parameter);
-        if (array == null || index >= 9) return -1;
+        if (array == null || index >= 16) return -1;
         else {
             return array[index];
         }

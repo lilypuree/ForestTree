@@ -30,5 +30,6 @@ public class Languages extends LanguageProvider {
             }
             add("forest_tree.treedesignergui.modules."+module.name(), module.name());
         }
+        
     }
 }

@@ -48,7 +48,6 @@ public class TreeDesignerScreen extends ContainerScreen<TreeDesignerContainer> {
     @Override
     protected void init() {
         paramData = getParametersFromStack(container.inventorySlots.get(0).getStack());
-        System.out.println(this.width + " " +this.height);
         this.xSize = 320;
         this.ySize = 180;
         defaultGui = new GuiExtended(0, 0, xSize, ySize);

@@ -46,6 +46,7 @@ public class TreeGenerator {
     private void createTree(BlockPos pos, int age) {
         ForestTree.LOGGER.info("starting tree creation");
         Queue<Meristem> meristems = new ArrayDeque<>();
+        factory.setStartingAge(age);
         meristems.add(factory.createTerminalMeristem(age, pos, factory.getDirectionHelper().getRandomTerminalDirection()));
 
         while (!meristems.isEmpty()) {

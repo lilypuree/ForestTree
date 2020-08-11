@@ -1,7 +1,9 @@
 package lilypuree.forest_tree;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import lilypuree.forest_tree.trees.block.BranchBlock;
+import lilypuree.forest_tree.trees.block.LeavesSlabBlock;
 import lilypuree.forest_tree.trees.customization.*;
 import lilypuree.forest_tree.trees.items.CustomSaplingItem;
 import lilypuree.forest_tree.trees.items.GraftingToolItem;
@@ -29,6 +31,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static lilypuree.forest_tree.ForestTree.MODID;
 
@@ -61,7 +64,9 @@ public class Registration {
 
     public static final ImmutableMap<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> BRANCH_BLOCKS;
     public static final ImmutableMap<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> BRANCH_END_BLOCKS;
-    public static final ImmutableMap<Integer, RegistryObject<Item>> BRANCH_BLOCK_ITEMS;
+    public static final ImmutableMap<Species, RegistryObject<LeavesSlabBlock>> LEAVES_SLAB_BLOCKS;
+    public static final ImmutableSet<RegistryObject<Item>> BRANCH_BLOCK_ITEMS;
+
 
     public static void forAllBranches(Consumer<BranchBlock> action) {
         for (Species species : ModSpecies.allSpecies()) {
@@ -96,12 +101,14 @@ public class Registration {
     static {
         ImmutableMap.Builder<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> branchBuilder = ImmutableMap.builder();
         ImmutableMap.Builder<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> branchEndBuilder = ImmutableMap.builder();
-        ImmutableMap.Builder<Integer, RegistryObject<Item>> itemBuilder = ImmutableMap.builder();
+        ImmutableMap.Builder<Species, RegistryObject<LeavesSlabBlock>> leavesSlabBuilder = ImmutableMap.builder();
+
+        ImmutableSet.Builder<RegistryObject<Item>> itemBuilder = ImmutableSet.builder();
 
         Block.Properties properties = Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0f).sound(SoundType.WOOD).notSolid();
+        Block.Properties leavesProperties = Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid();
         Item.Properties itemProp = new Item.Properties().group(ItemGroup.MISC);
 
-        int i = 0;
         for (Species species : ModSpecies.allSpecies()) {
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
@@ -109,22 +116,30 @@ public class Registration {
                         if (x == 0 && y == 0 && z == 0) continue;
                         String name = species.getName() + "_branch_" + x + "_" + y + "_" + z;
                         String endName = species.getName() + "_branch_end_" + x + "_" + y + "_" + z;
-
                         Vec3i sourceDir = new Vec3i(x, y, z);
                         Pair<Integer, Vec3i> pair = ImmutablePair.of(species.getID(), sourceDir);
-
-                        BranchBlock branch = new BranchBlock(properties, species).setSourceOffset(sourceDir).setEnd(false);
-                        BranchBlock branchEnd = new BranchBlock(properties, species).setSourceOffset(sourceDir).setEnd(true);
-                        branchBuilder.put(pair, BLOCKS.register(name, () -> branch));
-                        branchEndBuilder.put(pair, BLOCKS.register(endName, () -> branchEnd));
-                        itemBuilder.put(i++, ITEMS.register(name, () -> new BlockItem(branch, itemProp)));
-                        itemBuilder.put(i++, ITEMS.register(endName, () -> new BlockItem(branchEnd, itemProp)));
+                        branchBuilder.put(pair, BLOCKS.register(name, () -> new BranchBlock(properties, species).setSourceOffset(sourceDir).setEnd(false)));
+                        branchEndBuilder.put(pair, BLOCKS.register(endName, () -> new BranchBlock(properties, species).setSourceOffset(sourceDir).setEnd(true)));
                     }
                 }
             }
+            leavesSlabBuilder.put(species, BLOCKS.register(species.getName() + "_leaves_slab", () -> new LeavesSlabBlock(leavesProperties)));
+            ;
         }
         BRANCH_BLOCKS = branchBuilder.build();
         BRANCH_END_BLOCKS = branchEndBuilder.build();
+        LEAVES_SLAB_BLOCKS = leavesSlabBuilder.build();
+
+        for (RegistryObject<BranchBlock> blockObject : BRANCH_BLOCKS.values()) {
+            itemBuilder.add(ITEMS.register(blockObject.getId().getPath(), () -> new BlockItem(blockObject.get(), itemProp)));
+        }
+        for (RegistryObject<BranchBlock> blockObject : BRANCH_END_BLOCKS.values()) {
+            itemBuilder.add(ITEMS.register(blockObject.getId().getPath(), () -> new BlockItem(blockObject.get(), itemProp)));
+        }
+        for (RegistryObject<LeavesSlabBlock> blockObject : LEAVES_SLAB_BLOCKS.values()) {
+            itemBuilder.add(ITEMS.register(blockObject.getId().getPath(), () -> new BlockItem(blockObject.get(), itemProp)));
+        }
+
         BRANCH_BLOCK_ITEMS = itemBuilder.build();
     }
 
@@ -144,7 +159,7 @@ public class Registration {
 //    public static final ImmutableMap<String, RegistryObject<Item>> TREE_BLOCK_ITEMS;
 //
 //    private static Item.Properties timber = new Item.Properties().group(ItemGroup.MATERIALS);
-    public static final RegistryObject<GraftingToolItem> GRAFTING_TOOL = ITEMS.register("grafting_tool", () -> new GraftingToolItem((new Item.Properties()).maxDamage(238).group(ItemGroup.TOOLS)));
+    public static final RegistryObject<GraftingToolItem> GRAFTING_TOOL = ITEMS.register("grafting_tool", () -> new GraftingToolItem((new Item.Properties()).maxDamage(238).group(ITEM_GROUP)));
 //    public static final RegistryObject<Item> TREE_EXTRACT = ITEMS.register("tree_extract", () -> new Item(new Item.Properties().group(ItemGroup.MISC)));
 //    public static final RegistryObject<Item> TREE_ESSENCE = ITEMS.register("tree_essence", () -> new Item(new Item.Properties().group(ItemGroup.MISC)));
 //    public static final RegistryObject<Item> ACACIA_TIMBER = ITEMS.register("acacia_timber", () -> new Item(timber));

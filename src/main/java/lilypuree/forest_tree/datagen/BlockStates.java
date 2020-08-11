@@ -1,12 +1,18 @@
 package lilypuree.forest_tree.datagen;
 
 import lilypuree.forest_tree.ForestTree;
+import lilypuree.forest_tree.Registration;
 import lilypuree.forest_tree.trees.TreeBlocks;
+import lilypuree.forest_tree.trees.block.LeavesSlabBlock;
 import lilypuree.forest_tree.trees.species.ModSpecies;
 import lilypuree.forest_tree.trees.species.Species;
 import net.minecraft.block.Block;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
+import net.minecraft.state.properties.SlabType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.client.model.generators.*;
 
@@ -30,7 +36,8 @@ public class BlockStates extends BlockStateProvider {
         };
 
     }
-//
+
+    //
 //    public ModelFile treePartModel(WoodTypes wood, ThicknessTypes thickness, PartTypes type) {
 //        return addTreeTextures(models().getBuilder(wood + "_" + thickness + "_part_" + type).parent(partModel(thickness, type)), wood);
 //    }
@@ -111,19 +118,39 @@ public class BlockStates extends BlockStateProvider {
 //        return base;
 //    }
 //
-//    public ModelFile leafSlab(String name, ResourceLocation sideBottomTopTexture) {
-//        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_slab")))
-//                .texture("side", sideBottomTopTexture)
-//                .texture("bottom", sideBottomTopTexture)
-//                .texture("top", sideBottomTopTexture);
-//    }
-//
-//    public ModelFile leafSlabTop(String name, ResourceLocation sideBottomTopTexture) {
-//        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_slab_top")))
-//                .texture("side", sideBottomTopTexture)
-//                .texture("bottom", sideBottomTopTexture)
-//                .texture("top", sideBottomTopTexture);
-//    }
+    public ModelFile leafSlab(String name, ResourceLocation sideBottomTopTexture) {
+        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_slab")))
+                .texture("side", sideBottomTopTexture)
+                .texture("bottom", sideBottomTopTexture)
+                .texture("top", sideBottomTopTexture);
+    }
+
+    public ModelFile leafSlabTop(String name, ResourceLocation sideBottomTopTexture) {
+        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_slab_top")))
+                .texture("side", sideBottomTopTexture)
+                .texture("bottom", sideBottomTopTexture)
+                .texture("top", sideBottomTopTexture);
+    }
+
+    public ModelFile leafSlabSide(String name, ResourceLocation sideBottomTopTexture) {
+        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_slab_side")))
+                .texture("side", sideBottomTopTexture)
+                .texture("bottom", sideBottomTopTexture)
+                .texture("top", sideBottomTopTexture);
+    }
+
+    public void leafSlabBlock(LeavesSlabBlock block, ResourceLocation sideBottomTopTexture) {
+        ModelFile sideModel = leafSlabSide(name(block)+"side", sideBottomTopTexture);
+        getVariantBuilder(block)
+                .partialState().with(LeavesSlabBlock.FACE, Direction.DOWN).addModels(new ConfiguredModel(leafSlab(name(block), sideBottomTopTexture)))
+                .partialState().with(LeavesSlabBlock.FACE, Direction.UP).addModels(new ConfiguredModel(leafSlabTop(name(block)+"top", sideBottomTopTexture)))
+                .partialState().with(LeavesSlabBlock.FACE, Direction.NORTH).addModels(new ConfiguredModel(sideModel, 0, 0, false))
+                .partialState().with(LeavesSlabBlock.FACE, Direction.EAST).addModels(new ConfiguredModel(sideModel, 0, 90, false))
+                .partialState().with(LeavesSlabBlock.FACE, Direction.SOUTH).addModels(new ConfiguredModel(sideModel, 0, 180, false))
+                .partialState().with(LeavesSlabBlock.FACE, Direction.WEST).addModels(new ConfiguredModel(sideModel, 0, 270, false));
+    }
+
+
 //
 //    public ModelFile leafStairs(String name, ResourceLocation sideBottomTopTexture) {
 //        return models().getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/leaf_stairs")))
@@ -228,9 +255,7 @@ public class BlockStates extends BlockStateProvider {
 //    }
 
 //
-//    public void leafSlabBlock(SlabBlock block, ResourceLocation doubleslab, ResourceLocation sideBottomTopTexture) {
-//        slabBlock(block, leafSlab(name(block), sideBottomTopTexture), leafSlabTop(name(block) + "_top", sideBottomTopTexture), models().getExistingFile(doubleslab));
-//    }
+
 //
 //    public void leafStairsBlock(StairsBlock block, ResourceLocation texture) {
 //        String name = block.getRegistryName().toString();
@@ -256,21 +281,21 @@ public class BlockStates extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         for (Species species : ModSpecies.allSpecies()) {
-            for (int x = -1; x <= 1; x++) {
-                for (int y = -1; y <= 1; y++) {
-                    for (int z = -1; z <= 1; z++) {
-                        String name = species.getName() + "_branch_" + x + "_" + y + "_" + z;
-                        String endName = species.getName() + "_branch_end_" + x + "_" + y + "_" + z;
-
-                        Vec3i sourceDir = new Vec3i(x, y, z);
-
-                        branchBlock(TreeBlocks.getBranchBlock(sourceDir, species),species, sourceDir, name);
-                        branchBlock(TreeBlocks.getBranchEndBlock(sourceDir, species),species, sourceDir, endName);
-                    }
-                }
-            }
+//            for (int x = -1; x <= 1; x++) {
+//                for (int y = -1; y <= 1; y++) {
+//                    for (int z = -1; z <= 1; z++) {
+//                        String name = species.getName() + "_branch_" + x + "_" + y + "_" + z;
+//                        String endName = species.getName() + "_branch_end_" + x + "_" + y + "_" + z;
+//
+//                        Vec3i sourceDir = new Vec3i(x, y, z);
+//
+//                        branchBlock(TreeBlocks.getBranchBlock(sourceDir, species), species, sourceDir, name);
+//                        branchBlock(TreeBlocks.getBranchEndBlock(sourceDir, species), species, sourceDir, endName);
+//                    }
+//                }
+//            }
+            leafSlabBlock(Registration.LEAVES_SLAB_BLOCKS.get(species).get(), mcLoc("block/" + species.getName() + "_leaves"));
         }
-
     }
 
     @Override
@@ -286,6 +311,6 @@ public class BlockStates extends BlockStateProvider {
     }
 
     public ModelFile getBranchModel(Species species, String name, Vec3i source) {
-        return branchModels.getBuilder("block/branch/" + name).parent(new ModelFile.UncheckedModelFile(modLoc("block/branch/"+species.getName()+"_branch_base"))).source(source);
+        return branchModels.getBuilder("block/branch/" + name).parent(new ModelFile.UncheckedModelFile(modLoc("block/branch/" + species.getName() + "_branch_base"))).source(source);
     }
 }

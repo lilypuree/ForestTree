@@ -11,7 +11,7 @@ import java.util.Random;
 public abstract class Meristem {
 
     protected MeristemFactory factory;
-    protected MeristemTerminator killer;
+    protected MeristemTerminator terminator;
     protected MeristemGrower grower;
     protected BranchDirectionHelper directionHelper;
 
@@ -30,7 +30,7 @@ public abstract class Meristem {
         this.dir = dir;
         this.factory = factory;
         this.grower = grower;
-        this.killer = killer;
+        this.terminator = killer;
         this.directionHelper = factory.getDirectionHelper();
     }
 
@@ -42,7 +42,7 @@ public abstract class Meristem {
      * <p>ages if needed
      */
     public void grow(Random rand) {
-        if (rand.nextFloat() < killer.getMeristemDeathRate(this)) {
+        if (rand.nextFloat() < terminator.getMeristemDeathRate(this)) {
             alive = false;
             return;
         }
@@ -89,7 +89,7 @@ public abstract class Meristem {
 
         float interval = length - lastNodeLength;
 
-        if (grower.shouldGenerateNode(interval, isTerminal())) {
+        if (grower.shouldGenerateNode(interval, isTerminal()) || !this.isAlive() && isTerminal()) {
             lastNodeLength = length;
             BlockPos sourcePos = alive ? pos.add(getSourceDirection()) : pos;
             int count = (int) factory.randomMeristemsPerNode(isTerminal());

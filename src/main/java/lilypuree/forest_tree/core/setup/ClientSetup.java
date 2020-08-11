@@ -7,10 +7,14 @@ import lilypuree.forest_tree.trees.client.BranchModelLoader;
 import lilypuree.forest_tree.trees.client.gui.TreeDesignerScreen;
 import lilypuree.forest_tree.trees.client.render.BlockHologramRenderer;
 import lilypuree.forest_tree.trees.client.render.TreeDesignerRenderer;
+import lilypuree.forest_tree.trees.species.ModSpecies;
+import lilypuree.forest_tree.trees.species.Species;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.item.BlockItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.FoliageColors;
 import net.minecraft.world.biome.BiomeColors;
@@ -27,13 +31,11 @@ public class ClientSetup {
 
     public static void init(final FMLClientSetupEvent event) {
         ModelLoaderRegistry.registerLoader(new ResourceLocation(ForestTree.MODID, "branchloader"), BranchModelLoader.INSTANCE);
-        for (WoodTypes type : WoodTypes.values()) {
-//            RenderTypeLookup.setRenderLayer(Registration.TREE_BLOCKS.get((type + "_leaves_slab").toUpperCase()).get(), RenderType.getCutoutMipped());
-//            RenderTypeLookup.setRenderLayer(Registration.TREE_BLOCKS.get((type + "_leaves_stairs").toUpperCase()).get(), RenderType.getCutoutMipped());
-//            RenderTypeLookup.setRenderLayer(Registration.TREE_BLOCKS.get((type + "_leaves_trapdoor").toUpperCase()).get(), RenderType.getCutoutMipped());
+        for (Species species : ModSpecies.allSpecies()) {
+            RenderTypeLookup.setRenderLayer(Registration.LEAVES_SLAB_BLOCKS.get(species).get(), RenderType.getCutoutMipped());
         }
         Registration.forAllBranchEnds(branchBlock -> {
-            if(branchBlock.getSpecies().isConifer()){
+            if (branchBlock.getSpecies().isConifer()) {
                 RenderTypeLookup.setRenderLayer(branchBlock, RenderType.getCutoutMipped());
             }
         });
@@ -56,36 +58,40 @@ public class ClientSetup {
 //        event.getBlockColors().register((blockState, iLightReader, blockPos, i) -> {
 //            return iLightReader != null && blockPos != null ? BiomeColors.getFoliageColor(iLightReader, blockPos) : FoliageColors.getSpruce();
 //        }, Registration.TREE_BLOCKS.get((WoodTypes.SPRUCE + "_leaves_slab").toUpperCase()).get(), Registration.TREE_BLOCKS.get((WoodTypes.SPRUCE + "_leaves_stairs").toUpperCase()).get(), Registration.TREE_BLOCKS.get((WoodTypes.SPRUCE + "_leaves_trapdoor").toUpperCase()).get());
-
+        for (Species species : ModSpecies.allSpecies()) {
+            event.getBlockColors().register((blockstate, iLightReader, blockPos, i) -> {
+                return iLightReader != null && blockPos != null ? BiomeColors.getFoliageColor(iLightReader, blockPos) :
+                        species.isConifer() ? FoliageColors.getSpruce() : FoliageColors.getDefault();
+            }, Registration.LEAVES_SLAB_BLOCKS.get(species).get());
+        }
         Registration.forAllBranchEnds(branchBlock -> {
-            if(branchBlock.getSpecies().isConifer()){
+            if (branchBlock.getSpecies().isConifer()) {
                 event.getBlockColors().register((blockState, iLightReader, blockPos, i) ->
-                        iLightReader != null && blockPos != null ? BiomeColors.getFoliageColor(iLightReader, blockPos) : FoliageColors.getSpruce(),
+                                iLightReader != null && blockPos != null ? BiomeColors.getFoliageColor(iLightReader, blockPos) : FoliageColors.getSpruce(),
                         branchBlock);
             }
         });
     }
 
     @SubscribeEvent
-    public static void onTextureStitchEvent(TextureStitchEvent.Pre event){
+    public static void onTextureStitchEvent(TextureStitchEvent.Pre event) {
         ResourceLocation stitching = event.getMap().getTextureLocation();
-        if(!stitching.equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE))
-        {
+        if (!stitching.equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
             return;
         }
         event.addSprite(TreeDesignerRenderer.HOLOGRAM_RAY);
     }
 
-//
-//    @SubscribeEvent
-//    public static void onItemColourHandlerEvent(final ColorHandlerEvent.Item event) {
-//        for (WoodTypes type : WoodTypes.values()) {
-//            event.getItemColors().register((itemStack, i) -> {
-//                BlockState blockState = ((BlockItem) itemStack.getItem()).getBlock().getDefaultState();
-//                return event.getBlockColors().getColor(blockState, null, null, i);
-//            }, Registration.TREE_BLOCKS.get((type + "_leaves_slab").toUpperCase()).get(), Registration.TREE_BLOCKS.get((type + "_leaves_stairs").toUpperCase()).get(), Registration.TREE_BLOCKS.get((type + "_leaves_trapdoor").toUpperCase()).get());
-//        }
-//    }
-//
+
+    @SubscribeEvent
+    public static void onItemColourHandlerEvent(final ColorHandlerEvent.Item event) {
+        for (Species species : ModSpecies.allSpecies()) {
+            event.getItemColors().register((itemStack, i) -> {
+                BlockState blockState = ((BlockItem)itemStack.getItem()).getBlock().getDefaultState();
+                return event.getBlockColors().getColor(blockState, null, null, i);
+            }, Registration.LEAVES_SLAB_BLOCKS.get(species).get());
+        }
+    }
+
 
 }

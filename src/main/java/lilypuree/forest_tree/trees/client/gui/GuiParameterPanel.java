@@ -57,7 +57,7 @@ public class GuiParameterPanel extends GuiExtended {
         int height = 0;
         for (Parameter parameter : Parameter.parameters[module.index]) {
             int finalIndex = index;
-            int elementHeight = parameter.type==2 ? this.elementHeight * 2 : this.elementHeight;
+            int elementHeight = parameter.type==2 ? (int)(this.elementHeight * 2.5f) : this.elementHeight;
             GuiParameterElement element = new  GuiParameterElement(0, height, parameterList.getWidth(), elementHeight, parameter, paramData, () -> setSelected(finalIndex));
             parameterList.addChild(element);
 

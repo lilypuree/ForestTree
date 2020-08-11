@@ -24,10 +24,15 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BranchBlock extends Block {
 
     public static final IntegerProperty AGE = ModBlockProperties.TREE_AGE;
+    public Map<Integer, VoxelShape> ageToVoxelShapes = new HashMap<>();
+    public Map<Integer, VoxelShape> ageToHalfVoxelShapes = new HashMap<>();
 
     private boolean end = false;
     private Vec3i sourceOffset;
@@ -52,47 +57,16 @@ public class BranchBlock extends Block {
             Vec3d start = player.getEyePosition(0);
             Vec3d look = player.getLook(0);
             Vec3d end = start.add(look.scale(6));
-            return getClosestShape(start, end, pos, blockReader);
+            return BranchVoxelShapes.getClosestShape(start, end, pos, state, blockReader);
         }
-        return BranchVoxelShapes.getVoxelShapeForDirection(sourceOffset);
+        return ageToVoxelShapes.computeIfAbsent(state.get(AGE), age -> BranchVoxelShapes.getVoxelShapeForBranch(this, age));
     }
 
-    private VoxelShape getClosestShape(Vec3d start, Vec3d end, BlockPos pos, IBlockReader blockReader) {
-
-        VoxelShape temp = VoxelShapes.empty();
-        double tempDistance = Double.MAX_VALUE;
-
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                for (int k = -1; k <= 1; k++) {
-                    VoxelShape shape;
-                    if (i == 0 && j == 0 && k == 0) {
-                        shape = BranchVoxelShapes.getVoxelShapeForDirection(sourceOffset);
-                    } else {
-                        BlockPos otherPos = pos.add(i, j, k);
-                        Block otherBlock = blockReader.getBlockState(otherPos).getBlock();
-                        if (otherBlock instanceof BranchBlock && Util.compareVec3iToInts(((BranchBlock) otherBlock).getSourceOffset(), -i, -j, -k)) {
-                            shape = BranchVoxelShapes.getVoxelShapeForDirection(i, j, k);
-                        } else {
-                            continue;
-                        }
-                    }
-                    BlockRayTraceResult result = shape.rayTrace(start, end, pos);
-                    double distance = result == null ? Double.MAX_VALUE : start.squareDistanceTo(result.getHitVec());
-                    if (distance < tempDistance) {
-                        temp = shape;
-                        tempDistance = distance;
-                    }
-                }
-            }
-        }
-
-        return temp;
-    }
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
-        return BranchVoxelShapes.getHalfShapeForDirection(sourceOffset);
+//        return BranchVoxelShapes.getHalfShapeForDirection(sourceOffset);
+        return ageToHalfVoxelShapes.computeIfAbsent(state.get(AGE), age -> BranchVoxelShapes.getHalfVoxelShapeForBranch(this, age));
     }
 
 
@@ -121,6 +95,7 @@ public class BranchBlock extends Block {
     public Species getSpecies() {
         return species;
     }
+
 
     public BlockState getSourceBlock(IBlockReader world, BlockPos pos, int depth) {
         if (depth > 1) {

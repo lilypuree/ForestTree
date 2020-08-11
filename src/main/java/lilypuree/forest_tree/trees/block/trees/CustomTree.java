@@ -1,6 +1,6 @@
 package lilypuree.forest_tree.trees.block.trees;
 
-import lilypuree.forest_tree.core.registry.ForestTreeFeatures;
+import lilypuree.forest_tree.core.registry.FeatureRegistry;
 import lilypuree.forest_tree.trees.customization.CustomSaplingTile;
 import lilypuree.forest_tree.trees.world.gen.feature.TreeGenerator;
 import net.minecraft.block.BlockState;
@@ -14,7 +14,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 //A Copy of AdvancedTree, with slight differences
@@ -27,7 +26,7 @@ public class CustomTree  {
     }
 
     public ConfiguredFeature<NoFeatureConfig, ?> getTreeFeature(Random randomIn, boolean canPlace){
-        return ForestTreeFeatures.CUSTOM.withGenerator(treeGenerator).withConfiguration(NoFeatureConfig.NO_FEATURE_CONFIG);
+        return FeatureRegistry.CUSTOM.withGenerator(treeGenerator).withConfiguration(NoFeatureConfig.NO_FEATURE_CONFIG);
     }
 
     public boolean place(IWorld worldIn, ChunkGenerator<?> generatorIn, BlockPos posIn, BlockState stateIn, Random randomIn){

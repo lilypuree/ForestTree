@@ -29,19 +29,22 @@ public class BranchDirectionHelper {
 
     //m[i][j] : probability of transition from ith pitch -> jth pitch
     private float[][] terminalMarkovMatrix = new float[][]{
-            {0.95f, 0.05f, 0f},
-            {0.3f, 0.67f, 0.03f},
-            {0.0f, 0.94f, 0.06f}
+            {0.95f, 0.05f, 0f, 0f},
+            {0.3f, 0.67f, 0.03f, 0f},
+            {0.0f, 0.94f, 0.06f, 0f},
+            {0.0f, 0.0f, 0.0f, 1.0f}
     };     //change of terminal meristem
     private float[][] axillaryMarkovMatrix = new float[][]{
-            {0.4f, 0.6f, 0f},
-            {0.2f, 0.7f, 0.1f},
-            {0.0f, 0.9f, 0.1f}
+            {0.4f, 0.6f, 0f, 0f},
+            {0.2f, 0.7f, 0.1f, 0f},
+            {0.0f, 0.9f, 0.1f, 0f},
+            {0.0f, 0.0f, 0.0f, 1.0f}
     };      //change of axillary meristem
     private float[][] branchingMarkovMatrix = new float[][]{
-            {0.0f, 0.8f, 0.2f},
-            {0.0f, 0.8f, 0.2f},
-            {0.0f, 1.0f, 0.0f}
+            {0.0f, 0.8f, 0.2f, 0f},
+            {0.0f, 0.8f, 0.2f, 0f},
+            {0.0f, 1.0f, 0.0f, 0f},
+            {0.0f, 0.0f, 0.0f, 1.0f}
     };     //change of pitch when generating secondary branches
 
     public BranchDirectionHelper(MeristemFactory factory, MeristemGrower grower) {
@@ -192,11 +195,11 @@ public class BranchDirectionHelper {
     }
 
     public GrowthVec.Pitch changeTerminalPitchRandomly(GrowthVec.Pitch pitch) {
-        return useMarkovMatrix(GrowthVec.Pitch.values(), terminalMarkovMatrix, rand, pitch.ordinal(), 3);
+        return useMarkovMatrix(GrowthVec.Pitch.values(), terminalMarkovMatrix, rand, pitch.ordinal(), 4);
     }
 
     public GrowthVec.Pitch changeAxillaryPitchRandomly(GrowthVec.Pitch pitch) {
-        return useMarkovMatrix(GrowthVec.Pitch.values(), axillaryMarkovMatrix, rand, pitch.ordinal(), 3);
+        return useMarkovMatrix(GrowthVec.Pitch.values(), axillaryMarkovMatrix, rand, pitch.ordinal(), 4);
     }
 
     private static <T> T useMarkovMatrix(T[] outputMatrix, float[][] markovMatrix, Random rand, int x, int n) {
@@ -215,19 +218,19 @@ public class BranchDirectionHelper {
     }
 
     public static void setMarkovMatrix(float[][] matrix, float[] probabilities) {
-        if (probabilities.length != 9) throw new ArgumentIndexOutOfBoundsException(probabilities.length);
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                matrix[i][j] = probabilities[i * 3 + j];
+        if (probabilities.length != 16) throw new ArgumentIndexOutOfBoundsException(probabilities.length);
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                matrix[i][j] = probabilities[i * 4 + j];
             }
         }
     }
 
     public static float[] flattenMarkovMatrix(float[][] matrix) {
-        float[] flat = new float[9];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                flat[i * 3 + j] = matrix[i][j];
+        float[] flat = new float[16];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                flat[i * 4 + j] = matrix[i][j];
             }
         }
         return flat;
@@ -264,20 +267,24 @@ public class BranchDirectionHelper {
         private float axillaryYawVariance = 0.4f;
 
         private float[][] terminalMarkovMatrix = new float[][]{
-                {0.95f, 0.05f, 0f},
-                {0.3f, 0.67f, 0.03f},
-                {0.0f, 0.94f, 0.06f}
+                {0.95f, 0.05f, 0f, 0f},
+                {0.3f, 0.67f, 0.03f, 0f},
+                {0.0f, 0.94f, 0.06f, 0f},
+                {0.0f, 0.0f, 0.0f, 1.0f}
         };     //change of terminal meristem
         private float[][] axillaryMarkovMatrix = new float[][]{
-                {0.4f, 0.6f, 0f},
-                {0.2f, 0.7f, 0.1f},
-                {0.0f, 0.9f, 0.1f}
+                {0.4f, 0.6f, 0f, 0f},
+                {0.2f, 0.7f, 0.1f, 0f},
+                {0.0f, 0.9f, 0.1f, 0f},
+                {0.0f, 0.0f, 0.0f, 1.0f}
         };      //change of axillary meristem
         private float[][] branchingMarkovMatrix = new float[][]{
-                {0.0f, 0.8f, 0.2f},
-                {0.0f, 0.8f, 0.2f},
-                {0.0f, 1.0f, 0.0f}
-        };
+                {0.0f, 0.8f, 0.2f, 0f},
+                {0.0f, 0.8f, 0.2f, 0f},
+                {0.0f, 1.0f, 0.0f, 0f},
+                {0.0f, 0.0f, 0.0f, 1.0f}
+        };     //change of pitch when generating secondary branches
+
 
         public Builder secondaryYaw(float parallel, float degree45, float degree90) {
             float sum = parallel + degree45 + degree90;
