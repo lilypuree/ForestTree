@@ -1,17 +1,13 @@
 package lilypuree.forest_tree.trees.customization;
 
 import lilypuree.forest_tree.Registration;
-import lilypuree.forest_tree.trees.world.gen.feature.TreeGenerator;
+import lilypuree.forest_tree.trees.species.ModSpecies;
+import lilypuree.forest_tree.world.trees.gen.feature.TreeGenerator;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.INameable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.common.util.Constants;
-
-import javax.annotation.Nullable;
 
 public class CustomSaplingTile extends TileEntity implements INameable {
 
@@ -32,7 +28,7 @@ public class CustomSaplingTile extends TileEntity implements INameable {
         if (compound.contains("CustomName", 8)) {
             this.customName = ITextComponent.Serializer.fromJson(compound.getString("CustomName"));
         }
-        if (treeGenerator == null) treeGenerator = new TreeGenerator();
+        if (treeGenerator == null) treeGenerator = new TreeGenerator(ModSpecies.PINE);
         treeGenerator.loadFromNbt(compound);
     }
 

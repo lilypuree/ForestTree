@@ -24,7 +24,7 @@ public class BranchModelBuilder extends ModelBuilder<BranchModelBuilder> {
         super(outputLocation, existingFileHelper);
     }
 
-    public BranchModelBuilder source(Vec3i sourceOffsetIn){
+    public BranchModelBuilder source(Vec3i sourceOffsetIn) {
         this.sourceOffset = sourceOffsetIn;
         return this;
     }
@@ -36,7 +36,7 @@ public class BranchModelBuilder extends ModelBuilder<BranchModelBuilder> {
             root.addProperty("parent", serializeLoc(this.parent.getLocation()));
         }
         root.addProperty("loader", serializeLoc(new ResourceLocation(ForestTree.MODID, "branchloader")));
-        if(this.sourceOffset != null){
+        if (this.sourceOffset != null) {
             JsonArray source = new JsonArray();
             source.add(sourceOffset.getX());
             source.add(sourceOffset.getY());
@@ -57,6 +57,7 @@ public class BranchModelBuilder extends ModelBuilder<BranchModelBuilder> {
         }
         return root;
     }
+
     private String serializeLocOrKey(String tex) {
         if (tex.charAt(0) == '#') {
             return tex;

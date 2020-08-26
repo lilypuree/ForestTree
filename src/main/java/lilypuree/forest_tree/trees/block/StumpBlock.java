@@ -6,31 +6,39 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathType;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
 public class StumpBlock extends Block {
     public static final IntegerProperty AGE = ModBlockProperties.TREE_AGE;
+    public static final BooleanProperty STUMP = ModBlockProperties.STUMP;
     private Species species;
     private Map<Integer, VoxelShape> ageToVoxelShapes = new HashMap<>();
 
     public StumpBlock(Properties properties, Species speciesIn) {
         super(properties);
         this.species = speciesIn;
-        this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 1));
+        this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 1).with(STUMP, false));
     }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(AGE);
+        builder.add(AGE, STUMP);
     }
 
     @Override
@@ -46,8 +54,23 @@ public class StumpBlock extends Block {
         return ageToVoxelShapes.computeIfAbsent(state.get(AGE), age -> BranchVoxelShapes.getVoxelShapeForStump(this, state.get(AGE)));
     }
 
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return super.getCollisionShape(state, worldIn, pos, context);
+    }
+
     public Species getSpecies() {
         return species;
+    }
+
+    @Override
+    public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+        return false;
+    }
+
+    @Override
+    public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
+        super.harvestBlock(worldIn, player, pos, state, te, stack);
     }
 
 

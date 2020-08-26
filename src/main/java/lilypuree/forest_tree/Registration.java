@@ -2,8 +2,12 @@ package lilypuree.forest_tree;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import lilypuree.forest_tree.shrubs.block.MultipleFlowerBlock;
+import lilypuree.forest_tree.shrubs.block.MultipleFlowerTile;
 import lilypuree.forest_tree.trees.block.BranchBlock;
 import lilypuree.forest_tree.trees.block.LeavesSlabBlock;
+import lilypuree.forest_tree.trees.block.PalmCrownBlock;
+import lilypuree.forest_tree.trees.block.StumpBlock;
 import lilypuree.forest_tree.trees.customization.*;
 import lilypuree.forest_tree.trees.items.CustomSaplingItem;
 import lilypuree.forest_tree.trees.items.GraftingToolItem;
@@ -21,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.village.PointOfInterestType;
+import net.minecraft.world.gen.blockplacer.BlockPlacerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -31,7 +36,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static lilypuree.forest_tree.ForestTree.MODID;
 
@@ -50,6 +54,7 @@ public class Registration {
     public static final DeferredRegister<EntityType<?>> ENTITIES = new DeferredRegister<>(ForgeRegistries.ENTITIES, MODID);
     public static final DeferredRegister<ContainerType<?>> CONTAINERS = new DeferredRegister<>(ForgeRegistries.CONTAINERS, MODID);
     public static final DeferredRegister<PointOfInterestType> POIS = new DeferredRegister<>(ForgeRegistries.POI_TYPES, MODID);
+    public static final DeferredRegister<BlockPlacerType<?>> BLOCKPLACERS = new DeferredRegister<>(ForgeRegistries.BLOCK_PLACER_TYPES, MODID);
 
     public static void register() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -59,10 +64,12 @@ public class Registration {
         ENTITIES.register(modEventBus);
         CONTAINERS.register(modEventBus);
         POIS.register(modEventBus);
+        BLOCKPLACERS.register(modEventBus);
     }
 
 
     public static final ImmutableMap<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> BRANCH_BLOCKS;
+    public static final ImmutableMap<Species, RegistryObject<StumpBlock>> STUMP_BLOCKS;
     public static final ImmutableMap<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> BRANCH_END_BLOCKS;
     public static final ImmutableMap<Species, RegistryObject<LeavesSlabBlock>> LEAVES_SLAB_BLOCKS;
     public static final ImmutableSet<RegistryObject<Item>> BRANCH_BLOCK_ITEMS;
@@ -102,11 +109,13 @@ public class Registration {
         ImmutableMap.Builder<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> branchBuilder = ImmutableMap.builder();
         ImmutableMap.Builder<Pair<Integer, Vec3i>, RegistryObject<BranchBlock>> branchEndBuilder = ImmutableMap.builder();
         ImmutableMap.Builder<Species, RegistryObject<LeavesSlabBlock>> leavesSlabBuilder = ImmutableMap.builder();
+        ImmutableMap.Builder<Species, RegistryObject<StumpBlock>> stumpBuilder = ImmutableMap.builder();
 
         ImmutableSet.Builder<RegistryObject<Item>> itemBuilder = ImmutableSet.builder();
 
         Block.Properties properties = Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0f).sound(SoundType.WOOD).notSolid();
-        Block.Properties leavesProperties = Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid();
+        Block.Properties stumpProperties = Block.Properties.create(Material.WOOD).hardnessAndResistance(2.0f).sound(SoundType.WOOD).notSolid();
+        Block.Properties leavesProperties = Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).doesNotBlockMovement().notSolid();
         Item.Properties itemProp = new Item.Properties().group(ItemGroup.MISC);
 
         for (Species species : ModSpecies.allSpecies()) {
@@ -123,9 +132,12 @@ public class Registration {
                     }
                 }
             }
-            leavesSlabBuilder.put(species, BLOCKS.register(species.getName() + "_leaves_slab", () -> new LeavesSlabBlock(leavesProperties)));
-            ;
+            stumpBuilder.put(species, BLOCKS.register(species.getName() + "_stump", () -> new StumpBlock(stumpProperties, species)));
+            if(species != ModSpecies.PALM){
+                leavesSlabBuilder.put(species, BLOCKS.register(species.getName() + "_leaves_slab", () -> new LeavesSlabBlock(leavesProperties)));
+            }
         }
+        STUMP_BLOCKS = stumpBuilder.build();
         BRANCH_BLOCKS = branchBuilder.build();
         BRANCH_END_BLOCKS = branchEndBuilder.build();
         LEAVES_SLAB_BLOCKS = leavesSlabBuilder.build();
@@ -137,6 +149,9 @@ public class Registration {
             itemBuilder.add(ITEMS.register(blockObject.getId().getPath(), () -> new BlockItem(blockObject.get(), itemProp)));
         }
         for (RegistryObject<LeavesSlabBlock> blockObject : LEAVES_SLAB_BLOCKS.values()) {
+            itemBuilder.add(ITEMS.register(blockObject.getId().getPath(), () -> new BlockItem(blockObject.get(), itemProp)));
+        }
+        for (RegistryObject<StumpBlock> blockObject : STUMP_BLOCKS.values()) {
             itemBuilder.add(ITEMS.register(blockObject.getId().getPath(), () -> new BlockItem(blockObject.get(), itemProp)));
         }
 
@@ -155,9 +170,18 @@ public class Registration {
     public static final RegistryObject<TileEntityType<TreeDesignerTile>> TREE_DESIGNER_TILE = TILE_ENTITIES.register("tree_designer", () -> TileEntityType.Builder.create(TreeDesignerTile::new, TREE_DESIGNER_BLOCK.get()).build(null));
     public static final RegistryObject<ContainerType<TreeDesignerContainer>> TREE_DESIGNER_CONTAINER = CONTAINERS.register("tree_designer", () -> IForgeContainerType.create((TreeDesignerContainer::getClientContainer)));
 
-    //    public static final ImmutableMap<String, RegistryObject<Block>> TREE_BLOCKS;
-//    public static final ImmutableMap<String, RegistryObject<Item>> TREE_BLOCK_ITEMS;
-//
+    public static final RegistryObject<Block> MULTIPLE_FLOWER_BLOCK = BLOCKS.register("multiple_flower", () -> new MultipleFlowerBlock(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0f).sound(SoundType.PLANT)));
+    public static final RegistryObject<Item> MULTIPLE_FLOWER_ITEM = ITEMS.register("multiple_flower", () -> new BlockItem(MULTIPLE_FLOWER_BLOCK.get(), new Item.Properties().group(ITEM_GROUP)));
+    public static final RegistryObject<TileEntityType<MultipleFlowerTile>> MULTIPLE_FLOWER_TILE = TILE_ENTITIES.register("multiple_flower", () -> TileEntityType.Builder.create(MultipleFlowerTile::new, MULTIPLE_FLOWER_BLOCK.get()).build(null));
+
+
+    public static final RegistryObject<Block> PALM_CROWN = BLOCKS.register("palm_crown", () -> new PalmCrownBlock(Block.Properties.create(Material.WOOD).notSolid()));
+//    public static final RegistryObject<Block> PALM_LOG = BLOCKS.register("palm_log", () -> new LogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)));
+//    public static final RegistryObject<Block> PALM_SAPLING = BLOCKS.register("palm_sapling", () -> new PalmCrownBlock(Block.Properties.create(Material.WOOD).notSolid()));
+//    public static final RegistryObject<Item> PALM_SAPLING_ITEM = ITEMS.register("palm_sapling", () -> new BlockItem(PALM_CROWN.get(), new Item.Properties().group(ITEM_GROUP)));
+//    public static final RegistryObject<Item> PALM_LOG_ITEM = ITEMS.register("palm_log", () -> new BlockItem(PALM_CROWN.get(), new Item.Properties().group(ITEM_GROUP)));
+    public static final RegistryObject<Item> PALM_CROWN_ITEM = ITEMS.register("palm_crown", () -> new BlockItem(PALM_CROWN.get(), new Item.Properties().group(ITEM_GROUP)));
+
 //    private static Item.Properties timber = new Item.Properties().group(ItemGroup.MATERIALS);
     public static final RegistryObject<GraftingToolItem> GRAFTING_TOOL = ITEMS.register("grafting_tool", () -> new GraftingToolItem((new Item.Properties()).maxDamage(238).group(ITEM_GROUP)));
 //    public static final RegistryObject<Item> TREE_EXTRACT = ITEMS.register("tree_extract", () -> new Item(new Item.Properties().group(ItemGroup.MISC)));
@@ -171,132 +195,6 @@ public class Registration {
 //
 //
 //    public static final RegistryObject<TileEntityType<TreeTile>> TREE_TILE;
-//
-//
-//    static {
-//        ImmutableMap.Builder<String, RegistryObject<Block>> blockBuilder = ImmutableMap.builder();
-//        ImmutableMap.Builder<String, RegistryObject<Item>> itemBuilder = ImmutableMap.builder();
-//
-//        Block.Properties woodBlockProperty = Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F).sound(SoundType.WOOD);
-//        Block.Properties thinWoodBlockProperty = Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(1.2F).sound(SoundType.WOOD);
-//        Block.Properties stumpBlockProperty = Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(30.0F, 6.0F).sound(SoundType.WOOD);
-//        Item.Properties woodBlockItemProperty = new Item.Properties().group(ItemGroup.BUILDING_BLOCKS);
-//        Item.Properties treeItemProperty = new Item.Properties().group(ItemGroup.BUILDING_BLOCKS).maxStackSize(1);
-//
-//        for (WoodTypes wood : WoodTypes.values()) {
-//            for (ThicknessTypes thickness : ThicknessTypes.values()) {
-//                for (TreeBlockTypes type : TreeBlockTypes.values()) {
-//                    try {
-//
-//                        Class<?> clazz = Class.forName("lilypuree.forest_tree.trees.blocks.tree_blocks." + StringUtils.capitalize(thickness.toString()) + "Tree" + StringUtils.capitalize(type.toString()) + "Block");
-//                        Constructor<?> cons = clazz.getConstructor(Block.Properties.class);
-//
-//                        Block block = (Block) cons.newInstance((type == TreeBlockTypes.STUMP) ? stumpBlockProperty : ((thickness == ThicknessTypes.THIN) ? thinWoodBlockProperty : woodBlockProperty));
-//                        String name = wood + "_" + thickness + "_" + type;
-//                        blockBuilder.put(name.toUpperCase(), BLOCKS.register(name, () -> block));
-//                        itemBuilder.put(name.toUpperCase() + "_ITEM", ITEMS.register(name, () -> new BlockItem(block, woodBlockItemProperty)));
-//
-//                    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }
-//
-//        for (WoodTypes leaf : WoodTypes.values()) {
-//            String name = leaf + "_" + "leaves";
-//            Block leafSlab = new LeavesSlabBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid());
-//            Block leafStair = new LeavesStairsBlock(Blocks.OAK_LEAVES::getDefaultState, Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT).notSolid());
-//            Block leafTrapDoor = new LeavesTrapDoorBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).sound(SoundType.PLANT).notSolid());
-//            blockBuilder.put((name + "_slab").toUpperCase(), BLOCKS.register(name + "_slab", () -> leafSlab));
-//            blockBuilder.put((name + "_stairs").toUpperCase(), BLOCKS.register(name + "_stairs", () -> leafStair));
-//            blockBuilder.put((name + "_trapdoor").toUpperCase(), BLOCKS.register(name + "_trapdoor", () -> leafTrapDoor));
-//            itemBuilder.put((name + "_slab_item").toUpperCase(), ITEMS.register(name + "_slab", () -> new BlockItem(leafSlab, woodBlockItemProperty)));
-//            itemBuilder.put((name + "_stairs_item").toUpperCase(), ITEMS.register(name + "_stairs", () -> new BlockItem(leafStair, woodBlockItemProperty)));
-//            itemBuilder.put((name + "_trapdoor_item").toUpperCase(), ITEMS.register(name + "_trapdoor", () -> new BlockItem(leafTrapDoor, woodBlockItemProperty)));
-//        }
-//
-//        TREE_BLOCKS = blockBuilder.build();
-//
-//        for (WoodTypes wood : WoodTypes.values()) {
-//            for (ThicknessTypes thickness : ThicknessTypes.values()) {
-//                String name = wood + "_" + thickness + "_tree";
-//                itemBuilder.put(name.toUpperCase(), ITEMS.register(name, () -> new TreeItem(treeItemProperty, TREE_BLOCKS.get((wood + "_" + thickness + "_stump").toUpperCase()))));
-//            }
-//        }
-//
-//        TREE_BLOCK_ITEMS = itemBuilder.build();
-//
-//        TREE_TILE = TILE_ENTITIES.register("tree", () -> TileEntityType.Builder.create(TreeTile::new,
-//                TREE_BLOCKS.get("OAK_THICKEST_STUMP").get(), TREE_BLOCKS.get("OAK_THICK_STUMP").get(), TREE_BLOCKS.get("OAK_THIN_STUMP").get(),
-//                TREE_BLOCKS.get("SPRUCE_THICKEST_STUMP").get(), TREE_BLOCKS.get("SPRUCE_THICK_STUMP").get(), TREE_BLOCKS.get("SPRUCE_THIN_STUMP").get(),
-//                TREE_BLOCKS.get("JUNGLE_THICKEST_STUMP").get(), TREE_BLOCKS.get("JUNGLE_THICK_STUMP").get(), TREE_BLOCKS.get("JUNGLE_THIN_STUMP").get(),
-//                TREE_BLOCKS.get("BIRCH_THICKEST_STUMP").get(), TREE_BLOCKS.get("BIRCH_THICK_STUMP").get(), TREE_BLOCKS.get("BIRCH_THIN_STUMP").get(),
-//                TREE_BLOCKS.get("ACACIA_THICKEST_STUMP").get(), TREE_BLOCKS.get("ACACIA_THICK_STUMP").get(), TREE_BLOCKS.get("ACACIA_THIN_STUMP").get(),
-//                TREE_BLOCKS.get("DARK_OAK_THICKEST_STUMP").get(), TREE_BLOCKS.get("DARK_OAK_THICK_STUMP").get(), TREE_BLOCKS.get("DARK_OAK_THIN_STUMP").get()).build(null));
-//    }
-//
-//    public static Block getTreeBlock(WoodTypes wood, ThicknessTypes thickness, TreeBlockTypes type, boolean isLeaf, String leafType) {
-//        if (!isLeaf) {
-//            return TREE_BLOCKS.get((wood + "_" + thickness + "_" + type).toUpperCase()).get();
-//        } else {
-//            if (leafType.equals("slab"))
-//                return TREE_BLOCKS.get((wood + "_leaves_slab").toUpperCase()).get();
-//            else if (leafType.equals("stairs"))
-//                return TREE_BLOCKS.get((wood + "_leaves_stairs").toUpperCase()).get();
-//            else if (leafType.equals("trapdoor"))
-//                return TREE_BLOCKS.get((wood + "_leaves_trapdoor").toUpperCase()).get();
-//        }
-//
-//        return Blocks.AIR;
-//    }
-//
-//    public static Block getTreeBlock(WoodTypes wood, ThicknessTypes thickness, TreeBlockTypes type) {
-//        return getTreeBlock(wood, thickness, type, false, "");
-//    }
-//
-//    public static Block getLeafBlock(WoodTypes wood, String leafType) {
-//        return getTreeBlock(wood, null, null, true, leafType);
-//    }
-//
-//    public static Block getLeafBlock(WoodTypes wood, int leafType) {
-//        if (leafType == 1)
-//            return getLeafBlock(wood, "slab");
-//        else if (leafType == 2)
-//            return getLeafBlock(wood, "stairs");
-//        else
-//            return getLeafBlock(wood, "trapdoor");
-//    }
-//
-//    public static Item getTreeItem(WoodTypes wood, ThicknessTypes thickness) {
-//        return TREE_BLOCK_ITEMS.get((wood + "_" + thickness + "_tree").toUpperCase()).get();
-//    }
-//
-//    public static Item getTreeBlockItem(WoodTypes wood, ThicknessTypes thickness, TreeBlockTypes type) {
-//        return TREE_BLOCK_ITEMS.get((wood + "_" + thickness + "_" + type + "_item").toUpperCase()).get();
-//    }
-//
-//
-//    public static Item getLeafBlockItem(WoodTypes wood, String blockType) {
-//        return TREE_BLOCK_ITEMS.get((wood + "_leaves_" + blockType + "_item").toUpperCase()).get();
-//    }
-//
-//    public static Item getTimber(WoodTypes wood) {
-//        switch (wood) {
-//            case OAK:
-//                return OAK_TIMBER.get();
-//            case DARK_OAK:
-//                return DARK_OAK_TIMBER.get();
-//            case JUNGLE:
-//                return JUNGLE_TIMBER.get();
-//            case ACACIA:
-//                return ACACIA_TIMBER.get();
-//            case BIRCH:
-//                return BIRCH_TIMBER.get();
-//            case SPRUCE:
-//                return SPRUCE_TIMBER.get();
-//        }
-//        return OAK_TIMBER.get();
-//    }
+
 }
 

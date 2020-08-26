@@ -1,6 +1,6 @@
 package lilypuree.forest_tree.trees.client.gui;
 
-import lilypuree.forest_tree.trees.world.gen.feature.parametric.Module;
+import lilypuree.forest_tree.world.trees.gen.feature.parametric.Module;
 import se.mickelus.mgui.gui.GuiAttachment;
 import se.mickelus.mgui.gui.GuiElement;
 

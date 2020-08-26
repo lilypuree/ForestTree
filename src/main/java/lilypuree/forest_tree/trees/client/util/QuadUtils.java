@@ -40,7 +40,15 @@ public class QuadUtils {
        return createQuad(v1, v2, v3, v4, u, v, u_, v_, sprite, -1);
     }
 
+    public static BakedQuad createQuad(Vector3f v1, Vector3f v2, Vector3f v3, Vector3f v4, float u, float v, float u_, float v_, TextureAtlasSprite sprite, boolean flip){
+        return createQuad(v1, v2, v3, v4, u, v, u_, v_, sprite, -1, flip);
+    }
+
     public static BakedQuad createQuad(Vector3f v1, Vector3f v2, Vector3f v3, Vector3f v4, float u, float v, float u_, float v_, TextureAtlasSprite sprite, int tintIndex) {
+       return createQuad(v1, v2, v3, v4, u, v, u_, v_, sprite, tintIndex, false);
+    }
+
+    public static BakedQuad createQuad(Vector3f v1, Vector3f v2, Vector3f v3, Vector3f v4, float u, float v, float u_, float v_, TextureAtlasSprite sprite, int tintIndex, boolean flip) {
         Vector3f normal = v3.copy();
         normal.sub(v2);
         Vector3f other = v1.copy();
@@ -49,13 +57,21 @@ public class QuadUtils {
         normal.normalize();
 
         BakedQuadBuilder builder = new BakedQuadBuilder(sprite);
-        builder.setQuadOrientation(Direction.getFacingFromVector(normal.getX(), normal.getY(), normal.getZ()));
         builder.setQuadTint(tintIndex);
         float rgb = 1.0f;
-        putVertex(builder, normal, v1.getX(), v1.getY(), v1.getZ(), u_, v, sprite, rgb, rgb, rgb);
-        putVertex(builder, normal, v2.getX(), v2.getY(), v2.getZ(), u_, v_, sprite, rgb, rgb, rgb);
-        putVertex(builder, normal, v3.getX(), v3.getY(), v3.getZ(), u, v_, sprite, rgb, rgb, rgb);
-        putVertex(builder, normal, v4.getX(), v4.getY(), v4.getZ(), u, v, sprite, rgb, rgb, rgb);
+        if(flip){
+            builder.setQuadOrientation(Direction.getFacingFromVector(-normal.getX(), -normal.getY(), -normal.getZ()));
+            putVertex(builder, normal, v1.getX(), v1.getY(), v1.getZ(), u_, v, sprite, rgb, rgb, rgb);
+            putVertex(builder, normal, v4.getX(), v4.getY(), v4.getZ(), u, v, sprite, rgb, rgb, rgb);
+            putVertex(builder, normal, v3.getX(), v3.getY(), v3.getZ(), u, v_, sprite, rgb, rgb, rgb);
+            putVertex(builder, normal, v2.getX(), v2.getY(), v2.getZ(), u_, v_, sprite, rgb, rgb, rgb);
+        }else {
+            builder.setQuadOrientation(Direction.getFacingFromVector(normal.getX(), normal.getY(), normal.getZ()));
+            putVertex(builder, normal, v1.getX(), v1.getY(), v1.getZ(), u_, v, sprite, rgb, rgb, rgb);
+            putVertex(builder, normal, v2.getX(), v2.getY(), v2.getZ(), u_, v_, sprite, rgb, rgb, rgb);
+            putVertex(builder, normal, v3.getX(), v3.getY(), v3.getZ(), u, v_, sprite, rgb, rgb, rgb);
+            putVertex(builder, normal, v4.getX(), v4.getY(), v4.getZ(), u, v, sprite, rgb, rgb, rgb);
+        }
         return builder.build();
     }
 

@@ -1,6 +1,5 @@
 package lilypuree.forest_tree.trees.block.trees;
 
-import lilypuree.forest_tree.trees.world.gen_old.feature.AdvancedTreeFeatureConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.tags.BlockTags;

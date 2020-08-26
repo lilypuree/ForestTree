@@ -2,10 +2,11 @@ package lilypuree.forest_tree.core.setup;
 
 import lilypuree.forest_tree.ForestTree;
 import lilypuree.forest_tree.Registration;
-import lilypuree.forest_tree.datagen.types.WoodTypes;
+import lilypuree.forest_tree.shrubs.client.MultipleFlowerModelLoader;
 import lilypuree.forest_tree.trees.client.BranchModelLoader;
+import lilypuree.forest_tree.trees.client.PalmCrownModelLoader;
+import lilypuree.forest_tree.trees.client.StumpModelLoader;
 import lilypuree.forest_tree.trees.client.gui.TreeDesignerScreen;
-import lilypuree.forest_tree.trees.client.render.BlockHologramRenderer;
 import lilypuree.forest_tree.trees.client.render.TreeDesignerRenderer;
 import lilypuree.forest_tree.trees.species.ModSpecies;
 import lilypuree.forest_tree.trees.species.Species;
@@ -31,7 +32,11 @@ public class ClientSetup {
 
     public static void init(final FMLClientSetupEvent event) {
         ModelLoaderRegistry.registerLoader(new ResourceLocation(ForestTree.MODID, "branchloader"), BranchModelLoader.INSTANCE);
+        ModelLoaderRegistry.registerLoader(new ResourceLocation(ForestTree.MODID, "palmcrownloader"), PalmCrownModelLoader.INSTANCE);
+        ModelLoaderRegistry.registerLoader(new ResourceLocation(ForestTree.MODID, "stumploader"), StumpModelLoader.INSTANCE);
+        ModelLoaderRegistry.registerLoader(new ResourceLocation(ForestTree.MODID, "multipleflowerloader"), MultipleFlowerModelLoader.INSTANCE);
         for (Species species : ModSpecies.allSpecies()) {
+            if(species == ModSpecies.PALM) continue;
             RenderTypeLookup.setRenderLayer(Registration.LEAVES_SLAB_BLOCKS.get(species).get(), RenderType.getCutoutMipped());
         }
         Registration.forAllBranchEnds(branchBlock -> {
@@ -40,8 +45,13 @@ public class ClientSetup {
             }
         });
         TreeDesignerRenderer.register();
+//        MultipleFlowerRenderer.register();
         RenderTypeLookup.setRenderLayer(Registration.CUSTOM_SAPLING.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(Registration.PALM_CROWN.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(Registration.MULTIPLE_FLOWER_BLOCK.get(), RenderType.getCutout());
         ScreenManager.registerFactory(Registration.TREE_DESIGNER_CONTAINER.get(), TreeDesignerScreen::new);
+
+
     }
 
 
@@ -59,6 +69,7 @@ public class ClientSetup {
 //            return iLightReader != null && blockPos != null ? BiomeColors.getFoliageColor(iLightReader, blockPos) : FoliageColors.getSpruce();
 //        }, Registration.TREE_BLOCKS.get((WoodTypes.SPRUCE + "_leaves_slab").toUpperCase()).get(), Registration.TREE_BLOCKS.get((WoodTypes.SPRUCE + "_leaves_stairs").toUpperCase()).get(), Registration.TREE_BLOCKS.get((WoodTypes.SPRUCE + "_leaves_trapdoor").toUpperCase()).get());
         for (Species species : ModSpecies.allSpecies()) {
+            if(species == ModSpecies.PALM) continue;
             event.getBlockColors().register((blockstate, iLightReader, blockPos, i) -> {
                 return iLightReader != null && blockPos != null ? BiomeColors.getFoliageColor(iLightReader, blockPos) :
                         species.isConifer() ? FoliageColors.getSpruce() : FoliageColors.getDefault();
@@ -80,14 +91,16 @@ public class ClientSetup {
             return;
         }
         event.addSprite(TreeDesignerRenderer.HOLOGRAM_RAY);
+        event.addSprite(new ResourceLocation("block/oak_log_large"));
     }
 
 
     @SubscribeEvent
     public static void onItemColourHandlerEvent(final ColorHandlerEvent.Item event) {
         for (Species species : ModSpecies.allSpecies()) {
+            if(species == ModSpecies.PALM) continue;
             event.getItemColors().register((itemStack, i) -> {
-                BlockState blockState = ((BlockItem)itemStack.getItem()).getBlock().getDefaultState();
+                BlockState blockState = ((BlockItem) itemStack.getItem()).getBlock().getDefaultState();
                 return event.getBlockColors().getColor(blockState, null, null, i);
             }, Registration.LEAVES_SLAB_BLOCKS.get(species).get());
         }

@@ -19,27 +19,27 @@ public class BranchVoxelShapes {
     public static VoxelShape getVoxelShapeForBranch(BranchBlock block, int age) {
         Vec3i sp = block.getSourceOffset();
         float thickness = block.getSpecies().getThickness(0, age, block.isEnd(), sp);
-        return (sp.getX() * sp.getY() * sp.getZ() == 0) ? createStraightVoxelshape(sp.getX(), sp.getY(), sp.getZ(), thickness) :
-                createDiagonalVoxelshape(sp.getX(), sp.getY(), sp.getZ(), thickness);
+        return (sp.getX() * sp.getY() * sp.getZ() == 0) ? createStraightVoxelshape(sp.getX(), sp.getY(), sp.getZ(), thickness/2) :
+                createDiagonalVoxelshape(sp.getX(), sp.getY(), sp.getZ(), thickness/2);
     }
 
     public static VoxelShape getOppositeVoxelShapeForBranch(BranchBlock block, int age) {
         Vec3i sp = block.getSourceOffset();
         sp = new Vec3i(-sp.getX(), -sp.getY(), -sp.getZ());
         float thickness = block.getSpecies().getThickness(0, age, block.isEnd(), sp);
-        return (sp.getX() * sp.getY() * sp.getZ() == 0) ? createStraightVoxelshape(sp.getX(), sp.getY(), sp.getZ(), thickness) :
-                createDiagonalVoxelshape(sp.getX(), sp.getY(), sp.getZ(), thickness);
+        return (sp.getX() * sp.getY() * sp.getZ() == 0) ? createStraightVoxelshape(sp.getX(), sp.getY(), sp.getZ(), thickness/2) :
+                createDiagonalVoxelshape(sp.getX(), sp.getY(), sp.getZ(), thickness/2);
     }
 
     public static VoxelShape getVoxelShapeForStump(StumpBlock block, int age) {
-        return createHalfStraightVoxelshape(0, -1, 0, block.getSpecies().getThickness(0, age, false, new Vec3i(0, -1, 0)));
+        return createHalfStraightVoxelshape(0, -1, 0, block.getSpecies().getThickness(0, age, false, new Vec3i(0, -1, 0))/2);
     }
 
     public static VoxelShape getHalfVoxelShapeForBranch(BranchBlock block, int age) {
         Vec3i sp = block.getSourceOffset();
         float thickness = block.getSpecies().getThickness(0, age, block.isEnd(), sp);
-        return (sp.getX() * sp.getY() * sp.getZ() == 0) ? createHalfStraightVoxelshape(sp.getX(), sp.getY(), sp.getZ(), thickness) :
-                createHalfDiagonalVoxelshape(sp.getX(), sp.getY(), sp.getZ(), thickness);
+        return (sp.getX() * sp.getY() * sp.getZ() == 0) ? createHalfStraightVoxelshape(sp.getX(), sp.getY(), sp.getZ(), thickness/2) :
+                createHalfDiagonalVoxelshape(sp.getX(), sp.getY(), sp.getZ(), thickness/2);
     }
 
     private static VoxelShape createStraightVoxelshape(int x, int y, int z, float thickness) {

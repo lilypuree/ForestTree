@@ -16,7 +16,7 @@ public class BranchModelLoader implements IModelLoader<BranchModelGeometry> {
 
     public static BranchModelLoader INSTANCE = new BranchModelLoader();
 
-    private BranchModelLoader(){
+    private BranchModelLoader() {
 
     }
 
@@ -26,7 +26,7 @@ public class BranchModelLoader implements IModelLoader<BranchModelGeometry> {
 
     @Override
     public BranchModelGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
-        Vec3i source = this.parseVector(modelContents, "source", new Vec3i(0, 0, 0  ));
+        Vec3i source = this.parseVector(modelContents, "source", new Vec3i(0, 0, 0));
         return new BranchModelGeometry(source);
     }
 
@@ -40,7 +40,7 @@ public class BranchModelLoader implements IModelLoader<BranchModelGeometry> {
             } else {
                 int[] aint = new int[3];
 
-                for(int i = 0; i < aint.length; ++i) {
+                for (int i = 0; i < aint.length; ++i) {
                     aint[i] = JSONUtils.getInt(jsonarray.get(i), key + "[" + i + "]");
                 }
 

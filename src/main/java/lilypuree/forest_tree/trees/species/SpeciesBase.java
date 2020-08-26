@@ -45,6 +45,11 @@ public abstract class SpeciesBase implements Species {
     }
 
     @Override
+    public float getStumpThickness(int age) {
+        return 1.0f/12.0f * (age+1.0f);
+    }
+
+    @Override
     public boolean isConifer() {
         return false;
     }

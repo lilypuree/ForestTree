@@ -1,0 +1,12 @@
+{
+  "parent": "block/block",
+  "ambientocculsion" : false,
+  "loader": "forest_tree:palmcrownloader",
+  "textures": {
+    "crown": "forest_tree:block/palm_head",
+    "base": "forest_tree:block/palmfrondlightbase",
+    "a": "forest_tree:block/palmfrondlighta",
+    "b": "forest_tree:block/palmfrondlightb",
+    "end": "forest_tree:block/palmfrondlightend"
+  }
+}

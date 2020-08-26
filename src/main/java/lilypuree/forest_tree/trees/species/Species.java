@@ -2,11 +2,14 @@ package lilypuree.forest_tree.trees.species;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.IDynamicSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 
 public interface Species extends IDynamicSerializable {
 
     public abstract float getThickness(int distanceToTrunk, int age, boolean isEnd, Vec3i sourcePos);
+
+    public abstract float getStumpThickness(int age);
 
     public abstract boolean isConifer();
 
@@ -21,4 +24,12 @@ public interface Species extends IDynamicSerializable {
     Block getLog();
 
     Block getLeaves();
+
+    ResourceLocation getFullTexturePath();
+
+    default ResourceLocation getTruncatedTexturePath() {
+        String newPath = getFullTexturePath().getPath().replaceFirst("textures/", "");
+        newPath = newPath.replaceFirst(".png", "");
+        return new ResourceLocation(getFullTexturePath().getNamespace(), newPath);
+    }
 }

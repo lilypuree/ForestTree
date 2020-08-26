@@ -2,6 +2,7 @@ package lilypuree.forest_tree.trees;
 
 import lilypuree.forest_tree.Registration;
 import lilypuree.forest_tree.trees.block.BranchBlock;
+import lilypuree.forest_tree.trees.block.StumpBlock;
 import lilypuree.forest_tree.trees.species.Species;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -25,5 +26,8 @@ public class TreeBlocks {
     }
     public static BranchBlock getBranchEndBlock(Vec3i sourcePos, Species species){
         return Registration.BRANCH_END_BLOCKS.get(ImmutablePair.of(species.getID(), sourcePos)).get();
+    }
+    public static StumpBlock getStumpBlock(Species species){
+        return Registration.STUMP_BLOCKS.get(species).get();
     }
 }

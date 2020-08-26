@@ -13,13 +13,13 @@
       "model": "forest_tree:block/spruce_leaves_slabside",
       "y": 180
     },
-    "facing=east": {
-      "model": "forest_tree:block/spruce_leaves_slabside",
-      "y": 90
-    },
     "facing=west": {
       "model": "forest_tree:block/spruce_leaves_slabside",
       "y": 270
+    },
+    "facing=east": {
+      "model": "forest_tree:block/spruce_leaves_slabside",
+      "y": 90
     }
   }
 }

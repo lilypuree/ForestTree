@@ -1,6 +1,8 @@
 package lilypuree.forest_tree;
 
 import lilypuree.forest_tree.core.setup.*;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -14,8 +16,6 @@ public class ForestTree
     public static final String MODID = "forest_tree";
     public static final Logger LOGGER = LogManager.getLogger();
 
-//    public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
-
     public static ModSetup setup = new ModSetup();
     public static ForestTree instance;
 
@@ -24,7 +24,8 @@ public class ForestTree
     public ForestTree() {
 
         instance = this;
-
+        BranchTextureStitcher.setupFolders();
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientConstruction::run);
         Registration.register();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent e) -> setup.forestTreeCommonSetup(e));

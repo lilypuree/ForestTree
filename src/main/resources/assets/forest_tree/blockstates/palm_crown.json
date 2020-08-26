@@ -1,0 +1,6 @@
+{
+  "multipart": [
+    {"apply" : {"model" : "forest_tree:block/palm_crown"}},
+    {"apply" : {"model" : "forest_tree:block/palm_leaves"}}
+  ]
+}

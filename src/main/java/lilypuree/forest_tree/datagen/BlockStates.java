@@ -1,16 +1,13 @@
 package lilypuree.forest_tree.datagen;
 
 import lilypuree.forest_tree.ForestTree;
-import lilypuree.forest_tree.Registration;
 import lilypuree.forest_tree.trees.TreeBlocks;
 import lilypuree.forest_tree.trees.block.LeavesSlabBlock;
 import lilypuree.forest_tree.trees.species.ModSpecies;
 import lilypuree.forest_tree.trees.species.Species;
 import net.minecraft.block.Block;
-import net.minecraft.block.SlabBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
-import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
@@ -140,10 +137,10 @@ public class BlockStates extends BlockStateProvider {
     }
 
     public void leafSlabBlock(LeavesSlabBlock block, ResourceLocation sideBottomTopTexture) {
-        ModelFile sideModel = leafSlabSide(name(block)+"side", sideBottomTopTexture);
+        ModelFile sideModel = leafSlabSide(name(block) + "side", sideBottomTopTexture);
         getVariantBuilder(block)
                 .partialState().with(LeavesSlabBlock.FACE, Direction.DOWN).addModels(new ConfiguredModel(leafSlab(name(block), sideBottomTopTexture)))
-                .partialState().with(LeavesSlabBlock.FACE, Direction.UP).addModels(new ConfiguredModel(leafSlabTop(name(block)+"top", sideBottomTopTexture)))
+                .partialState().with(LeavesSlabBlock.FACE, Direction.UP).addModels(new ConfiguredModel(leafSlabTop(name(block) + "top", sideBottomTopTexture)))
                 .partialState().with(LeavesSlabBlock.FACE, Direction.NORTH).addModels(new ConfiguredModel(sideModel, 0, 0, false))
                 .partialState().with(LeavesSlabBlock.FACE, Direction.EAST).addModels(new ConfiguredModel(sideModel, 0, 90, false))
                 .partialState().with(LeavesSlabBlock.FACE, Direction.SOUTH).addModels(new ConfiguredModel(sideModel, 0, 180, false))
@@ -280,21 +277,24 @@ public class BlockStates extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
+
         for (Species species : ModSpecies.allSpecies()) {
-//            for (int x = -1; x <= 1; x++) {
-//                for (int y = -1; y <= 1; y++) {
-//                    for (int z = -1; z <= 1; z++) {
-//                        String name = species.getName() + "_branch_" + x + "_" + y + "_" + z;
-//                        String endName = species.getName() + "_branch_end_" + x + "_" + y + "_" + z;
-//
-//                        Vec3i sourceDir = new Vec3i(x, y, z);
-//
-//                        branchBlock(TreeBlocks.getBranchBlock(sourceDir, species), species, sourceDir, name);
-//                        branchBlock(TreeBlocks.getBranchEndBlock(sourceDir, species), species, sourceDir, endName);
-//                    }
-//                }
-//            }
-            leafSlabBlock(Registration.LEAVES_SLAB_BLOCKS.get(species).get(), mcLoc("block/" + species.getName() + "_leaves"));
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    for (int z = -1; z <= 1; z++) {
+                        if(x == 0 && y == 0 && z == 0) continue;
+                        String name = species.getName() + "_branch_" + x + "_" + y + "_" + z;
+                        String endName = species.getName() + "_branch_end_" + x + "_" + y + "_" + z;
+
+                        Vec3i sourceDir = new Vec3i(x, y, z);
+
+                        branchBlock(TreeBlocks.getBranchBlock(sourceDir, species), species, sourceDir, name);
+                        branchBlock(TreeBlocks.getBranchEndBlock(sourceDir, species), species, sourceDir, endName);
+                    }
+                }
+            }
+            stumpBlock(TreeBlocks.getStumpBlock(species), species, species.getName() + "_stump");
+//            leafSlabBlock(Registration.LEAVES_SLAB_BLOCKS.get(species).get(), mcLoc("block/" + species.getName() + "_leaves"));
         }
     }
 
@@ -308,6 +308,10 @@ public class BlockStates extends BlockStateProvider {
     public void branchBlock(Block block, Species species, Vec3i source, String name) {
         ModelFile defaultModel = getBranchModel(species, name, source);
         getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(defaultModel).build());
+    }
+
+    public void stumpBlock(Block block, Species species, String name) {
+        getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(ForestTree.MODID+":block/stump/" + species.getName() + "_stump")).build());
     }
 
     public ModelFile getBranchModel(Species species, String name, Vec3i source) {

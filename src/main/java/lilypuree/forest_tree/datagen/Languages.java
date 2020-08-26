@@ -1,15 +1,11 @@
 package lilypuree.forest_tree.datagen;
 
 import lilypuree.forest_tree.ForestTree;
-import lilypuree.forest_tree.datagen.types.ThicknessTypes;
-import lilypuree.forest_tree.datagen.types.TreeBlockTypes;
-import lilypuree.forest_tree.datagen.types.WoodTypes;
 import lilypuree.forest_tree.Registration;
-import lilypuree.forest_tree.trees.world.gen.feature.parametric.Module;
-import lilypuree.forest_tree.trees.world.gen.feature.parametric.Parameter;
+import lilypuree.forest_tree.world.trees.gen.feature.parametric.Module;
+import lilypuree.forest_tree.world.trees.gen.feature.parametric.Parameter;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
-import org.apache.commons.lang3.StringUtils;
 
 public class Languages extends LanguageProvider {
 

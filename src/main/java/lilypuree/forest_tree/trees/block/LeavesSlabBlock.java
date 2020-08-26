@@ -73,9 +73,20 @@ public class LeavesSlabBlock extends LeavesBlock implements IWaterLoggable {
         BlockPos blockpos = context.getPos();
         IFluidState ifluidstate = context.getWorld().getFluidState(blockpos);
         Direction direction = context.getFace().getOpposite();
-        BlockState blockstate1 = super.getStateForPlacement(context).with(FACE, direction).with(WATERLOGGED, ifluidstate.getFluid() == Fluids.WATER);
-
-        return blockstate1;
+        BlockState baseState = super.getStateForPlacement(context).with(WATERLOGGED, ifluidstate.getFluid() == Fluids.WATER);
+        if (context.getPlayer() != null && context.getPlayer().isSneaking()) {
+            if (direction.getAxis() != Direction.Axis.Y) {
+                return baseState.with(FACE, (context.getHitVec().y - (double) blockpos.getY() > 0.5D) ? Direction.UP : Direction.DOWN);
+            } else {
+                Direction lookDir = context.getPlacementHorizontalFacing();
+                if (lookDir.getAxis() == Direction.Axis.X) {
+                    return baseState.with(FACE, (context.getHitVec().x - (double) blockpos.getX() > 0.5D) ? Direction.EAST : Direction.WEST);
+                } else if (lookDir.getAxis() == Direction.Axis.Z) {
+                    return baseState.with(FACE, (context.getHitVec().z - (double) blockpos.getZ() > 0.5D) ? Direction.SOUTH : Direction.NORTH);
+                }
+            }
+        }
+        return baseState.with(FACE, direction);
     }
 
 //    //copied from SlabBlock.

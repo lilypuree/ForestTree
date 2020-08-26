@@ -15,7 +15,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
-    apply plugin: 'maven-publish'
+apply plugin: 'maven-publish'
 
 
 version = "${mod_version}"
@@ -64,20 +64,16 @@ minecraft {
         }
 
         data {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run').canonicalPath
 
             // Recommended logging data for a userdev environment
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'forest_tree', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'forest_tree', '--all', '--output', file('src/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
 
-            mods {
-                forest_tree {
-                    source sourceSets.main
-                }
-            }
+            source sourceSets.main
         }
     }
 }
@@ -111,6 +107,7 @@ dependencies {
     // compile "some.group:artifact:version"
 
     compile fg.deobf("curse.maven:mgui:2928277")
+    runtimeOnly fg.deobf("curse.maven:natures_compass:2893530")
 
     compile 'org.spongepowered:mixin:0.8'
 

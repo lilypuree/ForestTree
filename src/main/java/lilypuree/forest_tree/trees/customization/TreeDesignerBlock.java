@@ -44,6 +44,7 @@ public class TreeDesignerBlock extends Block {
                     ((TreeDesignerTile) tileEntity).extractSapling();
                     worldIn.notifyBlockUpdate(pos, state, state, 3);
                 } else if (player.getHeldItemMainhand().getItem() == Registration.CUSTOM_SAPLING_ITEM.get()) {
+
                 } else {
                     NetworkHooks.openGui((ServerPlayerEntity) player, (TreeDesignerTile) tileEntity, pos);
                     return ActionResultType.SUCCESS;

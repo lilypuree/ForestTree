@@ -1,6 +1,7 @@
 package lilypuree.forest_tree.trees.customization;
 
 import lilypuree.forest_tree.Registration;
+import lilypuree.forest_tree.trees.block.ModBlockProperties;
 import lilypuree.forest_tree.trees.block.trees.CustomTree;
 import lilypuree.forest_tree.trees.customization.CustomSaplingTile;
 import net.minecraft.block.Block;
@@ -30,12 +31,12 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 public class CustomSaplingBlock extends BushBlock implements IGrowable {
-    public static final IntegerProperty STAGE = BlockStateProperties.STAGE_0_1;
+    public static final IntegerProperty AGE = ModBlockProperties.TREE_AGE;
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
     public CustomSaplingBlock(Block.Properties properties) {
         super(properties);
-        this.setDefaultState(this.getStateContainer().getBaseState().with(STAGE, 0));
+        this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 7));
     }
 
     @Override
@@ -94,30 +95,23 @@ public class CustomSaplingBlock extends BushBlock implements IGrowable {
     }
     //shulker box code end
 
-    //1.16 code... will Random tick work?
-    @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        if (worldIn.getLight(pos.up()) >= 9 && random.nextInt(7) == 0) {
-            if (!worldIn.isAreaLoaded(pos, 1))
-                return; // Forge: prevent loading unloaded chunks when checking neighbor's light
-            this.placeTree(worldIn, pos, state, random);
-        }
-    }
+//    //1.16 code... will Random tick work?
+//    @Override
+//    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
+//        if (worldIn.getLight(pos.up()) >= 9 && random.nextInt(7) == 0) {
+//            if (!worldIn.isAreaLoaded(pos, 1))
+//                return; // Forge: prevent loading unloaded chunks when checking neighbor's light
+//            this.placeTree(worldIn, pos, state, random);
+//        }
+//    }
 
     public void placeTree(ServerWorld world, BlockPos pos, BlockState state, Random rand) {
-//        if (state.get(STAGE) == 0) {
-//            world.setBlockState(pos, state.cycle(STAGE), 4);
-//        } else {
         if (!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(world, rand, pos)) return;
         CustomSaplingTile customSaplingTile = (CustomSaplingTile) world.getTileEntity(pos);
         if (customSaplingTile != null) {
             CustomTree customTree = new CustomTree(customSaplingTile.getTreeGenerator());
-
-            //TODO
-            //set age here?
-            customTree.place(world, world.getChunkProvider().getChunkGenerator(), pos, state, rand);
+            customTree.place(world, world.getChunkProvider().getChunkGenerator(), pos, state, rand, state.get(AGE));
         }
-//        }
     }
 
 
@@ -138,7 +132,7 @@ public class CustomSaplingBlock extends BushBlock implements IGrowable {
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(STAGE);
+        builder.add(AGE);
     }
 
 

@@ -2,6 +2,7 @@ package lilypuree.forest_tree.trees.items;
 
 import lilypuree.forest_tree.trees.TreeBlocks;
 import lilypuree.forest_tree.trees.block.BranchBlock;
+import lilypuree.forest_tree.trees.species.Species;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,7 +33,9 @@ public class GraftingToolItem extends Item {
         if (playerMatchesCycleCondition(player) && block.getBlock() instanceof BranchBlock) {
             Vec3i offset = getOffset(player.getLookVec());
             BlockPos newPos = pos.add(offset);
-            Block branch = TreeBlocks.getBranchBlock(new Vec3i(-offset.getX(), -offset.getY(), -offset.getZ()), ((BranchBlock) block.getBlock()).getSpecies());
+            Vec3i dir = new Vec3i(-offset.getX(), -offset.getY(), -offset.getZ());
+            Species species = ((BranchBlock) block.getBlock()).getSpecies();
+            Block branch = player.isSneaking() ? TreeBlocks.getBranchEndBlock(dir, species) : TreeBlocks.getBranchBlock(dir, species);
             BlockState branchState = branch.getDefaultState();
             world.setBlockState(newPos, branchState);
             return ActionResultType.SUCCESS;
@@ -45,10 +48,10 @@ public class GraftingToolItem extends Item {
 //        System.out.println(pos);
 //        Vec3d blockOffset = hitVec.subtract(pos.getX(), pos.getY(), pos.getZ()).normalize();
 //        System.out.println(blockOffset);
-        int x = Math.abs(lookVec.x) < 0.5 ? 0 : ((lookVec.x > 0) ? 1 : -1);
-        int y = Math.abs(lookVec.y) < 0.5 ? 0 : ((lookVec.y > 0) ? 1 : -1);
-        int z = Math.abs(lookVec.z) < 0.5 ? 0 : ((lookVec.z > 0) ? 1 : -1);
-        if(x == 0 && y== 0 && z==0) y +=1;
+        int x = Math.abs(lookVec.x) < 0.4 ? 0 : ((lookVec.x > 0) ? 1 : -1);
+        int y = Math.abs(lookVec.y) < 0.4 ? 0 : ((lookVec.y > 0) ? 1 : -1);
+        int z = Math.abs(lookVec.z) < 0.4 ? 0 : ((lookVec.z > 0) ? 1 : -1);
+        if (x == 0 && y == 0 && z == 0) y += 1;
         return new Vec3i(-x, -y, -z);
     }
 

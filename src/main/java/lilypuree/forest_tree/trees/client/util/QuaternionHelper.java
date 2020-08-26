@@ -30,15 +30,21 @@ public class QuaternionHelper {
             float angle = (float) ((y > 0) ? Math.asin(SQRT_2 / SQRT_3) : Math.PI - Math.asin(SQRT_2 / SQRT_3));
             Quaternion planeRotation = new Quaternion(axis, angle, false);
             Quaternion rotation = new Quaternion(new Vector3f(0, 1, 0), 45, true);
+
             planeRotation.multiply(rotation);
             return planeRotation;
+
         } else {
             float angle = (90 - y * 45) * (float) Math.PI / 180;
-            return new Quaternion(axis, angle, false);
+            Quaternion rotation = new Quaternion(axis, angle, false);
+            if(len > 1.4 && y == 0){
+                Quaternion axisRotation = new Quaternion(normal, 45, true);
+                axisRotation.multiply(rotation);
+                return axisRotation;
+            }
+            return rotation;
         }
     }
-
-
 
 
 }

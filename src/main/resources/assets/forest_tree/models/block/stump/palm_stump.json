@@ -1,0 +1,9 @@
+{
+  "parent": "block/block",
+  "loader": "forest_tree:stumploader",
+  "textures": {
+    "particles": "forest_tree:block/palm_log",
+    "side": "forest_tree:block/palm_log",
+    "end": "forest_tree:block/palm_log_top"
+  }
+}

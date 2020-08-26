@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(Entity.class)
-public abstract class EntityMixin {
+public abstract class   EntityMixin {
 
     @Shadow
     public World world;
