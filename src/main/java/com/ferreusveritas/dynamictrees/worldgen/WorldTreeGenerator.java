@@ -1,12 +1,20 @@
 package com.ferreusveritas.dynamictrees.worldgen;
 
+import com.ferreusveritas.dynamictrees.api.worldgen.BiomePropertySelectors;
+import com.ferreusveritas.dynamictrees.api.worldgen.BiomePropertySelectors.EnumChance;
 import com.ferreusveritas.dynamictrees.api.worldgen.IGroundFinder;
 import com.ferreusveritas.dynamictrees.systems.poissondisc.PoissonDisc;
 import com.ferreusveritas.dynamictrees.systems.poissondisc.PoissonDiscProviderUniversal;
 import com.ferreusveritas.dynamictrees.util.RandomXOR;
 import com.ferreusveritas.dynamictrees.util.SafeChunkBounds;
 import com.google.common.collect.Maps;
+import lilypuree.forest_tree.ForestTree;
+import lilypuree.forest_tree.ModTrees;
+import lilypuree.forest_tree.api.gen.SpeciesPlacer;
+import lilypuree.forest_tree.api.genera.Species;
+import lilypuree.forest_tree.trees.PalmTree;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
@@ -72,7 +80,7 @@ public class WorldTreeGenerator {
     }
 
     public boolean validateBiomeDataBases() {
-        return defaultBiomeDataBase.isValid() && dimensionMap.values().stream().allMatch(db -> db.isValid());
+        return defaultBiomeDataBase.isValid() && dimensionMap.values().stream().allMatch(BiomeDataBase::isValid);
     }
 
     /**
@@ -181,11 +189,11 @@ public class WorldTreeGenerator {
 
         random.setXOR(pos);
 
-//        IBlockState dirtState = world.getBlockState(pos);
+        BlockState dirtState = world.getBlockState(pos);
 //
         EnumGeneratorResult result = EnumGeneratorResult.GENERATED;
-//
-//        SpeciesSelection speciesSelection = biomeEntry.getSpeciesSelector().getSpecies(pos, dirtState, random);
+
+        BiomePropertySelectors.SpeciesSelection speciesSelection = biomeEntry.getSpeciesSelector().getSpecies(pos, dirtState, random);
 //        if (speciesSelection.isHandled()) {
 //            Species species = speciesSelection.getSpecies();
 //            if (species.isValid()) {
@@ -208,6 +216,14 @@ public class WorldTreeGenerator {
 //        } else {
 //            result = EnumGeneratorResult.UNHANDLEDBIOME;
 //        }
+
+//        Species species = speciesSelection.getSpecies();
+        Species species = ModTrees.baseFamilies.get(0).getCommonSpecies();
+        if (species.isValid() && species.isAcceptableSoilForWorldgen(world, pos, dirtState)) {
+//            species.getTreeModel().createTree(null, null, pos.up(), new SpeciesPlacer(world), world.getRandom());
+        } else {
+            result = EnumGeneratorResult.NOTREE;
+        }
 
         //Display wool circles for testing the circle growing algorithm
 //        if (ModConfigs.worldGenDebug) {

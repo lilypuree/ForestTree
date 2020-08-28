@@ -1,10 +1,6 @@
 package lilypuree.forest_tree.mixin;
 
-import lilypuree.forest_tree.Registration;
-import lilypuree.forest_tree.trees.TreeBlocks;
-import lilypuree.forest_tree.trees.block.BranchBlock;
-import lilypuree.forest_tree.trees.block.BranchVoxelShapes;
-import lilypuree.forest_tree.trees.block.ModBlockProperties;
+import lilypuree.forest_tree.common.trees.block.BranchBlock;
 import lilypuree.forest_tree.util.Util;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -14,7 +10,6 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.system.CallbackI;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(Entity.class)
-public abstract class   EntityMixin {
+public abstract class EntityMixin {
 
     @Shadow
     public World world;

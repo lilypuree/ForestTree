@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "forest_tree:block/acacia_leaves_slab"
+    },
+    "facing=up": {
+      "model": "forest_tree:block/acacia_leaves_slabtop"
+    },
+    "facing=north": {
+      "model": "forest_tree:block/acacia_leaves_slabside"
+    },
+    "facing=south": {
+      "model": "forest_tree:block/acacia_leaves_slabside",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "forest_tree:block/acacia_leaves_slabside",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "forest_tree:block/acacia_leaves_slabside",
+      "y": 90
+    }
+  }
+}

@@ -1,39 +1,39 @@
 {
   "variants": {
-    "tree_age=0": {
+    "thickness=1": {
       "model": "forest_tree:block/branch/oak_branch_0_0_1"
     },
-    "tree_age=1": {
+    "thickness=2": {
       "model": "forest_tree:block/branch/oak_branch_0_0_1"
     },
-    "tree_age=2": {
+    "thickness=3": {
       "model": "forest_tree:block/branch/oak_branch_0_0_1"
     },
-    "tree_age=3": {
+    "thickness=4": {
       "model": "forest_tree:block/branch/oak_branch_0_0_1"
     },
-    "tree_age=4": {
+    "thickness=5": {
       "model": "forest_tree:block/branch/oak_branch_0_0_1"
     },
-    "tree_age=5": {
+    "thickness=6": {
       "model": "forest_tree:block/branch/oak_branch_0_0_1"
     },
-    "tree_age=6": {
+    "thickness=7": {
       "model": "forest_tree:block/branch/oak_branch_0_0_1"
     },
-    "tree_age=7": {
+    "thickness=8": {
       "model": "forest_tree:block/branch/oak_branch_0_0_1"
     },
-    "tree_age=8": {
+    "thickness=9": {
       "model": "forest_tree:block/branch/oak_branch_0_0_1"
     },
-    "tree_age=9": {
+    "thickness=10": {
       "model": "forest_tree:block/branch/oak_branch_0_0_1"
     },
-    "tree_age=10": {
+    "thickness=11": {
       "model": "forest_tree:block/branch/oak_branch_0_0_1"
     },
-    "tree_age=11": {
+    "thickness=12": {
       "model": "forest_tree:block/branch/oak_branch_0_0_1"
     }
   }

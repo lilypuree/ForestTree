@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "thickness=1": {
+      "model": "forest_tree:block/branch/acacia_branch_1_-1_0"
+    },
+    "thickness=2": {
+      "model": "forest_tree:block/branch/acacia_branch_1_-1_0"
+    },
+    "thickness=3": {
+      "model": "forest_tree:block/branch/acacia_branch_1_-1_0"
+    },
+    "thickness=4": {
+      "model": "forest_tree:block/branch/acacia_branch_1_-1_0"
+    },
+    "thickness=5": {
+      "model": "forest_tree:block/branch/acacia_branch_1_-1_0"
+    },
+    "thickness=6": {
+      "model": "forest_tree:block/branch/acacia_branch_1_-1_0"
+    },
+    "thickness=7": {
+      "model": "forest_tree:block/branch/acacia_branch_1_-1_0"
+    },
+    "thickness=8": {
+      "model": "forest_tree:block/branch/acacia_branch_1_-1_0"
+    },
+    "thickness=9": {
+      "model": "forest_tree:block/branch/acacia_branch_1_-1_0"
+    },
+    "thickness=10": {
+      "model": "forest_tree:block/branch/acacia_branch_1_-1_0"
+    },
+    "thickness=11": {
+      "model": "forest_tree:block/branch/acacia_branch_1_-1_0"
+    },
+    "thickness=12": {
+      "model": "forest_tree:block/branch/acacia_branch_1_-1_0"
+    }
+  }
+}

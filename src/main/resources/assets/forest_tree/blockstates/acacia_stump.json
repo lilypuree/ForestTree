@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "stump=false,thickness=1": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=true,thickness=1": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=false,thickness=2": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=true,thickness=2": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=false,thickness=3": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=true,thickness=3": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=false,thickness=4": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=true,thickness=4": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=false,thickness=5": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=true,thickness=5": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=false,thickness=6": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=true,thickness=6": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=false,thickness=7": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=true,thickness=7": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=false,thickness=8": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=true,thickness=8": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=false,thickness=9": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=true,thickness=9": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=false,thickness=10": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=true,thickness=10": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=false,thickness=11": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=true,thickness=11": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=false,thickness=12": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    },
+    "stump=true,thickness=12": {
+      "model": "forest_tree:block/stump/acacia_stump"
+    }
+  }
+}

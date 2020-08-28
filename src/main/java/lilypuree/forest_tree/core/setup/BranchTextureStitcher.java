@@ -5,8 +5,8 @@
 package lilypuree.forest_tree.core.setup;
 
 import lilypuree.forest_tree.ForestTree;
-import lilypuree.forest_tree.trees.species.ModSpecies;
-import lilypuree.forest_tree.trees.species.Species;
+import lilypuree.forest_tree.api.genera.WoodCategory;
+import lilypuree.forest_tree.api.registration.TreeBlockRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.IResource;
 import net.minecraft.util.ResourceLocation;
@@ -41,10 +41,7 @@ public class BranchTextureStitcher {
             RESOURCE_PACK_FOLDER = new File(modData, "resource_pack");
 
             new File(RESOURCE_PACK_FOLDER, "assets").mkdirs();
-            ModSpecies.allSpecies().stream().map(Species::getFullTexturePath).forEach(fullpath -> {
-//                String requiredFile = fullpath.toString().replaceFirst(":", "/");
-//                File directory = new File(RESOURCE_PACK_FOLDER +"/assets/" + requiredFile.substring(0, requiredFile.lastIndexOf("/")));
-//                directory.mkdirs();
+            TreeBlockRegistry.woodCategories.stream().map(WoodCategory::getFullBarkTexturePath).forEach(fullpath -> {
                 String fileName = fullpath.toString().replaceFirst(":", "/").replaceAll(".png", "_large.png");
                 File outputFile = new File(RESOURCE_PACK_FOLDER + "/assets/" + fileName);
                 outputFile.getParentFile().mkdirs();
@@ -62,7 +59,7 @@ public class BranchTextureStitcher {
 
     public BranchTextureStitcher prepare() {
 
-        this.requiredTextures = ModSpecies.allSpecies().stream().parallel().map(Species::getFullTexturePath).map(loc -> {
+        this.requiredTextures = TreeBlockRegistry.woodCategories.parallelStream().map(WoodCategory::getFullBarkTexturePath).map(loc -> {
             try {
                 IResource resource = Minecraft.getInstance().getResourceManager().getResource(loc);
                 if (resource == null) return null;

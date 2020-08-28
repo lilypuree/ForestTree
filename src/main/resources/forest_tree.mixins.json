@@ -4,8 +4,9 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "forest_tree.refmap.json",
   "mixins": [
+    "AbstractTreeFeatureMixin"
   ],
-  "client":[
+  "client": [
     "EntityMixin"
   ],
   "injectors": {

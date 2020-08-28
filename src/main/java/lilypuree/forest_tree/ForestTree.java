@@ -30,6 +30,7 @@ public class ForestTree
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent e) -> setup.forestTreeCommonSetup(e));
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
+
     }
 
     private static String prefix(String path) {

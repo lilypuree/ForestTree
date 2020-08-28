@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "thickness=1": {
+      "model": "forest_tree:block/branch/jungle_branch_end_1_0_1"
+    },
+    "thickness=2": {
+      "model": "forest_tree:block/branch/jungle_branch_end_1_0_1"
+    },
+    "thickness=3": {
+      "model": "forest_tree:block/branch/jungle_branch_end_1_0_1"
+    },
+    "thickness=4": {
+      "model": "forest_tree:block/branch/jungle_branch_end_1_0_1"
+    },
+    "thickness=5": {
+      "model": "forest_tree:block/branch/jungle_branch_end_1_0_1"
+    },
+    "thickness=6": {
+      "model": "forest_tree:block/branch/jungle_branch_end_1_0_1"
+    },
+    "thickness=7": {
+      "model": "forest_tree:block/branch/jungle_branch_end_1_0_1"
+    },
+    "thickness=8": {
+      "model": "forest_tree:block/branch/jungle_branch_end_1_0_1"
+    },
+    "thickness=9": {
+      "model": "forest_tree:block/branch/jungle_branch_end_1_0_1"
+    },
+    "thickness=10": {
+      "model": "forest_tree:block/branch/jungle_branch_end_1_0_1"
+    },
+    "thickness=11": {
+      "model": "forest_tree:block/branch/jungle_branch_end_1_0_1"
+    },
+    "thickness=12": {
+      "model": "forest_tree:block/branch/jungle_branch_end_1_0_1"
+    }
+  }
+}

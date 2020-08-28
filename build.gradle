@@ -108,6 +108,7 @@ dependencies {
 
     compile fg.deobf("curse.maven:mgui:2928277")
     runtimeOnly fg.deobf("curse.maven:natures_compass:2893530")
+    runtimeOnly fg.deobf("curse.maven:bop:2988999")
 
     compile 'org.spongepowered:mixin:0.8'
 

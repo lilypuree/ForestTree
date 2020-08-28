@@ -1,0 +1,9 @@
+{
+  "parent": "block/block",
+  "loader": "forest_tree:stumploader",
+  "textures": {
+    "particles": "block/birch_log",
+    "side": "block/birch_log",
+    "end": "block/birch_log_top"
+  }
+}

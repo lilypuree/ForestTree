@@ -1,9 +1,11 @@
 package com.ferreusveritas.dynamictrees.api.worldgen;
 
+import lilypuree.forest_tree.api.genera.Species;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -16,7 +18,7 @@ import java.util.Random;
 public class BiomePropertySelectors {
 	
 	public interface IChanceSelector {
-//		EnumChance getChance(Random random, @Nonnull Species species, int radius);
+		EnumChance getChance(Random random, @Nonnull Species species, int radius);
 	}
 
 	public interface IDensitySelector {
@@ -33,25 +35,25 @@ public class BiomePropertySelectors {
 	 */
 	public static class SpeciesSelection {
 		private boolean handled;
-//		private final Species species;
+		private final Species species;
 		
 		public SpeciesSelection() {
 			handled = false;
-//			species = Species.NULLSPECIES;
+			species = Species.NULLSPECIES;
 		}
 		
-//		public SpeciesSelection(@Nonnull Species species) {
-//			this.species = species;
-//			handled = true;
-//		}
+		public SpeciesSelection(@Nonnull Species species) {
+			this.species = species;
+			handled = true;
+		}
 		
 		public boolean isHandled() {
 			return handled;
 		}
 		
-//		public Species getSpecies() {
-//			return species;
-//		}
+		public Species getSpecies() {
+			return species;
+		}
 	}
 	
 	public static class StaticSpeciesSelector implements ISpeciesSelector {
@@ -61,9 +63,9 @@ public class BiomePropertySelectors {
 			this.decision = decision;
 		}
 
-//		public StaticSpeciesSelector(@Nonnull Species species) {
-//			this(new SpeciesSelection(species));
-//		}
+		public StaticSpeciesSelector(@Nonnull Species species) {
+			this(new SpeciesSelection(species));
+		}
 		
 		public StaticSpeciesSelector() {
 			this(new SpeciesSelection());
@@ -94,11 +96,11 @@ public class BiomePropertySelectors {
 			return decisionTable.size();
 		}
 		
-//		public RandomSpeciesSelector add(@Nonnull Species species, int weight) {
-//			decisionTable.add(new Entry(new SpeciesSelection(species), weight));
-//			totalWeight += weight;
-//			return this;
-//		}
+		public RandomSpeciesSelector add(@Nonnull Species species, int weight) {
+			decisionTable.add(new Entry(new SpeciesSelection(species), weight));
+			totalWeight += weight;
+			return this;
+		}
 		
 		public RandomSpeciesSelector add(int weight) {
 			decisionTable.add(new Entry(new SpeciesSelection(), weight));

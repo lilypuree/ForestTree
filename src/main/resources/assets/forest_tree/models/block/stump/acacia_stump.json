@@ -1,0 +1,9 @@
+{
+  "parent": "block/block",
+  "loader": "forest_tree:stumploader",
+  "textures": {
+    "particles": "block/acacia_log",
+    "side": "block/acacia_log",
+    "end": "block/acacia_log_top"
+  }
+}

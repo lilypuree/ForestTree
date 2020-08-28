@@ -2,8 +2,8 @@ package lilypuree.forest_tree.datagen;
 
 import lilypuree.forest_tree.ForestTree;
 import lilypuree.forest_tree.Registration;
-import lilypuree.forest_tree.world.trees.gen.feature.parametric.Module;
-import lilypuree.forest_tree.world.trees.gen.feature.parametric.Parameter;
+import lilypuree.forest_tree.common.world.trees.gen.feature.parametric.Module;
+import lilypuree.forest_tree.common.world.trees.gen.feature.parametric.Parameter;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 

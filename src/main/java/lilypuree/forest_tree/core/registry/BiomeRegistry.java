@@ -1,7 +1,7 @@
 package lilypuree.forest_tree.core.registry;
 
 import lilypuree.forest_tree.ForestTree;
-import lilypuree.forest_tree.world.shrubs.biome.DenseFlowerFields;
+import lilypuree.forest_tree.common.world.shrubs.biome.DenseFlowerFields;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
